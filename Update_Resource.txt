@@ -1,0 +1,50 @@
+*** Settings ***
+Documentation     Common Atlas Test Source
+...   This file contains common high level keywords or functions for all CI-Manager tests
+
+Library           OperatingSystem
+Library           FusionLibrary
+Library           RoboGalaxyLibrary
+Library           BuiltIn
+Library           Collections
+Library           String
+Library           SSHLibrary
+Library           RoboGalaxyLibrary\\utilitylib\\file_utils.py
+
+*** Variables ***
+${IP}				         15.154.123.154
+${ApplianceUrl}				 https://${IP}
+${DataFile}					 C:\\Users\\gandhik\\Desktop\\OneView-Supportability\\Robo\\12_09_2017\\update_appliance_TestData.xml
+${SeleniumSpeed}             1.0
+${Browser}					 ff
+${activityname}              
+${resource}                  
+${owner}                     
+
+*** Keywords ***
+Load test data and open browser
+      Set Log Level     TRACE
+      Load All Test Data
+      Log Variables
+      Open Browser      ${ApplianceUrl}   ${Browser}
+      Set Selenium Speed      ${SeleniumSpeed}
+
+Load All Test Data
+      Load Test Data  ${DataFile}
+	  
+Log into Fusion appliance as Administrator
+      ${user} =   Get data by property  ${TestData.users}   name  Administrator
+      Fusion UI Login To Appliance  ${user[0].name}
+	  
+Upload fixme
+      ${path} =   Get data by property    ${TestData.update}    selectimage    yes
+      Fusion UI Update Appliance    @{TestData.update}
+
+Verify Activity Page
+      ${resource} =    Get data by property    ${TestData.activity}
+      Fusion UI Verify Alert Page Details    @{TestData.activity}
+
+Logout and close all browsers
+      Fusion UI Logout Of Appliance
+      Close all browsers
+      

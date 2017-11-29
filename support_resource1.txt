@@ -1,0 +1,210 @@
+*** Settings ***
+Documentation    Support Tools Installation and verification
+
+Library                         robot.api.logger
+Library                         OperatingSystem
+Library                         FusionLibrary
+Library                         RoboGalaxyLibrary
+Library                         BuiltIn
+Library                         Collections
+Library                         String
+Library                         SSHLibrary
+Library                         XML             
+Resource						deploy_resource.txt
+#Resource                        tools-validation-resource.txt
+Variables                       Supportool_data.py                        
+
+*** Variables ***
+${SSH_HOST}              15.154.123.154
+
+
+*** Keywords ***
+#######################################
+# LOGGING
+#######################################
+Open OVSSH Connection And Log In
+    [Documentation]     Opens an SSH session to an appliance and logs in
+    [Arguments]         ${SSH_USER}=root   ${SSH_PASS}=hpvse1
+    Open Connection     ${SSH_HOST}     timeout=180s
+    Run Keyword If	    '${SSH_PASS}' is ${null}      Set Suite variable  ${SSH_PASS}     hpvse1
+    Login               ${SSH_USER}     ${SSH_PASS}
+    
+Login to OV Via REST API
+    # [Documentation]    Connects to the Appliance and creates a session using the Username and Password.
+    # [Documentation]    Example:\n| Login to Fusion Via REST
+    Should Not Be Equal    ${SSH_HOST}    'unknown'    msg=Please specify a valid Fusion IP address or hostname
+    Log    \n With IP ${SSH_HOST} (${admin1_credentials})...    console=true
+    ${Response}    ${AUTHTOKEN}    Fusion Api Login Appliance    ${SSH_HOST}    ${admin1_credentials}
+    Set Suite Variable   ${AUTHTOKEN}
+    Console      Auth token: ${AUTHTOKEN}
+    #Should Match StatusCode in Response      ${Response}   ${200}
+    #Set Suite Variable    ${LOGGED}  ${True}
+Open SSH and API
+    Open OVSSH Connection And Log In
+    Login to OV Via REST API    
+        
+Check Support Tool
+    ${out}=  Execute Command    rpm -qa | grep "support"
+    ${result}=  Split String    ${out}    \n
+    log    [Check Support Tool command]#:${result}    console=true
+    :FOR     ${line}   in    @{result}
+    \    ${value}=    Evaluate     'atlas-support-dumps'
+    \    ${value1}=    Evaluate     'atlas-support'
+    \    ${value2}=    Evaluate    'support-tools'
+    \    ${status}     ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${line}    ${value}    ${value1}    ${value2}
+    \    Run keyword if   '${status}'=='PASS'     Exit for loop
+    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the files
+    
+Check Support Tool rpm
+    ${out}=  Execute Command    rpm -qa | grep "support-tools"
+    ${result}=  Split String    ${out}    \n
+    log    [Verify Support Tool rpm]#:${result}    console=true
+    :FOR     ${line}   in    @{result}
+    \    ${value}=    Evaluate   'support-tools-4'
+    \    Should Match RegExp    ${line}    (\\w+)-(\\w+)-(\\d).(\\d+).(\\d+)-(\\d+).(\\w+)
+    \    ${status}     ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${line}    ${value}
+    \    Run keyword if   '${status}'=='PASS'     Exit for loop
+    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the files
+    
+rpm file availability
+    ${rpm_out}=  Execute Command    ls -p /ci/support/ovs/ | grep -v /
+    #${result}=  Split String    ${out}    \n
+    log    [rpm file availability]#:${rpm_out}    console=true
+    #:FOR     ${line}   in    @{result}
+    ${value}=    Evaluate   'support-tools.tar'
+    #\    Should Match RegExp    ${line}    (\\w+)-(\\w+)-(\\d).(\\d+).(\\d+)-(\\d+).(\\w+)
+    ${status}     ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rpm_out}    ${value}
+    Run keyword if   '${status}'=='PASS'    Log    RPM Exists
+    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the files
+    Set Global Variable    ${rpm_out}
+    
+Untar
+    ${out}=  Execute Command    tar -xvf /ci/support/ovs/${rpm_out} -C /ci/support/ovs/
+    ${result}=  Split String    ${out}
+    log    [untar support-tools]#:${result}    console=true
+    ${payload}=    Create List  tmp/ecdsa-0.13-py2.py3-none-any.whl
+    ...                         tmp/install.sh
+    ...                         tmp/libnl-1.1.4-2.el6.x86_64.rpm
+    ...                         tmp/libpcap-1.4.0-4.20130826git2dbcaa1.el6.x86_64.rpm
+    ...                         tmp/ply-3.8.tar.gz
+    ...                         tmp/pyasn1-0.1.9-py2.py3-none-any.whl
+    ...                         tmp/pycrypto-2.6.1-py2.py3-none-any.whl
+    ...                         tmp/pysmi-0.0.7-py2.py3-none-any.whl
+    ...                         tmp/pysnmp-4.3.2.tar.gz
+    ...                         tmp/requests-2.9.1.tar.gz
+    ...                         tmp/supportUtil-4.10.00-SNAPSHOT.rpm
+    ...                         tmp/tcpdump-4.0.0-5.20090921gitdf3cb4.2.el6.x86_64.rpm
+    ...                         tmp/uninstall.sh
+    ${result1} =   Create List
+    log    Reference List output:${payload}    console=true
+    :FOR    ${value1}    IN    @{result}
+    \    ${status} =  Run Keyword and Return Status    List should contain value    ${payload}  ${value1}
+    \    Run keyword if   '${status}'=='True'    Append to List    ${result1}  ${value1}
+    Run keyword if   '${status}'!='True'    FAIL    Failed to Find the files
+    log    Verified Pacakages:${result1}    console=true
+
+Install Supportool
+    [Arguments]       ${text}=fail
+    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovs/tmp && ./install.sh    return_stderr=True    return_rc=True
+    ${status} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${stdout}    ${text}
+    Run keyword if   '${status}'!='True'    FAIL    Failed to Install Support-tool
+    Log    ${stdout}    console=true
+    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+
+Post Installation Validation
+
+    Set Default Configuration    timeout=900    # Some commands (below) take a long time
+    @{Commands}    Create List    find / -name "pyasn1"
+    ...                           find / -name "pysmi"
+    ...                           find / -name "ply"
+    ...                           find / -name "ecdsa"
+    ...                           find / -name "pysnmp"
+    ...                           find / -name "requests"
+    ...                           rpm -qa | grep libnl-1.1.4-2.el6.x86_64
+    ...                           rpm -qa | grep libpcap-1.4.0-4.20130826git2dbcaa1.el6.x86_64
+    ...                           rpm -qa | grep tcpdump-4.0.0-5.20090921gitdf3cb4.2.el6.x86_64   
+    :FOR    ${Command}    IN    @{Commands}
+    \    ${stdout}    ${stderr}    ${rc}=    Execute Command    ${Command}    return_stderr=True    return_rc=True
+    \    Log  [PostInstall-Command]#:${Command}    console=true
+    \    Log    ${stdout}    console=true
+    \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+
+    
+Add OV Enclosure
+    [Arguments]       ${timeout}=600 s   ${interval}=10 s
+    Log  Request to add enclosure   console=true
+    ${response} =   Fusion Api Add Enclosure    body=${add1_enclosure_body}
+    ${actual_resp_code} =   get from dictionary     ${response}     status_code
+    ${uri_location} =     Get From Dictionary    ${response}    headers
+    Run Keyword If  "${actual_resp_code}" is not '${202}'   Output Response Error Messages   ${response}
+    Run Keyword If  "${actual_resp_code}" is not '${202}'  Fail    msg=Failed add enclosure since the response code is not 202
+    Should Contain    ${uri_location}    Location
+    Set Suite Variable  ${uri_location}
+    Set Suite Variable  ${response}
+    ${task} =   Wait Until Keyword Succeeds     ${timeout}  ${interval}    Task1 Reached Endstate
+    
+    #Should Match Regexp     ${task['percentComplete']}   ((?i)Warning|Unknown|Terminated|Killed|Error|Completed)
+    Run Keyword If    '${task['percentComplete']}' is None    FAIL
+    
+Task1 Reached Endstate
+    #[Documentation]  Validate that task response has reach the end state
+    #[Arguments]    ${response}
+    Set Log Level   TRACE
+    ${task_uri} =       Get From Dictionary     ${uri_location}   Location
+    ${task} =           Fusion Api Get Task     uri=${task_uri}
+    Console      \t Task: [${task['category']}:${task['name']}] is: ${task['percentComplete']} for resource: ${task['associatedResource']['resourceName']} ${task['associatedResource']['resourceUri']}
+    Should Be Equal as integers    ${task['percentComplete']}  100
+    [Return]    ${task}
+
+ADD STORAGE DEVICES
+    ${resp} =    Fusion Api Create Storage System     body=${storage1_systems}
+    Log    ${resp}
+    ${actual_resp_code} =   get from dictionary     ${resp}     status_code
+    Log    [Status Code for Storage Hardware Add]#: ${actual_resp_code}    console=true
+    Run Keyword If  "${actual_resp_code}" is not '${202}'   Output Response Error Messages   ${resp}
+    Run Keyword If  "${actual_resp_code}" is not '${202}'  Fail    msg=Failed add enclosure since the response code is not 202 
+    
+ADD New Server Hardware
+    ${resp} =  Fusion Api Add Server Hardware   body=${rackservers1}
+    Log  ${resp}
+    ${actual_resp_code} =   get from dictionary     ${resp}     status_code
+    Log    [Status Code for Server Hardware Add]#: ${actual_resp_code}    console=true
+    Run Keyword If  "${actual_resp_code}" is not '${202}'   Output Response Error Messages   ${resp}
+    Run Keyword If  "${actual_resp_code}" is not '${202}'  Fail    msg=Failed add enclosure since the response code is not 202
+
+DevComm Verification
+    Set Default Configuration    timeout=900    # Some commands (below) take a long time
+    :FOR    ${Command}    IN    @{devComm_commands1}
+    # \    ${stdout}=     Create Variable
+    \    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
+    \    Log    [Command]#:${Command}    console=true
+    \    Log    ${stdout}    console=true
+    \    ${status}=    Run Keyword If    '''${devComm_3par}'''=='''${stdout}'''    Set Variable  OK
+    \    ...                  ELSE IF    '''${devComm_OA}'''               Set Variable  OK
+    \    ...                  ELSE IF    '''${ilo_devComm}'''              Set Variable  OK
+    \    ...                  ELSE    FAIL
+    \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    \    Run keyword if   '${status}'=='True'    PASS     Log    Validation : Passed
+    Run keyword if   '${status}'!='OK'    FAIL    Validation : Failed
+       
+    
+    
+Test Support
+    Set Default Configuration    timeout=900    # Some commands (below) take a long time
+    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./device_communication.py -ip 15.154.126.8 -devtype ILO    return_stderr=True    return_rc=True
+    #Log    [Command]#:${Command}    console=true
+        
+    ${comm_stdout_list}=    Create List    ${stdout.replace("\n", " ")}
+    
+    Log    ${comm_stdout_list}    console=true
+    Log    ${ilo_devComm}    console=true
+    ${status}     ${taskState} =  Run Keyword and Ignore Error    List Should Contain Value    ${comm_stdout_list}    ${ilo_devComm}   
+    Log    ${status}    console=true
+    #Log    ${stdout}    console=true
+    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    
+    

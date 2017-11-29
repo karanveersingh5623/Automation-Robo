@@ -1,0 +1,36 @@
+*** Settings ***
+Documentation    Verify and Deploy latest Support-Tool OVA
+
+Resource         support_resource1.txt
+Test Setup       Open SSH and API
+
+	  
+
+*** Test Cases ***
+# Connect to ssh OV
+    # ${a}=    Open OVSSH Connection And Log In
+    # Log    ${a}    console=True
+# Test 1
+    # Check Support Tool
+# Test 2
+    # Check Support Tool rpm
+# Test 3
+    # rpm file availability
+# Test 4
+    # Untar
+# Test 5
+    # Install Supportool
+# Test 6
+    # Post Installation Validation
+# Test 7
+    # Add OV Enclosure
+# Test 8
+    # ADD STORAGE DEVICES
+# Test 9
+    # ADD New Server Hardware
+    # Sleep  10 seconds
+Test 10
+    DevComm Verification
+# Test 11
+    # Test Support
+    

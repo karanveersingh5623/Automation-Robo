@@ -1,0 +1,87 @@
+*** Settings ***
+Documentation    Support Tools Installation and verification
+
+Library                         robot.api.logger
+Library                         OperatingSystem
+Library                         FusionLibrary
+Library                         RoboGalaxyLibrary
+Library                         BuiltIn
+Library                         Collections
+Library                         String
+Library                         SSHLibrary
+Library                         json
+Library                         XML            
+Resource						deploy_resource.txt
+Variables                       Supportool_data.py
+                        
+
+
+*** Variables ***
+${SSH_HOST}                     15.154.123.154
+
+*** Keywords ***
+#######################################
+# LOGGING
+#######################################
+
+Open OVSSH Connection And Log In
+    [Documentation]     Opens an SSH session to an appliance and logs in
+    [Arguments]         ${SSH_USER}=root   ${SSH_PASS}=hpvse1
+    Open Connection     ${SSH_HOST}     timeout=180s
+    Run Keyword If	    '${SSH_PASS}' is ${null}      Set Suite variable  ${SSH_PASS}     hpvse1
+    Login               ${SSH_USER}     ${SSH_PASS}
+    
+Login to OV Via REST API
+    # [Documentation]    Connects to the Appliance and creates a session using the Username and Password.
+    # [Documentation]    Example:\n| Login to Fusion Via REST
+    Should Not Be Equal    ${SSH_HOST}    'unknown'    msg=Please specify a valid Fusion IP address or hostname
+    Log    \n With IP ${SSH_HOST} (${admin1_credentials})...    console=true
+    ${Response}    ${AUTHTOKEN}    Fusion Api Login Appliance    ${SSH_HOST}    ${admin1_credentials}
+    Set Suite Variable   ${AUTHTOKEN}
+    Console      Auth token: ${AUTHTOKEN}
+    #Should Match StatusCode in Response      ${Response}   ${200}
+    #Set Suite Variable    ${LOGGED}  ${True}
+Open SSH and API
+    Open OVSSH Connection And Log In
+    Login to OV Via REST API    
+Soap Comm
+    ${rc}=    Execute Command    java -cp /ci/support/ovsupportability/lib/supportclient.jar:/ci/webapps/psrm/WEB-INF/lib/*:/ci/webapps/vcmmigrationmgr/WEB-INF/lib/*: SoapClient 15.154.122.101 admin admin1234
+    Log    ${rc}    console=true
+    ${value}=    Evaluate    "SessionKey:"
+    ${status}    ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rc}    ${value}
+    Run keyword if   '${status}'=='PASS'    Log    SOAP COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='PASS'    FAIL    SOAP FAILED
+    [Return]     ${status}  
+    
+REST Comm
+    ${rc}=    Execute Command     /usr/bin/curl -i --user admin:admin123 -X GET https://15.154.126.8/rest/v1/Systems
+    Log    ${rc}    console=true
+    ${value}=    Evaluate    "HTTP/1.1 200 OK"
+    ${status}    ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rc}    ${value}
+    Run keyword if   '${status}'=='PASS'    Log    REST : PASSED    console=true
+    Run keyword if   '${status}'!='PASS'    FAIL   REST : FAILED    console=true
+    [Return]     ${status}  
+    
+RIBCL Comm
+    [Arguments]    ${ilo_ip}=15.154.126.8    ${user_ilo}=admin    ${pass_ilo}=admin123  
+    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts && ./locfg1.pl -s ${ilo_ip} -f get_server_name.xml -u ${user_ilo} -p ${pass_ilo}
+    Log    ${rc}    console=true
+    ${value}=    Evaluate    "SERVER_OSNAME"
+    ${status}    ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rc}    ${value}
+    Run keyword if   '${status}'=='PASS'    Log    RIBCL : PASSED    console=true
+    Run keyword if   '${status}'!='PASS'    FAIL   RIBCL : FAILED    console=true
+    [Return]     ${status}  
+
+ILO Validation
+    REST Comm
+    RIBCL Comm
+    [Return]
+        
+    
+    
+    
+    
+    
+    
+    
+    

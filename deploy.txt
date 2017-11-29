@@ -1,0 +1,39 @@
+*** Settings ***
+Documentation    Deploy latest OVA
+...     = Variables =
+...     | FUSION_NAME | Required. VMware name for  the Fusion VM.
+...     | DEPLOY_URL | Required. if we want to install build other than top of tree
+...     | FUSION_DEPOT | URL specifying location of the OVA files.|
+...     | | (default http://ci-nexus.vse.rdlabs.hpecorp.net/Fusion/rel/4.00/OVA/DCS/ ).|
+...     | VSPHERE_DATASTORE | vShpere device to hold deployed VM (default fusionvm-1)|
+Resource        deploy_resource.txt
+
+*** Test Cases ***
+
+Test 1
+    Get Latest Fusion PASS Build URL
+  
+Test2
+    Extract Build Id Number
+
+# Test3
+    # Check OVFtool
+
+# Test4
+    # Deploy One View
+    
+Test 5
+    Get OV IP Address    
+    
+Test 6
+    Wait For OneView Configuration To Be Ready
+
+Test 7
+    API For Appliance Setup
+
+Test 8
+    FTS OV
+
+
+    
+    

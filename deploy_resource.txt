@@ -1,0 +1,191 @@
+*** Settings ***
+Documentation                   Configures an appliance with resources found in supplied data file.
+...                             Pass in specific tags with pybot -i <tag(s)> to limit processing
+Library                         robot.api.logger
+Library                         OperatingSystem
+Library                         FusionLibrary
+Library                         RoboGalaxyLibrary
+Library                         BuiltIn
+Library                         Collections
+Library                         String
+Library                         SSHLibrary
+#Library                         clrm_vmware.py
+Resource                        ../fusion/Resources/api/fusion_api_resource.txt
+#Variables                       data.py
+
+*** Variables ***
+
+${DATA}                         data.py
+${VERIFY}                       ${TRUE}
+${PASS_BUILD}                   HPE?OneView.*_PASS.*.%s$
+${VSPHERE_IP}                   15.154.123.113
+${VSPHERE_USERNAME}             Administrator@vsphere.local
+${VSPHERE_PASSWORD}             iso*help
+${VSPHERE_DATASTORE}            ""OVS_3PAR_TEST_Vol2""
+${FUSION_NAME}                  Karan_OVS-HPOneView
+${VSPHERE_NETWORK}              "VM Network"
+${OVFTOOL}                      C:\\ovftool\\ovftool.exe    #for 64-bit ovftool
+#${OVFTOOL1}                     "ovftool.exe"     #use this if path is too long for windows command prompt
+${TARGET_LOCATOR}               vi://vsphere.local%5cAdministrator:iso*help@15.154.123.113:443/OVSupportDev/host/OVS_Test
+${FUSION_DEPOT}                 http://ci-nexus.vse.rdlabs.hpecorp.net/Fusion/rel/4.00/OVA/SSH/
+${APPLIANCE_IP}                 []
+${SSH_HOST}						
+${FUSION_URL}                   unknown
+${SUITE_LOG_LEVEL}              TRACE
+${FUSION_PROMPT}                \#
+${FUSION_TIMEOUT}               60
+${IPV4TYPE}                     STATIC
+${OV_TYPE}		  				OA
+${DCS_TYPE}						C7000
+${FUSION_NAME_FINAL}
+
+
+*** Keywords ***
+
+Get Latest Fusion PASS Build URL
+    [TAGS]    DEFAULT_URL
+    [Documentation]    Get Latest OV PASS BUILD URL
+    #For Selecting Pass build only use non_passed = False
+    ${ova}=     Get LatestBuild Name           ${Fusion_Depot}     ''      ova    ${PASS_BUILD}
+    Set Suite Variable      ${DEPLOY_URL}       ${Fusion_Depot}${ova}
+    Console     \nDeploying from: ${DEPLOY_URL}
+    Log     ${DEPLOY_URL}
+    Set Suite Metadata      Deployed URL    ${DEPLOY_URL}   top=True
+    
+Extract Build Id Number
+    [Documentation]    Extract Build Id Number
+    #Using regular expression to match the ID with URL
+    ${status_non_pass} =        Run Keyword And Return Status
+    ...    Should Match Regexp    ${DEPLOY_URL}    (\\d{6})\.ova$
+    ${status_pass} =    Run Keyword And Return Status
+    ...    Should Match Regexp    ${DEPLOY_URL}    (\\d{6})\_.*\.ova$
+    ${id}=  Run Keyword If  ${status_non_pass} == True or ${status_pass} == True
+    ...    get regexp matches    ${DEPLOY_URL}    (\\d{6})\(\\w+)
+    Log To Console    ${id}
+    ${id_match}=        Get From List   ${id}   0
+    Set Suite Variable    ${FUSION_ID}    ${id_match}
+    Set Suite Metadata     Fusion Build Id    ${FUSION_ID}    top=True
+    Set Global Variable    ${FUSION_NAME_FINAL}    ${FUSION_NAME}${FUSION_ID}
+    Set Suite Metadata     Fusion VM Name    ${FUSION_NAME_FINAL}    top=True
+    Log    VM Build Name: ${FUSION_NAME_FINAL}    console=true
+    
+Check OVFtool
+    [Documentation]    Check If OVFTool installed on automation client
+    ...    If it is not installed Fusion VM deployment will fail
+    ${rc}   ${output}=  Run and Return Rc and Output    dir ${OVFTOOL}
+    Run Keyword Unless      '${rc}' == '0'      Fatal Error
+    ...     msg=Could not find ovftool.exe. Is it installed?
+    
+Deploy One View
+    [Documentation]    Deploy Fusion VM using latest build
+    Console    \nDeploying VM: ${FUSION_NAME_FINAL}
+    ${command}=    Catenate    ${OVFTOOL}
+    ...     --skipManifestCheck
+    ...     --noSSLVerify
+    ...     --acceptAllEulas
+    ...     --machineOutput
+    ...     --ipProtocol=IPv4
+    ...     --powerOn
+    ...     --overwrite
+    ...     --name="${FUSION_NAME_FINAL}"
+    ...     --datastore=${vSphere_Datastore}
+    ...     --network=${vSphere_Network}
+    ...     --diskMode=thin
+    #...     --vmFolder=${VMFOLDER}
+    ...     ${DEPLOY_URL}
+    ...     ${Target_Locator}
+    Log     ${command}
+    ${rc}   ${output}=      Run and Return Rc and Output    ${command}
+    Run Keyword Unless    '${rc}' == '0'    Fatal Error    msg=Could not deploy new VM ${output}
+    
+Get OV IP Address
+    [Documentation]    Get IP from newly deployed Fusion VM
+    Connect To VI Server    ${VSPHERE_IP}   ${VSPHERE_USERNAME}     ${VSPHERE_PASSWORD}
+    #Wait for 5 minutes since Fusion IP sometimes takes time to get assigned
+    Sleep    minutes
+    Wait Until Keyword Succeeds    10m  60s    Get VM IPv6 Addresses  ${FUSION_NAME_FINAL}
+    @{ips}=     Get VM IPv6 Addresses       ${FUSION_NAME_FINAL}
+    ${count}=       Get Length      ${ips}
+    Run Keyword If      ${count} == 0    Fatal Error     msg=No IP address returned from vSphere
+    ${ip}=      Get From List       ${ips}      0
+    #${ip2}=     Get From List       ${ips}      1
+    Should Match RegExp     ${ip}    (\\w+).(\\w+).(\\w+).(\\w+).(\\w+)
+    #Should Match RegExp     ${ip2}    (\\w+).(\\w+).(\\w+).(\\w+).(\\w+)
+        ...     msg=No valid IP address returned from vSphere
+    #Select IP  ${ip}  ${ip2}
+    #${RC}	${output} =	Run and return RC and Output	ping -n 4 [${ip}]
+    #Log    ${output}    console=true
+    Set Global Variable     ${APPLIANCE_IP}     [${ip}]
+    Set Environment Variable    FUSION_IP       ${APPLIANCE_IP}
+    Console     \nYour OV IP is: ${APPLIANCE_IP}
+    # ${file_ip}=    set variable    ${CURDIR}\\..\\..\\..\\..\\file_with_ip.txt
+    # CreateFile     ${file_ip}      ${APPLIANCE_IP}
+
+OV Reached Ready State
+	[Documentation]	Waits for an appliance reach OK state
+	${state} = 	Fusion Api Get Resource		${APPLIANCE_IP}/controller-state.json
+	Log 	-Appliance state: ${state['state']}    console=True
+	Should Match Regexp	${state['state']}	((?i)OK)
+	
+Wait For OneView Configuration To Be Ready
+	[Documentation]	Waits for an appliance reach a the ready state
+	[Arguments]		${timeout}=20 min	${interval}=30 s
+	Wait Until Keyword Succeeds		${timeout}	${interval}    OV Reached Ready State
+
+API For Appliance Setup
+    [Arguments]    ${PRIMARY_DNS}=16.110.135.51
+    Log 	-Agree to EULA    console=True
+	${eula}=    Fusion Api Save EULA    ${APPLIANCE_IP}
+    Return From Keyword If    ${eula['status_code']}!=200    FAIL   msg=EULA is not saved
+	Log 	-Enable service access    console=True
+	${access}=  Fusion Api Get service access   ${APPLIANCE_IP}
+	Run Keyword If   ${access['_content_consumed']}==True    Log  Service access is True
+    Return From Keyword If    ${access['status_code']}==400    FAIL   msg=Service Access is not proper
+    ${req} = 		Create Dictionary		newPassword=hpeadmin
+	...										oldPassword=admin
+	...										userName=Administrator
+	#Run Keyword If	${password} is not ${null}	Fusion Api Change Administrator password	host=${APPLIANCE_IP}	body=${req}
+	${password}=   Fusion Api Change Administrator password	  host=${APPLIANCE_IP}	body=${req}
+	Run Keyword If  ${password['status_code']}==400  Log   Password is already set  WARN
+	Run Keyword If    ${password['status_code']}==200    Log   Password is set
+	${admin_credentials} =            Create Dictionary		password=hpeadmin
+        ...                                             	userName=Administrator
+    Log to Console 	\nLogging in to the appliance after change password
+    ${response}		${session_id}=			Fusion Api Login Appliance		${APPLIANCE_IP} 		${admin_credentials}
+	${Network_response}=	Fusion Api Get Appliance Interfaces	    
+    Run Keyword If    ${Network_response['status_code']}!=200	
+    ...		Fatal Error    Unable to fetch Appliance Interfaces Dictionary: ${Network_response['message']}
+    ${body} =    Convert To Dictionary    ${Network_response}    
+    Remove from dictionary	${body}		headers		
+    Remove from dictionary      ${body}         status_code   
+    ${hostname} = 	get from dictionary	${body['applianceNetworks'][0]} 	hostname
+    Set to dictionary	${body['applianceNetworks'][0]}		hostname=${hostname}.hpe.com
+    Set to dictionary   ${body['applianceNetworks'][0]}		app1Ipv4Addr=15.154.123.157
+    Set to dictionary	${body['applianceNetworks'][0]}		ipv4Subnet=255.255.248.0
+    Set to dictionary	${body['applianceNetworks'][0]}		ipv4Gateway=15.154.120.1
+    Set to dictionary   ${body['applianceNetworks'][0]}		ipv4Type=STATIC
+    ${ipv4NameServers}    Create List    ${PRIMARY_DNS}
+    Set to dictionary   ${body['applianceNetworks'][0]}		ipv4NameServers=${ipv4NameServers}
+    Set to dictionary   ${body['applianceNetworks'][0]}		overrideIpv4DhcpDnsServers=false
+    Log to Console     ${body}		
+    ${resp}= 	Fusion Api Configure Appliance Interfaces		${body}	
+    #Log to Console	${resp}
+    Run Keyword If  ${resp['status_code']!=202}   FAIL  msg=Unable to set the network interfaces
+    Sleep     1 minutes
+    Wait For Task	${resp}		timeout=500s		interval=5s
+    Log to Console     New Array Set for OV : ${body}		
+    
+FTS OV
+    #API For Appliance Setup
+    Connect To VI Server    ${VSPHERE_IP}   ${VSPHERE_USERNAME}     ${VSPHERE_PASSWORD}
+    Wait Until Keyword Succeeds  1m  1s    Get VM IPv4 Addresses  ${FUSION_NAME_FINAL}
+    @{ips}=     Get VM IPv4 Addresses       ${FUSION_NAME_FINAL}
+    ${count}=       Get Length      ${ips}
+    Run Keyword If      ${count} == 0    Fatal Error     msg=No IP address returned from vSphere
+    ${ip1}=      Get From List       ${ips}      0
+    Should Match RegExp     ${ip1}       [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}
+        ...     msg=No valid IP address returned from vSphere
+    Set Global Variable     ${SSH_HOST}     ${ip1}
+    Set Environment Variable  FUSION_IP  ${SSH_HOST}
+    Console     \nYour Fusion IP is: ${SSH_HOST}
+    

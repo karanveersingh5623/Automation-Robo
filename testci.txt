@@ -1,0 +1,23 @@
+*** Settings ***
+Library				BuiltIn
+Library		        SSHLibrary
+Library           	FusionLibrary
+Library           	RoboGalaxyLibrary
+Resource			../Update_Resource.txt
+Resource			../cidebug.txt
+
+*** Variables ***
+${PauseWhenFailed}      False
+${SendMailWhenPaused}   False
+${sender}       karan-singh.gandhi@hpe.com
+${reciever}     karan-singh.gandhi@hpe.com
+${Subject}      Fixme.bin Testing
+${Content}	
+
+*** Test Cases ***
+Send mail Notification
+    #${EMAIL_TO} =   Get Variable Value   ${EMAIL_TO}
+    #Pass Execution If   '${EMAIL_TO}' == '${null}'  EMAIL_TO was set to None, no email notification will be sent.
+    #Connect To SMTP Server          smtp@hpe.com  True
+    ${suitename} =   Fetch From Left   ${SUITE NAME}  --
+    Send Email    ${sender}    ${reciever}    ${Subject}    ${suitename} complete

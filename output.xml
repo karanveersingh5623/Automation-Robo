@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20171129 13:05:08.693" generator="Robot 3.0 (Python 2.7.11 on win32)">
+<suite source="C:\Users\rguser\Robo\fusion\tests\ovs\MAT-I\Support.txt" id="s1" name="Support">
+<test id="s1-t1" name="Test 10">
+<kw type="setup" name="Open SSH and API" library="support_resource1">
+<kw name="Open OVSSH Connection And Log In" library="support_resource1">
+<doc>Opens an SSH session to an appliance and logs in</doc>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>timeout=180s</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:05:15.700" starttime="20171129 13:05:15.699"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PASS}' is ${null}</arg>
+<arg>Set Suite variable</arg>
+<arg>${SSH_PASS}</arg>
+<arg>hpvse1</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:05:15.703" starttime="20171129 13:05:15.701"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${SSH_USER}</arg>
+<arg>${SSH_PASS}</arg>
+</arguments>
+<msg timestamp="20171129 13:05:15.704" level="INFO">Logging into '15.154.123.154:22' as 'root'.</msg>
+<msg timestamp="20171129 13:05:18.972" level="INFO">Read output:</msg>
+<status status="PASS" endtime="20171129 13:05:18.972" starttime="20171129 13:05:15.703"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:05:18.972" starttime="20171129 13:05:15.698"></status>
+</kw>
+<kw name="Login to OV Via REST API" library="support_resource1">
+<kw name="Should Not Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are equal.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>'unknown'</arg>
+<arg>msg=Please specify a valid Fusion IP address or hostname</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:05:18.976" starttime="20171129 13:05:18.976"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>\n With IP ${SSH_HOST} (${admin1_credentials})...</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20171129 13:05:18.978" level="INFO">
+With IP 15.154.123.154 ({'userName': 'Administrator', 'password': 'hpeadmin'})...</msg>
+<status status="PASS" endtime="20171129 13:05:18.982" starttime="20171129 13:05:18.978"></status>
+</kw>
+<kw name="Fusion Api Login Appliance" library="FusionLibrary">
+<doc>Login to the appliance as the specified user</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>${admin1_credentials}</arg>
+</arguments>
+<assign>
+<var>${Response}</var>
+<var>${AUTHTOKEN}</var>
+</assign>
+<msg timestamp="20171129 13:05:22.941" level="INFO">Set suite metadata 'OneView Version' to value '4.00.00-0322016'.</msg>
+<msg timestamp="20171129 13:05:24.200" level="INFO">${Response} = {'status_code': 200, u'sessionID': u'MjAzOTE2MzE3MDk53VTTfFq1vk5VYvULgC1udZv5Rg6cJYTy', u'partnerData': {}, 'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=98', 'Server': 'A...</msg>
+<msg timestamp="20171129 13:05:24.200" level="INFO">${AUTHTOKEN} = MjAzOTE2MzE3MDk53VTTfFq1vk5VYvULgC1udZv5Rg6cJYTy</msg>
+<status status="PASS" endtime="20171129 13:05:24.200" starttime="20171129 13:05:18.984"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${AUTHTOKEN}</arg>
+</arguments>
+<msg timestamp="20171129 13:05:24.203" level="INFO">${AUTHTOKEN} = MjAzOTE2MzE3MDk53VTTfFq1vk5VYvULgC1udZv5Rg6cJYTy</msg>
+<status status="PASS" endtime="20171129 13:05:24.203" starttime="20171129 13:05:24.202"></status>
+</kw>
+<kw name="Console" library="robot.api.logger">
+<doc>Writes the message to the console.</doc>
+<arguments>
+<arg>Auth token: ${AUTHTOKEN}</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:05:24.205" starttime="20171129 13:05:24.204"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:05:24.205" starttime="20171129 13:05:18.974"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:05:24.205" starttime="20171129 13:05:15.697"></status>
+</kw>
+<kw name="DevComm Verification" library="support_resource1">
+<kw name="Set Default Configuration" library="SSHLibrary">
+<doc>Update the default `configuration`.</doc>
+<arguments>
+<arg>timeout=900</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:05:24.211" starttime="20171129 13:05:24.210"></status>
+</kw>
+<kw type="for" name="${Command} IN [ @{devComm_commands1} ]">
+<kw type="foritem" name="${Command} = ./device_communication.py -ip 16.114.216.190 -devtype 3par">
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ${Command}</arg>
+<arg>return_stderr=True</arg>
+<arg>return_rc=True</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+<var>${rc}</var>
+</assign>
+<msg timestamp="20171129 13:05:24.214" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./device_communication.py -ip 16.114.216.190 -devtype 3par'.</msg>
+<msg timestamp="20171129 13:05:48.407" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20171129 13:05:48.407" level="INFO">${stdout} = Device Type : 3par
+Supported protocols :  ping,rest
+
+ping : passed
+
+
+checking REST communication for 3PAR ...
+REST : passed</msg>
+<msg timestamp="20171129 13:05:48.407" level="INFO">${stderr} = </msg>
+<msg timestamp="20171129 13:05:48.408" level="INFO">${rc} = 0</msg>
+<status status="PASS" endtime="20171129 13:05:48.408" starttime="20171129 13:05:24.213"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>[Command]#:${Command}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20171129 13:05:48.410" level="INFO">[Command]#:./device_communication.py -ip 16.114.216.190 -devtype 3par</msg>
+<status status="PASS" endtime="20171129 13:05:48.411" starttime="20171129 13:05:48.409"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${stdout}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20171129 13:05:48.413" level="INFO">Device Type : 3par
+Supported protocols :  ping,rest
+
+ping : passed
+
+
+checking REST communication for 3PAR ...
+REST : passed</msg>
+<status status="PASS" endtime="20171129 13:05:48.413" starttime="20171129 13:05:48.412"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'''${devComm_3par}'''=='''${stdout}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE IF</arg>
+<arg>'''${devComm_OA}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE IF</arg>
+<arg>'''${ilo_devComm}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE</arg>
+<arg>FAIL</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>OK</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:05:48.421" starttime="20171129 13:05:48.420"></status>
+</kw>
+<msg timestamp="20171129 13:05:48.421" level="INFO">${status} = OK</msg>
+<status status="PASS" endtime="20171129 13:05:48.421" starttime="20171129 13:05:48.415"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+<arg>msg=Error returned: ${rc} ${stderr}</arg>
+</arguments>
+<msg timestamp="20171129 13:05:48.423" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20171129 13:05:48.423" starttime="20171129 13:05:48.422"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${rc}</arg>
+<arg>0</arg>
+<arg>msg=non-zero return code ${rc}</arg>
+</arguments>
+<msg timestamp="20171129 13:05:48.426" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20171129 13:05:48.426" starttime="20171129 13:05:48.425"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${status}'=='True'</arg>
+<arg>PASS</arg>
+<arg>Log</arg>
+<arg>Validation : Passed</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:05:48.431" starttime="20171129 13:05:48.428"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:05:48.431" starttime="20171129 13:05:24.211"></status>
+</kw>
+<kw type="foritem" name="${Command} = ./device_communication.py -ip 15.154.122.101 -devtype OA">
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ${Command}</arg>
+<arg>return_stderr=True</arg>
+<arg>return_rc=True</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+<var>${rc}</var>
+</assign>
+<msg timestamp="20171129 13:05:48.433" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./device_communication.py -ip 15.154.122.101 -devtype OA'.</msg>
+<msg timestamp="20171129 13:06:15.486" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20171129 13:06:15.486" level="INFO">${stdout} = Device Type : oa
+Supported protocols :  ping,ssh,soap
+
+ping : passed
+checking ssh communication ...
+SSH : passed
+checking SOAP communication ...
+SOAP Passed</msg>
+<msg timestamp="20171129 13:06:15.487" level="INFO">${stderr} = </msg>
+<msg timestamp="20171129 13:06:15.487" level="INFO">${rc} = 0</msg>
+<status status="PASS" endtime="20171129 13:06:15.487" starttime="20171129 13:05:48.433"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>[Command]#:${Command}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20171129 13:06:15.488" level="INFO">[Command]#:./device_communication.py -ip 15.154.122.101 -devtype OA</msg>
+<status status="PASS" endtime="20171129 13:06:15.489" starttime="20171129 13:06:15.488"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${stdout}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20171129 13:06:15.491" level="INFO">Device Type : oa
+Supported protocols :  ping,ssh,soap
+
+ping : passed
+checking ssh communication ...
+SSH : passed
+checking SOAP communication ...
+SOAP Passed</msg>
+<status status="PASS" endtime="20171129 13:06:15.491" starttime="20171129 13:06:15.490"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'''${devComm_3par}'''=='''${stdout}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE IF</arg>
+<arg>'''${devComm_OA}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE IF</arg>
+<arg>'''${ilo_devComm}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE</arg>
+<arg>FAIL</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>OK</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:06:15.502" starttime="20171129 13:06:15.502"></status>
+</kw>
+<msg timestamp="20171129 13:06:15.502" level="INFO">${status} = OK</msg>
+<status status="PASS" endtime="20171129 13:06:15.502" starttime="20171129 13:06:15.493"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+<arg>msg=Error returned: ${rc} ${stderr}</arg>
+</arguments>
+<msg timestamp="20171129 13:06:15.506" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20171129 13:06:15.506" starttime="20171129 13:06:15.505"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${rc}</arg>
+<arg>0</arg>
+<arg>msg=non-zero return code ${rc}</arg>
+</arguments>
+<msg timestamp="20171129 13:06:15.508" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20171129 13:06:15.508" starttime="20171129 13:06:15.507"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${status}'=='True'</arg>
+<arg>PASS</arg>
+<arg>Log</arg>
+<arg>Validation : Passed</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:06:15.512" starttime="20171129 13:06:15.509"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:06:15.512" starttime="20171129 13:05:48.431"></status>
+</kw>
+<kw type="foritem" name="${Command} = ./device_communication.py -ip 15.154.126.8 -devtype ILO">
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ${Command}</arg>
+<arg>return_stderr=True</arg>
+<arg>return_rc=True</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+<var>${rc}</var>
+</assign>
+<msg timestamp="20171129 13:06:15.516" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./device_communication.py -ip 15.154.126.8 -devtype ILO'.</msg>
+<msg timestamp="20171129 13:06:33.481" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20171129 13:06:33.483" level="INFO">${stdout} = Device Type : ilo
+Note: REST and SNMP access are supported only on iLO 4.
+Supported protocols :  ping,rest,ribcl,snmp
+
+ping : passed
+checking REST communication for iLO...
+REST : passed
+checking RIBCL...</msg>
+<msg timestamp="20171129 13:06:33.483" level="INFO">${stderr} = </msg>
+<msg timestamp="20171129 13:06:33.483" level="INFO">${rc} = 0</msg>
+<status status="PASS" endtime="20171129 13:06:33.483" starttime="20171129 13:06:15.514"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>[Command]#:${Command}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20171129 13:06:33.486" level="INFO">[Command]#:./device_communication.py -ip 15.154.126.8 -devtype ILO</msg>
+<status status="PASS" endtime="20171129 13:06:33.486" starttime="20171129 13:06:33.485"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${stdout}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20171129 13:06:33.487" level="INFO">Device Type : ilo
+Note: REST and SNMP access are supported only on iLO 4.
+Supported protocols :  ping,rest,ribcl,snmp
+
+ping : passed
+checking REST communication for iLO...
+REST : passed
+checking RIBCL communication for iLO...
+RIBCL : Passed
+checking snmp communication ...
+snmp : failed</msg>
+<status status="PASS" endtime="20171129 13:06:33.488" starttime="20171129 13:06:33.487"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'''${devComm_3par}'''=='''${stdout}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE IF</arg>
+<arg>'''${devComm_OA}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE IF</arg>
+<arg>'''${ilo_devComm}'''</arg>
+<arg>Set Variable</arg>
+<arg>OK</arg>
+<arg>ELSE</arg>
+<arg>FAIL</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>OK</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:06:33.499" starttime="20171129 13:06:33.498"></status>
+</kw>
+<msg timestamp="20171129 13:06:33.499" level="INFO">${status} = OK</msg>
+<status status="PASS" endtime="20171129 13:06:33.499" starttime="20171129 13:06:33.489"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+<arg>msg=Error returned: ${rc} ${stderr}</arg>
+</arguments>
+<msg timestamp="20171129 13:06:33.503" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20171129 13:06:33.503" starttime="20171129 13:06:33.502"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${rc}</arg>
+<arg>0</arg>
+<arg>msg=non-zero return code ${rc}</arg>
+</arguments>
+<msg timestamp="20171129 13:06:33.505" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20171129 13:06:33.505" starttime="20171129 13:06:33.504"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${status}'=='True'</arg>
+<arg>PASS</arg>
+<arg>Log</arg>
+<arg>Validation : Passed</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:06:33.510" starttime="20171129 13:06:33.506"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:06:33.510" starttime="20171129 13:06:15.512"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:06:33.510" starttime="20171129 13:05:24.211"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${status}'!='OK'</arg>
+<arg>FAIL</arg>
+<arg>Validation : Failed</arg>
+</arguments>
+<status status="PASS" endtime="20171129 13:06:33.515" starttime="20171129 13:06:33.512"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:06:33.515" starttime="20171129 13:05:24.208"></status>
+</kw>
+<status status="PASS" endtime="20171129 13:06:33.516" critical="yes" starttime="20171129 13:05:15.696"></status>
+</test>
+<doc>Verify and Deploy latest Support-Tool OVA</doc>
+<metadata>
+<item name="OneView Version">4.00.00-0322016</item>
+</metadata>
+<status status="PASS" endtime="20171129 13:06:33.521" starttime="20171129 13:05:08.699"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="Support" pass="1">Support</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

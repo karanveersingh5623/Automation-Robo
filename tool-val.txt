@@ -1,0 +1,18 @@
+*** Settings ***
+Documentation    Verify and Deploy latest Support-Tool OVA
+
+Resource         tools-validation-resource.txt
+Test Setup       Open SSH and API
+
+*** Test Cases ***
+# Test 1
+    # Soap Comm
+   
+# Test 2
+    # REST Comm
+
+# Test 3
+    # RIBCL Comm
+    
+Test 4
+    ILO Validation
