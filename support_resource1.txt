@@ -71,7 +71,7 @@ rpm file availability
     #${result}=  Split String    ${out}    \n
     log    [rpm file availability]#:${rpm_out}    console=true
     #:FOR     ${line}   in    @{result}
-    ${value}=    Evaluate   'support-tools.tar'
+    ${value}=    Evaluate   'support-tools.tar.gz'
     #\    Should Match RegExp    ${line}    (\\w+)-(\\w+)-(\\d).(\\d+).(\\d+)-(\\d+).(\\w+)
     ${status}     ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rpm_out}    ${value}
     Run keyword if   '${status}'=='PASS'    Log    RPM Exists
@@ -175,23 +175,95 @@ ADD New Server Hardware
     Run Keyword If  "${actual_resp_code}" is not '${202}'  Fail    msg=Failed add enclosure since the response code is not 202
 
 DevComm Verification
+    [Documentation]    Verifies Device communication scripts against ILO , 3PAR , OA
     Set Default Configuration    timeout=900    # Some commands (below) take a long time
     :FOR    ${Command}    IN    @{devComm_commands1}
     # \    ${stdout}=     Create Variable
     \    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
     \    Log    [Command]#:${Command}    console=true
     \    Log    ${stdout}    console=true
-    \    ${status}=    Run Keyword If    '''${devComm_3par}'''=='''${stdout}'''    Set Variable  OK
-    \    ...                  ELSE IF    '''${devComm_OA}'''               Set Variable  OK
-    \    ...                  ELSE IF    '''${ilo_devComm}'''              Set Variable  OK
-    \    ...                  ELSE    FAIL
+    \    ${status}=    Run Keyword If    '''${stdout}'''=='''${devComm_3par}'''             Set Variable  OK
+    \    ...                  ELSE IF    '''${stdout}'''=='''${devComm_OA}'''               Set Variable  OK
+    \    ...                  ELSE IF    '''${stdout}'''=='''${ilo_devComm}'''              Set Variable  OK
+    # \    ...                  ELSE    FAIL
     \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
     \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
     \    Run keyword if   '${status}'=='True'    PASS     Log    Validation : Passed
     Run keyword if   '${status}'!='OK'    FAIL    Validation : Failed
        
+PortComm Verification
+    [Documentation]    Verifies port communication scripts against ILO , 3PAR , OA
+    #[Arguments]    ${Command}=./check_port_communication.py -ip 15.154.126.8 -devtype ilo 
+    Set Default Configuration    timeout=900    # Some commands (below) take a long time
+    :FOR    ${Command}    IN    @{portComm_commands}
+    \    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
+    \    Log    [Command]#:${Command}    console=true
+    \    Log    ${stdout}    console=true
+    \    ${lines}=    Split To Lines    ${stdout}
+    #Log    ${lines}    console=true
+    \    ${match}=    Should Contain Match    ${lines}    regexp=Port\\s\\d+:\\s+Open
+    \    ${match}=    Set Variable If     '${match}'=='None'    OK
+    \    Log    [Match]:${match}    console=true
+    \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    Run keyword if   '${match}'=='OK'        Log    Port Validation : Passed
+    Run keyword if   '${match}'!='OK'    FAIL    Port Validation : Failed
+    # ${status}=      Get From List       ${lines}               4
+    # Log    ${status}    console=true
     
+    # \    ${status}=    Run Keyword If    '''${stdout}'''=='''${portComm_OA}'''                Set Variable  OK
+    # \    ...                  ELSE IF    '''${stdout}'''=='''${portComm_ILO}'''               Set Variable  OK
+    # \    ...                  ELSE IF    '''${stdout}'''=='''${portComm_3par}'''              Set Variable  OK
+    # # \    ...                  ELSE    FAIL
+    # \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    # \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    # \    Run keyword if   '${status}'=='True'    PASS     Log    Validation : Passed
+    # Run keyword if   '${status}'!='OK'    FAIL    Validation : Failed
+
+Dtask Verification
+    ${dtask_out}=  Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dtask.py --list warning    return_stderr=True    return_rc=True
+    #${dtask_out}=  Split String    ${out}
+    ${str}=    Catenate    @{dtask_out}
+    log    [Dtask availability]#:${str}    console=true
+    #:FOR     ${task}   in    @${dtask_out}
+    ${value}=    Evaluate   'Warning'
+    ${status}     ${taskState} =  Run Keyword and Ignore Error    should contain    ${str}    ${value}
+    Run keyword if   '${status}'=='PASS'    Log    Dtasks Exists    console=true
+    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the tasks
     
+RabbitMQ Verification
+    ${mq_out}=  Execute Command    cd /ci/support/ovsupportability/scripts/ && ./rabbitmq.py -l CRM    return_stderr=True    return_rc=True
+    #${dtask_out}=  Split String    ${out}
+    ${str}=    Catenate    @{mq_out}
+    log    [RabbitMQ availability]#:${str}    console=true
+    #:FOR     ${task}   in    @${dtask_out}
+    ${value}=    Evaluate   'Running'
+    ${status}     ${taskState} =  Run Keyword and Ignore Error    should contain    ${str}    ${value}
+    Run keyword if   '${status}'=='PASS'    Log    Queue Exists    console=true
+    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the Oueues
+    
+DBsync Verification
+    ${db_out}=  Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm fulldb -diff    return_stderr=True    return_rc=True
+    #${dtask_out}=  Split String    ${out}
+    ${str}=    Catenate    @{db_out}
+    log    [DBsync Output]#:${str}    console=true
+    #:FOR     ${task}   in    @${dtask_out}
+    ${value}=    Evaluate   'rm_id'
+    ${status}     ${taskState} =  Run Keyword and Ignore Error    should contain    ${str}    ${value}
+    Run keyword if   '${status}'=='PASS'    Log    DB Exists    console=true
+    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the DB
+    
+LuceneIndex Verfication
+    [Arguments]    ${out1}=Lucene and Index db needs to be synced. Appliance restart will resolve the issue    ${out2}=Lucene and index db are in sync
+    ${Command}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./luceneindex.py    return_stderr=True    return_rc=True
+    Log    [OUTPUT]#:${Command}    console=true
+    ${status}=    Run Keyword If    '''${out1}'''=='''${Command}'''    Set Variable  OK
+    ...                  ELSE IF    '''${out2}'''               Set Variable  OK
+    ...                  ELSE    FAIL
+    Run keyword if   '${status}'=='OK'    Log    LuceneIndex Validation : Passed    console=true
+    Run keyword if   '${status}'!='OK'    FAIL    Validation : Failed
+
+        
 Test Support
     Set Default Configuration    timeout=900    # Some commands (below) take a long time
     ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./device_communication.py -ip 15.154.126.8 -devtype ILO    return_stderr=True    return_rc=True
