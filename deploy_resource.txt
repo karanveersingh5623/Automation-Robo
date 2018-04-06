@@ -9,34 +9,31 @@ Library                         BuiltIn
 Library                         Collections
 Library                         String
 Library                         SSHLibrary
-#Library                         clrm_vmware.py
 Resource                        ../fusion/Resources/api/fusion_api_resource.txt
-#Variables                       data.py
 
 *** Variables ***
 
-${DATA}                         data.py
+#${DATA}                         data.py
 ${VERIFY}                       ${TRUE}
 ${PASS_BUILD}                   HPE?OneView.*_PASS.*.%s$
-${VSPHERE_IP}                   15.154.123.113
+${PASS_BUILD2}                  HPE?OneView.*.%s$
+${DCS_BUILD}                    HPE?OneView-DCS.*.%s$
+${ATLAS_BUILD}                  atlas.*.%s$
+${VSPHERE_IP}                   15.212.144.137
 ${VSPHERE_USERNAME}             Administrator@vsphere.local
-${VSPHERE_PASSWORD}             iso*help
+${VSPHERE_PASSWORD}             12Iso*help
 ${VSPHERE_DATASTORE}            ""OVS_3PAR_TEST_Vol2""
-${FUSION_NAME}                  Karan_OVS-HPOneView
+${FUSION_NAME}                  OVS-MAT_4.10OVS-HPOneView                #  Change the name accordingly
 ${VSPHERE_NETWORK}              "VM Network"
 ${OVFTOOL}                      C:\\ovftool\\ovftool.exe    #for 64-bit ovftool
-#${OVFTOOL1}                     "ovftool.exe"     #use this if path is too long for windows command prompt
-${TARGET_LOCATOR}               vi://vsphere.local%5cAdministrator:iso*help@15.154.123.113:443/OVSupportDev/host/OVS_Test
-${FUSION_DEPOT}                 http://ci-nexus.vse.rdlabs.hpecorp.net/Fusion/rel/4.00/OVA/SSH/
+${TARGET_LOCATOR}               "vi://vsphere.local%5cAdministrator:12Iso*help@15.212.144.137:443/OVSupportDev/host/OVS_Test"
+${FUSION_DEPOT}                 http://ci-artifacts02.vse.rdlabs.hpecorp.net/Fusion/rel/4.10/OVA/SSH/
+${ATLAS_DEPOT}                  http://ci-artifacts02.vse.rdlabs.hpecorp.net/Atlas/master/OVA/SSH/
+${OV_FTP_DEPOT}                 http://15.212.144.150/Fusion_Pass/
 ${APPLIANCE_IP}                 []
 ${SSH_HOST}						
-${FUSION_URL}                   unknown
+${FUSION_PROXY}                 http://web-proxy.houston.hpecorp.net:8080
 ${SUITE_LOG_LEVEL}              TRACE
-${FUSION_PROMPT}                \#
-${FUSION_TIMEOUT}               60
-${IPV4TYPE}                     STATIC
-${OV_TYPE}		  				OA
-${DCS_TYPE}						C7000
 ${FUSION_NAME_FINAL}
 
 
@@ -46,8 +43,9 @@ Get Latest Fusion PASS Build URL
     [TAGS]    DEFAULT_URL
     [Documentation]    Get Latest OV PASS BUILD URL
     #For Selecting Pass build only use non_passed = False
-    ${ova}=     Get LatestBuild Name           ${Fusion_Depot}     ''      ova    ${PASS_BUILD}
-    Set Suite Variable      ${DEPLOY_URL}       ${Fusion_Depot}${ova}
+    ${ova}=     Get LatestBuild Name           ${OV_FTP_DEPOT}    ''    ova    ${PASS_BUILD}
+    ${ova1}=    Remove String Using Regexp    ${ova}    (/\\w+/)
+    Set Suite Variable      ${DEPLOY_URL}       ${OV_FTP_DEPOT}${ova1}
     Console     \nDeploying from: ${DEPLOY_URL}
     Log     ${DEPLOY_URL}
     Set Suite Metadata      Deployed URL    ${DEPLOY_URL}   top=True
@@ -61,6 +59,7 @@ Extract Build Id Number
     ...    Should Match Regexp    ${DEPLOY_URL}    (\\d{6})\_.*\.ova$
     ${id}=  Run Keyword If  ${status_non_pass} == True or ${status_pass} == True
     ...    get regexp matches    ${DEPLOY_URL}    (\\d{6})\(\\w+)
+    #...    get regexp matches    ${DEPLOY_URL}    (\\d{6})
     Log To Console    ${id}
     ${id_match}=        Get From List   ${id}   0
     Set Suite Variable    ${FUSION_ID}    ${id_match}
@@ -91,7 +90,9 @@ Deploy One View
     ...     --datastore=${vSphere_Datastore}
     ...     --network=${vSphere_Network}
     ...     --diskMode=thin
-    #...     --vmFolder=${VMFOLDER}
+    # ...     --X:viUseProxy
+    # ...     --proxy=${FUSION_PROXY}
+    ...     --chunkSize=200mb
     ...     ${DEPLOY_URL}
     ...     ${Target_Locator}
     Log     ${command}
@@ -102,7 +103,7 @@ Get OV IP Address
     [Documentation]    Get IP from newly deployed Fusion VM
     Connect To VI Server    ${VSPHERE_IP}   ${VSPHERE_USERNAME}     ${VSPHERE_PASSWORD}
     #Wait for 5 minutes since Fusion IP sometimes takes time to get assigned
-    Sleep    minutes
+    Sleep    3 minutes
     Wait Until Keyword Succeeds    10m  60s    Get VM IPv6 Addresses  ${FUSION_NAME_FINAL}
     @{ips}=     Get VM IPv6 Addresses       ${FUSION_NAME_FINAL}
     ${count}=       Get Length      ${ips}
@@ -129,7 +130,7 @@ OV Reached Ready State
 	
 Wait For OneView Configuration To Be Ready
 	[Documentation]	Waits for an appliance reach a the ready state
-	[Arguments]		${timeout}=20 min	${interval}=30 s
+	[Arguments]		${timeout}=30 min	${interval}=30 s
 	Wait Until Keyword Succeeds		${timeout}	${interval}    OV Reached Ready State
 
 API For Appliance Setup
@@ -141,14 +142,14 @@ API For Appliance Setup
 	${access}=  Fusion Api Get service access   ${APPLIANCE_IP}
 	Run Keyword If   ${access['_content_consumed']}==True    Log  Service access is True
     Return From Keyword If    ${access['status_code']}==400    FAIL   msg=Service Access is not proper
-    ${req} = 		Create Dictionary		newPassword=hpeadmin
+    ${req} = 		Create Dictionary		newPassword=admin123
 	...										oldPassword=admin
 	...										userName=Administrator
 	#Run Keyword If	${password} is not ${null}	Fusion Api Change Administrator password	host=${APPLIANCE_IP}	body=${req}
 	${password}=   Fusion Api Change Administrator password	  host=${APPLIANCE_IP}	body=${req}
 	Run Keyword If  ${password['status_code']}==400  Log   Password is already set  WARN
 	Run Keyword If    ${password['status_code']}==200    Log   Password is set
-	${admin_credentials} =            Create Dictionary		password=hpeadmin
+	${admin_credentials} =            Create Dictionary		password=admin123
         ...                                             	userName=Administrator
     Log to Console 	\nLogging in to the appliance after change password
     ${response}		${session_id}=			Fusion Api Login Appliance		${APPLIANCE_IP} 		${admin_credentials}
@@ -160,9 +161,9 @@ API For Appliance Setup
     Remove from dictionary      ${body}         status_code   
     ${hostname} = 	get from dictionary	${body['applianceNetworks'][0]} 	hostname
     Set to dictionary	${body['applianceNetworks'][0]}		hostname=${hostname}.hpe.com
-    Set to dictionary   ${body['applianceNetworks'][0]}		app1Ipv4Addr=15.154.123.157
-    Set to dictionary	${body['applianceNetworks'][0]}		ipv4Subnet=255.255.248.0
-    Set to dictionary	${body['applianceNetworks'][0]}		ipv4Gateway=15.154.120.1
+    Set to dictionary   ${body['applianceNetworks'][0]}		app1Ipv4Addr=15.212.144.151
+    Set to dictionary	${body['applianceNetworks'][0]}		ipv4Subnet=255.255.255.0
+    Set to dictionary	${body['applianceNetworks'][0]}		ipv4Gateway=15.212.144.1
     Set to dictionary   ${body['applianceNetworks'][0]}		ipv4Type=STATIC
     ${ipv4NameServers}    Create List    ${PRIMARY_DNS}
     Set to dictionary   ${body['applianceNetworks'][0]}		ipv4NameServers=${ipv4NameServers}
@@ -172,7 +173,7 @@ API For Appliance Setup
     #Log to Console	${resp}
     Run Keyword If  ${resp['status_code']!=202}   FAIL  msg=Unable to set the network interfaces
     Sleep     1 minutes
-    Wait For Task	${resp}		timeout=500s		interval=5s
+    #Wait For Task	${resp}		timeout=500s		interval=5s
     Log to Console     New Array Set for OV : ${body}		
     
 FTS OV

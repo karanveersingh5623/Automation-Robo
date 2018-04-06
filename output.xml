@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generated="20171129 13:05:08.693" generator="Robot 3.0 (Python 2.7.11 on win32)">
+<robot generated="20180403 02:09:41.009" generator="Robot 3.0 (Python 2.7.11 on win32)">
 <suite source="C:\Users\rguser\Robo\fusion\tests\ovs\MAT-I\Support.txt" id="s1" name="Support">
-<test id="s1-t1" name="Test 10">
+<kw type="setup" name="Set Log Level" library="BuiltIn">
+<doc>Sets the log threshold to the specified level and returns the old level.</doc>
+<arguments>
+<arg>Trace</arg>
+</arguments>
+<msg timestamp="20180403 02:09:50.398" level="INFO">Log level changed from INFO to TRACE.</msg>
+<msg timestamp="20180403 02:09:50.398" level="TRACE">Return: b'INFO'</msg>
+<status status="PASS" endtime="20180403 02:09:50.398" starttime="20180403 02:09:50.398"></status>
+</kw>
+<test id="s1-t1" name="Test 19">
 <kw type="setup" name="Open SSH and API" library="support_resource1">
+<msg timestamp="20180403 02:09:50.398" level="TRACE">Arguments: [  ]</msg>
 <kw name="Open OVSSH Connection And Log In" library="support_resource1">
 <doc>Opens an SSH session to an appliance and logs in</doc>
+<msg timestamp="20180403 02:09:50.414" level="TRACE">Arguments: [ ${SSH_USER}='root' | ${SSH_PASS}='hpvse1' ]</msg>
 <kw name="Open Connection" library="SSHLibrary">
 <doc>Opens a new SSH connection to the given `host` and `port`.</doc>
 <arguments>
 <arg>${SSH_HOST}</arg>
 <arg>timeout=180s</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:05:15.700" starttime="20171129 13:05:15.699"></status>
+<msg timestamp="20180403 02:09:50.414" level="TRACE">Arguments: [ '15.212.144.169' | timeout='180s' ]</msg>
+<msg timestamp="20180403 02:09:50.414" level="TRACE">Return: 1</msg>
+<status status="PASS" endtime="20180403 02:09:50.414" starttime="20180403 02:09:50.414"></status>
 </kw>
 <kw name="Run Keyword If" library="BuiltIn">
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
@@ -21,7 +34,9 @@
 <arg>${SSH_PASS}</arg>
 <arg>hpvse1</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:05:15.703" starttime="20171129 13:05:15.701"></status>
+<msg timestamp="20180403 02:09:50.414" level="TRACE">Arguments: [ "'hpvse1' is None" | 'Set Suite variable' | '${SSH_PASS}' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:09:50.414" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:50.414" starttime="20180403 02:09:50.414"></status>
 </kw>
 <kw name="Login" library="SSHLibrary">
 <doc>Logs into the SSH server with the given `username` and `password`.</doc>
@@ -29,13 +44,20 @@
 <arg>${SSH_USER}</arg>
 <arg>${SSH_PASS}</arg>
 </arguments>
-<msg timestamp="20171129 13:05:15.704" level="INFO">Logging into '15.154.123.154:22' as 'root'.</msg>
-<msg timestamp="20171129 13:05:18.972" level="INFO">Read output:</msg>
-<status status="PASS" endtime="20171129 13:05:18.972" starttime="20171129 13:05:15.703"></status>
+<msg timestamp="20180403 02:09:50.414" level="TRACE">Arguments: [ 'root' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:09:50.414" level="INFO">Logging into '15.212.144.169:22' as 'root'.</msg>
+<msg timestamp="20180403 02:09:50.914" level="DEBUG">Adding ssh-rsa host key for 15.212.144.169: 384c307862744f084d50634b1c76adf1</msg>
+<msg timestamp="20180403 02:09:51.335" level="DEBUG">[chan 0] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:09:52.617" level="INFO">Read output: Last login: Tue Apr  3 18:46:39 2018 from 10.41.93.5
+7[r[999;999H[6n</msg>
+<msg timestamp="20180403 02:09:52.617" level="TRACE">Return: 'Last login: Tue Apr  3 18:46:39 2018 from 10.41.93.5\r\r\n\x1b7\x1b[r\x1b[999;999H\x1b[6n'</msg>
+<status status="PASS" endtime="20180403 02:09:52.617" starttime="20180403 02:09:50.414"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:05:18.972" starttime="20171129 13:05:15.698"></status>
+<msg timestamp="20180403 02:09:52.617" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:52.617" starttime="20180403 02:09:50.398"></status>
 </kw>
 <kw name="Login to OV Via REST API" library="support_resource1">
+<msg timestamp="20180403 02:09:52.617" level="TRACE">Arguments: [  ]</msg>
 <kw name="Should Not Be Equal" library="BuiltIn">
 <doc>Fails if the given objects are equal.</doc>
 <arguments>
@@ -43,7 +65,12 @@
 <arg>'unknown'</arg>
 <arg>msg=Please specify a valid Fusion IP address or hostname</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:05:18.976" starttime="20171129 13:05:18.976"></status>
+<msg timestamp="20180403 02:09:52.617" level="TRACE">Arguments: [ '15.212.144.169' | "'unknown'" | msg='Please specify a valid Fusion IP address or hostname' ]</msg>
+<msg timestamp="20180403 02:09:52.617" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20180403 02:09:52.617" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:52.617" starttime="20180403 02:09:52.617"></status>
 </kw>
 <kw name="Log" library="BuiltIn">
 <doc>Logs the given message with the given level.</doc>
@@ -51,9 +78,11 @@
 <arg>\n With IP ${SSH_HOST} (${admin1_credentials})...</arg>
 <arg>console=true</arg>
 </arguments>
-<msg timestamp="20171129 13:05:18.978" level="INFO">
-With IP 15.154.123.154 ({'userName': 'Administrator', 'password': 'hpeadmin'})...</msg>
-<status status="PASS" endtime="20171129 13:05:18.982" starttime="20171129 13:05:18.978"></status>
+<msg timestamp="20180403 02:09:52.617" level="TRACE">Arguments: [ "\nWith IP 15.212.144.169 ({'userName': 'Administrator', 'password': 'admin123'})..." | console='true' ]</msg>
+<msg timestamp="20180403 02:09:52.617" level="INFO">
+With IP 15.212.144.169 ({'userName': 'Administrator', 'password': 'admin123'})...</msg>
+<msg timestamp="20180403 02:09:52.632" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:52.632" starttime="20180403 02:09:52.617"></status>
 </kw>
 <kw name="Fusion Api Login Appliance" library="FusionLibrary">
 <doc>Login to the appliance as the specified user</doc>
@@ -65,417 +94,1898 @@ With IP 15.154.123.154 ({'userName': 'Administrator', 'password': 'hpeadmin'})..
 <var>${Response}</var>
 <var>${AUTHTOKEN}</var>
 </assign>
-<msg timestamp="20171129 13:05:22.941" level="INFO">Set suite metadata 'OneView Version' to value '4.00.00-0322016'.</msg>
-<msg timestamp="20171129 13:05:24.200" level="INFO">${Response} = {'status_code': 200, u'sessionID': u'MjAzOTE2MzE3MDk53VTTfFq1vk5VYvULgC1udZv5Rg6cJYTy', u'partnerData': {}, 'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=98', 'Server': 'A...</msg>
-<msg timestamp="20171129 13:05:24.200" level="INFO">${AUTHTOKEN} = MjAzOTE2MzE3MDk53VTTfFq1vk5VYvULgC1udZv5Rg6cJYTy</msg>
-<status status="PASS" endtime="20171129 13:05:24.200" starttime="20171129 13:05:18.984"></status>
+<msg timestamp="20180403 02:09:52.632" level="TRACE">Arguments: [ '15.212.144.169' | {b'password': b'admin123', b'userName': b'Administrator'} ]</msg>
+<msg timestamp="20180403 02:09:52.632" level="DEBUG">
+URL	GET https://15.212.144.169/rest/appliance/nodeinfo/version
+Request Headers {
+    "Accept": "application/json, */*",
+    "Accept-language": "en_US",
+    "Content-Type": "application/json"
+}
+HTTP Headers {
+    "accept": [
+        "Accept",
+        "*/*"
+    ],
+    "accept-encoding": [
+        "Accept-Encoding",
+        "gzip, deflate"
+    ],
+    "connection": [
+        "Connection",
+        "keep-alive"
+    ],
+    "user-agent": [
+        "User-Agent",
+        "python-requests/2.18.4"
+    ]
+}
+</msg>
+<msg timestamp="20180403 02:09:52.695" level="DEBUG">Starting new HTTPS connection (1): 15.212.144.169</msg>
+<msg timestamp="20180403 02:09:56.718" level="DEBUG">https://15.212.144.169:443 "GET /rest/appliance/nodeinfo/version HTTP/1.1" 200 None</msg>
+<msg timestamp="20180403 02:09:56.718" level="DEBUG">
+Status 200
+Response Headers {
+    "Connection": "Keep-Alive",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Date": "Tue, 03 Apr 2018 19:02:17 GMT",
+    "Keep-Alive": "timeout=15, max=100",
+    "Server": "Apache",
+    "Transfer-Encoding": "chunked",
+    "cache-control": "no-cache"
+}
+Response Body {
+    "build": "0336720",
+    "category": null,
+    "created": null,
+    "date": "2018-03-11T02:01:02+0000",
+    "eTag": null,
+    "major": "4",
+    "minor": "10",
+    "modelNumber": "HPE OneView VM - VMware vSphere",
+    "modified": null,
+    "platformType": "vm",
+    "revision": "00",
+    "serialNumber": "VMware-422c1b770fa92b1d-58a5f8652952a424",
+    "softwareVersion": "4.10.00-0336720",
+    "type": "NodeVersionDto",
+    "uri": null
+}</msg>
+<msg timestamp="20180403 02:09:56.718" level="INFO">Set suite metadata 'OneView Version' to value '4.10.00-0336720'.</msg>
+<msg timestamp="20180403 02:09:56.718" level="DEBUG">
+URL	POST https://15.212.144.169/rest/login-sessions
+Request Headers {
+    "Accept": "application/json, */*",
+    "Accept-language": "en_US",
+    "Content-Type": "application/json",
+    "X-Api-Version": "600"
+}
+HTTP Headers {
+    "accept": [
+        "Accept",
+        "*/*"
+    ],
+    "accept-encoding": [
+        "Accept-Encoding",
+        "gzip, deflate"
+    ],
+    "connection": [
+        "Connection",
+        "keep-alive"
+    ],
+    "user-agent": [
+        "User-Agent",
+        "python-requests/2.18.4"
+    ]
+}n</msg>
+<msg timestamp="20180403 02:09:56.733" level="DEBUG">Request Body {
+    "password": "admin123",
+    "userName": "Administrator"
+}
+</msg>
+<msg timestamp="20180403 02:09:57.327" level="DEBUG">https://15.212.144.169:443 "POST /rest/login-sessions HTTP/1.1" 200 None</msg>
+<msg timestamp="20180403 02:09:57.327" level="DEBUG">
+Status 200
+Response Headers {
+    "Connection": "Keep-Alive",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Date": "Tue, 03 Apr 2018 19:02:17 GMT",
+    "Keep-Alive": "timeout=15, max=99",
+    "Server": "Apache",
+    "Transfer-Encoding": "chunked",
+    "cache-control": "no-cache"
+}
+Response Body {
+    "partnerData": {},
+    "sessionID": "LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o"
+}</msg>
+<msg timestamp="20180403 02:09:57.327" level="TRACE">Return: ({b'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=99', 'Server': 'Apache', 'Connection': 'Keep-Alive', 'cache-control': 'no-cache', 'Date': 'Tue, 03 Apr 2018 19:02:17 GMT', 'Content-Type': 'application/json;charset=UTF-8'}, 'partnerData': {}, 'sessionID': 'LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o', b'status_code': 200},
+ 'LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o')</msg>
+<msg timestamp="20180403 02:09:57.327" level="INFO">${Response} = {'status_code': 200, u'sessionID': u'LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o', u'partnerData': {}, 'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=99', 'Server': 'A...</msg>
+<msg timestamp="20180403 02:09:57.327" level="INFO">${AUTHTOKEN} = LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o</msg>
+<status status="PASS" endtime="20180403 02:09:57.327" starttime="20180403 02:09:52.632"></status>
 </kw>
 <kw name="Set Suite Variable" library="BuiltIn">
 <doc>Makes a variable available everywhere within the scope of the current suite.</doc>
 <arguments>
 <arg>${AUTHTOKEN}</arg>
 </arguments>
-<msg timestamp="20171129 13:05:24.203" level="INFO">${AUTHTOKEN} = MjAzOTE2MzE3MDk53VTTfFq1vk5VYvULgC1udZv5Rg6cJYTy</msg>
-<status status="PASS" endtime="20171129 13:05:24.203" starttime="20171129 13:05:24.202"></status>
+<msg timestamp="20180403 02:09:57.327" level="TRACE">Arguments: [ '${AUTHTOKEN}' ]</msg>
+<msg timestamp="20180403 02:09:57.327" level="INFO">${AUTHTOKEN} = LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o</msg>
+<msg timestamp="20180403 02:09:57.327" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:57.327" starttime="20180403 02:09:57.327"></status>
 </kw>
 <kw name="Console" library="robot.api.logger">
 <doc>Writes the message to the console.</doc>
 <arguments>
 <arg>Auth token: ${AUTHTOKEN}</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:05:24.205" starttime="20171129 13:05:24.204"></status>
+<msg timestamp="20180403 02:09:57.327" level="TRACE">Arguments: [ 'Auth token: LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o' ]</msg>
+<msg timestamp="20180403 02:09:57.327" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:57.327" starttime="20180403 02:09:57.327"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:05:24.205" starttime="20171129 13:05:18.974"></status>
+<msg timestamp="20180403 02:09:57.327" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:57.327" starttime="20180403 02:09:52.617"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:05:24.205" starttime="20171129 13:05:15.697"></status>
+<msg timestamp="20180403 02:09:57.327" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:57.327" starttime="20180403 02:09:50.398"></status>
 </kw>
-<kw name="DevComm Verification" library="support_resource1">
-<kw name="Set Default Configuration" library="SSHLibrary">
-<doc>Update the default `configuration`.</doc>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
 <arguments>
-<arg>timeout=900</arg>
+<arg>PORT COMMUNICATION FOR IPDU ******** STARTED ******</arg>
+<arg>console=true</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:05:24.211" starttime="20171129 13:05:24.210"></status>
+<msg timestamp="20180403 02:09:57.343" level="TRACE">Arguments: [ 'PORT COMMUNICATION FOR IPDU ******** STARTED ******' | console='true' ]</msg>
+<msg timestamp="20180403 02:09:57.343" level="INFO">PORT COMMUNICATION FOR IPDU ******** STARTED ******</msg>
+<msg timestamp="20180403 02:09:57.343" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:09:57.343" starttime="20180403 02:09:57.343"></status>
 </kw>
-<kw type="for" name="${Command} IN [ @{devComm_commands1} ]">
-<kw type="foritem" name="${Command} = ./device_communication.py -ip 16.114.216.190 -devtype 3par">
+<kw name="Port Communication Check for IPDU" library="PortCommResource">
+<doc>Port communication check for IPDU</doc>
+<msg timestamp="20180403 02:09:57.343" level="TRACE">Arguments: [  ]</msg>
+<kw name="IPDU Port Validation" library="PortCommResource">
+<doc>Check SNMP and REST protocol</doc>
+<assign>
+<var>${IPDU}</var>
+</assign>
+<msg timestamp="20180403 02:09:57.343" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<assign>
+<var>${IPDU}</var>
+</assign>
+<msg timestamp="20180403 02:09:57.343" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20180403 02:09:57.343" level="TRACE">Return: {}</msg>
+<msg timestamp="20180403 02:09:57.343" level="INFO">${IPDU} = {}</msg>
+<status status="PASS" endtime="20180403 02:09:57.343" starttime="20180403 02:09:57.343"></status>
+</kw>
 <kw name="Execute Command" library="SSHLibrary">
 <doc>Executes `command` on the remote machine and returns its outputs.</doc>
 <arguments>
-<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ${Command}</arg>
-<arg>return_stderr=True</arg>
-<arg>return_rc=True</arg>
+<arg>nc -vzu ${ipdu_ip} 161</arg>
 </arguments>
 <assign>
-<var>${stdout}</var>
-<var>${stderr}</var>
-<var>${rc}</var>
+<var>${snmp}</var>
 </assign>
-<msg timestamp="20171129 13:05:24.214" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./device_communication.py -ip 16.114.216.190 -devtype 3par'.</msg>
-<msg timestamp="20171129 13:05:48.407" level="INFO">Command exited with return code 0.</msg>
-<msg timestamp="20171129 13:05:48.407" level="INFO">${stdout} = Device Type : 3par
-Supported protocols :  ping,rest
-
-ping : passed
-
-
-checking REST communication for 3PAR ...
-REST : passed</msg>
-<msg timestamp="20171129 13:05:48.407" level="INFO">${stderr} = </msg>
-<msg timestamp="20171129 13:05:48.408" level="INFO">${rc} = 0</msg>
-<status status="PASS" endtime="20171129 13:05:48.408" starttime="20171129 13:05:24.213"></status>
+<msg timestamp="20180403 02:09:57.343" level="TRACE">Arguments: [ 'nc -vzu 15.212.144.94 161' ]</msg>
+<msg timestamp="20180403 02:09:57.343" level="INFO">Executing command 'nc -vzu 15.212.144.94 161'.</msg>
+<msg timestamp="20180403 02:09:57.343" level="DEBUG">[chan 1] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:00.563" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20180403 02:10:00.563" level="TRACE">Return: 'Connection to 15.212.144.94 161 port [udp/snmp] succeeded!'</msg>
+<msg timestamp="20180403 02:10:00.563" level="INFO">${snmp} = Connection to 15.212.144.94 161 port [udp/snmp] succeeded!</msg>
+<status status="PASS" endtime="20180403 02:10:00.563" starttime="20180403 02:09:57.343"></status>
 </kw>
-<kw name="Log" library="BuiltIn">
-<doc>Logs the given message with the given level.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
 <arguments>
-<arg>[Command]#:${Command}</arg>
-<arg>console=true</arg>
+<arg>Should Contain</arg>
+<arg>${snmp}</arg>
+<arg>161 port [udp/snmp] succeeded</arg>
 </arguments>
-<msg timestamp="20171129 13:05:48.410" level="INFO">[Command]#:./device_communication.py -ip 16.114.216.190 -devtype 3par</msg>
-<status status="PASS" endtime="20171129 13:05:48.411" starttime="20171129 13:05:48.409"></status>
+<assign>
+<var>${status1}</var>
+</assign>
+<msg timestamp="20180403 02:10:00.563" level="TRACE">Arguments: [ 'Should Contain' | '${snmp}' | '161 port [udp/snmp] succeeded' ]</msg>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${snmp}</arg>
+<arg>161 port [udp/snmp] succeeded</arg>
+</arguments>
+<msg timestamp="20180403 02:10:00.563" level="TRACE">Arguments: [ 'Connection to 15.212.144.94 161 port [udp/snmp] succeeded!' | '161 port [udp/snmp] succeeded' ]</msg>
+<msg timestamp="20180403 02:10:00.563" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:00.563" starttime="20180403 02:10:00.563"></status>
 </kw>
-<kw name="Log" library="BuiltIn">
-<doc>Logs the given message with the given level.</doc>
-<arguments>
-<arg>${stdout}</arg>
-<arg>console=true</arg>
-</arguments>
-<msg timestamp="20171129 13:05:48.413" level="INFO">Device Type : 3par
-Supported protocols :  ping,rest
-
-ping : passed
-
-
-checking REST communication for 3PAR ...
-REST : passed</msg>
-<status status="PASS" endtime="20171129 13:05:48.413" starttime="20171129 13:05:48.412"></status>
+<msg timestamp="20180403 02:10:00.563" level="TRACE">Return: True</msg>
+<msg timestamp="20180403 02:10:00.563" level="INFO">${status1} = True</msg>
+<status status="PASS" endtime="20180403 02:10:00.563" starttime="20180403 02:10:00.563"></status>
 </kw>
 <kw name="Run Keyword If" library="BuiltIn">
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
 <arguments>
-<arg>'''${devComm_3par}'''=='''${stdout}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
+<arg>'${status1}' != 'True'</arg>
+<arg>Log To Console</arg>
+<arg>SNMP port is not enabled for IPDU</arg>
+<arg>WARN</arg>
 <arg>ELSE IF</arg>
-<arg>'''${devComm_OA}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
-<arg>ELSE IF</arg>
-<arg>'''${ilo_devComm}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
-<arg>ELSE</arg>
-<arg>FAIL</arg>
+<arg>'${status1}' == 'True'</arg>
+<arg>Set To Dictionary</arg>
+<arg>${IPDU}</arg>
+<arg>Port 161</arg>
+<arg>Open</arg>
+</arguments>
+<msg timestamp="20180403 02:10:00.563" level="TRACE">Arguments: [ "'True' != 'True'" | 'Log To Console' | 'SNMP port is not enabled for IPDU' | 'WARN' | 'ELSE IF' | "'${status1}' == 'True'" | 'Set To Dictionary' | '${IPDU}' | 'Port 161' | 'Open' ]</msg>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${IPDU}</arg>
+<arg>Port 161</arg>
+<arg>Open</arg>
+</arguments>
+<msg timestamp="20180403 02:10:00.578" level="TRACE">Arguments: [ {} | 'Port 161' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:00.578" level="TRACE">Return: {'Port 161': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:00.578" starttime="20180403 02:10:00.578"></status>
+</kw>
+<msg timestamp="20180403 02:10:00.578" level="TRACE">Return: {'Port 161': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:00.578" starttime="20180403 02:10:00.563"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${snmp}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20180403 02:10:00.578" level="TRACE">Arguments: [ 'Connection to 15.212.144.94 161 port [udp/snmp] succeeded!' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:00.578" level="INFO">Connection to 15.212.144.94 161 port [udp/snmp] succeeded!</msg>
+<msg timestamp="20180403 02:10:00.578" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:00.578" starttime="20180403 02:10:00.578"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>timeout 120s openssl s_client -tls1 -crlf -ign_eof -connect ${ipdu_ip}:50443</arg>
+</arguments>
+<assign>
+<var>${rc}</var>
+</assign>
+<msg timestamp="20180403 02:10:00.578" level="TRACE">Arguments: [ 'timeout 120s openssl s_client -tls1 -crlf -ign_eof -connect 15.212.144.94:50443' ]</msg>
+<msg timestamp="20180403 02:10:00.578" level="INFO">Executing command 'timeout 120s openssl s_client -tls1 -crlf -ign_eof -connect 15.212.144.94:50443'.</msg>
+<msg timestamp="20180403 02:10:00.578" level="DEBUG">[chan 2] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:08.603" level="DEBUG">[chan 2] EOF sent (2)</msg>
+<msg timestamp="20180403 02:10:08.603" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20180403 02:10:08.603" level="TRACE">Return: 'CONNECTED(00000003)\n---\nCertificate chain\n 0 s:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n   i:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n---\nServer certificate\n-----BEGIN CERTIFICATE-----\nMIIDFjCCAn+gAwIBAgIJAIIzRKjsgavGMA0GCSqGSIb3DQEBBQUAMGYxCzAJBgNV\nBAYTAlVTMQ4wDAYDVQQIEwVUZXhhczEQMA4GA1UEBxMHSG91c3RvbjEgMB4GA1UE\nChMXSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkxEzARBgNVBAMTCnd3dy5ocC5jb20w\nHhcNMTIxMDI1MTkyOTM1WhcNMjIxMDI0MTkyOTM1WjBmMQswCQYDVQQGEwJVUzEO\nMAwGA1UECBMFVGV4YXMxEDAOBgNVBAcTB0hvdXN0b24xIDAeBgNVBAoTF0hld2xl\ndHQtUGFja2FyZCBDb21wYW55MRMwEQYDVQQDEwp3d3cuaHAuY29tMIGfMA0GCSqG\nSIb3DQEBAQUAA4GNADCBiQKBgQDb5urKuEfMdz4mHtfzX1xo6f+ZNNuXxkhe9fHz\nGFHFvBKOEoooGBQcfPOPxrKJjnxJP15tr8/mtXwdakV0iTB2obtq0xfhHL113/VE\nBJ0DPcjVN+h1MGu86krB5rVLV0tBAHTvV4OtXA3ZQfQ1OTN9j5/ybQZXsVC0bes4\nMR8uDQIDAQABo4HLMIHIMB0GA1UdDgQWBBRI8TUI2+/9ql/8d3tqpcJ7juG/7TCB\nmAYDVR0jBIGQMIGNgBRI8TUI2+/9ql/8d3tqpcJ7juG/7aFqpGgwZjELMAkGA1UE\nBhMCVVMxDjAMBgNVBAgTBVRleGFzMRAwDgYDVQQHEwdIb3VzdG9uMSAwHgYDVQQK\nExdIZXdsZXR0LVBhY2thcmQgQ29tcGFueTETMBEGA1UEAxMKd3d3LmhwLmNvbYIJ\nAIIzRKjsgavGMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAt1ZB2MKL\nXnrPdykEXxYpdLyCHIku45qSsiX3cJIapMM9oNpb2wbhf2ueza2+Wp1j3lPxSRV2\nvx5gmDyBOYawckN7a3L1uNwSNK27JTPBu7Fr9AKlrC8CnM61urSMdfdSDifUXYRz\n2d0UrX+evDfrWBZiBB9BB6PFYeFJ/5QGR5s=\n-----END CERTIFICATE-----\nsubject=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\nissuer=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n---\nNo client certificate CA names sent\n---\nSSL handshake has read 943 bytes and written 389 bytes\n---\nNew, TLSv1/SSLv3, Cipher is DES-CBC3-SHA\nServer public key is 1024 bit\nSecure Renegotiation IS NOT supported\nCompression: NONE\nExpansion: NONE\nNo ALPN negotiated\nSSL-Session:\n    Protocol  : TLSv1\n    Cipher    : DES-CBC3-SHA\n    Session-ID: 77CFEC6CBE1A175951D5CC7A504E8F7975073D5C29C7DB47185E7210DEF13229\n    Session-ID-ctx: \n    Master-Key: 224571616FDA7B658EF8C1CA351069BC80C9CC968B7B4955EBDB95456B15B65489FBA95076F341051E60DAC4B926A88E\n    Key-Arg   : None\n    Krb5 Principal: None\n    PSK identity: None\n    PSK identity hint: None\n    Start Time: 1522782141\n    Timeout   : 7200 (sec)\n    Verify return code: 18 (self signed certificate)\n---\n&lt;?xml version="1.0"?&gt;\n&lt;RIBCL VERSION="2.21"&gt;\n&lt;RESPONSE STATUS="0x29" MSG = "Failure"/&gt;\n&lt;/RIBCL&gt;'</msg>
+<msg timestamp="20180403 02:10:08.603" level="INFO">${rc} = CONNECTED(00000003)
+---
+Certificate chain
+ 0 s:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com
+   i:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com
+---
+Server certifi...</msg>
+<status status="PASS" endtime="20180403 02:10:08.603" starttime="20180403 02:10:00.578"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${rc}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:08.603" level="TRACE">Arguments: [ 'CONNECTED(00000003)\n---\nCertificate chain\n 0 s:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n   i:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n---\nServer certificate\n-----BEGIN CERTIFICATE-----\nMIIDFjCCAn+gAwIBAgIJAIIzRKjsgavGMA0GCSqGSIb3DQEBBQUAMGYxCzAJBgNV\nBAYTAlVTMQ4wDAYDVQQIEwVUZXhhczEQMA4GA1UEBxMHSG91c3RvbjEgMB4GA1UE\nChMXSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkxEzARBgNVBAMTCnd3dy5ocC5jb20w\nHhcNMTIxMDI1MTkyOTM1WhcNMjIxMDI0MTkyOTM1WjBmMQswCQYDVQQGEwJVUzEO\nMAwGA1UECBMFVGV4YXMxEDAOBgNVBAcTB0hvdXN0b24xIDAeBgNVBAoTF0hld2xl\ndHQtUGFja2FyZCBDb21wYW55MRMwEQYDVQQDEwp3d3cuaHAuY29tMIGfMA0GCSqG\nSIb3DQEBAQUAA4GNADCBiQKBgQDb5urKuEfMdz4mHtfzX1xo6f+ZNNuXxkhe9fHz\nGFHFvBKOEoooGBQcfPOPxrKJjnxJP15tr8/mtXwdakV0iTB2obtq0xfhHL113/VE\nBJ0DPcjVN+h1MGu86krB5rVLV0tBAHTvV4OtXA3ZQfQ1OTN9j5/ybQZXsVC0bes4\nMR8uDQIDAQABo4HLMIHIMB0GA1UdDgQWBBRI8TUI2+/9ql/8d3tqpcJ7juG/7TCB\nmAYDVR0jBIGQMIGNgBRI8TUI2+/9ql/8d3tqpcJ7juG/7aFqpGgwZjELMAkGA1UE\nBhMCVVMxDjAMBgNVBAgTBVRleGFzMRAwDgYDVQQHEwdIb3VzdG9uMSAwHgYDVQQK\nExdIZXdsZXR0LVBhY2thcmQgQ29tcGFueTETMBEGA1UEAxMKd3d3LmhwLmNvbYIJ\nAIIzRKjsgavGMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAt1ZB2MKL\nXnrPdykEXxYpdLyCHIku45qSsiX3cJIapMM9oNpb2wbhf2ueza2+Wp1j3lPxSRV2\nvx5gmDyBOYawckN7a3L1uNwSNK27JTPBu7Fr9AKlrC8CnM61urSMdfdSDifUXYRz\n2d0UrX+evDfrWBZiBB9BB6PFYeFJ/5QGR5s=\n-----END CERTIFICATE-----\nsubject=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\nissuer=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n---\nNo client certificate CA names sent\n---\nSSL handshake has read 943 bytes and written 389 bytes\n---\nNew, TLSv1/SSLv3, Cipher is DES-CBC3-SHA\nServer public key is 1024 bit\nSecure Renegotiation IS NOT supported\nCompression: NONE\nExpansion: NONE\nNo ALPN negotiated\nSSL-Session:\n    Protocol  : TLSv1\n    Cipher    : DES-CBC3-SHA\n    Session-ID: 77CFEC6CBE1A175951D5CC7A504E8F7975073D5C29C7DB47185E7210DEF13229\n    Session-ID-ctx: \n    Master-Key: 224571616FDA7B658EF8C1CA351069BC80C9CC968B7B4955EBDB95456B15B65489FBA95076F341051E60DAC4B926A88E\n    Key-Arg   : None\n    Krb5 Principal: None\n    PSK identity: None\n    PSK identity hint: None\n    Start Time: 1522782141\n    Timeout   : 7200 (sec)\n    Verify return code: 18 (self signed certificate)\n---\n&lt;?xml version="1.0"?&gt;\n&lt;RIBCL VERSION="2.21"&gt;\n&lt;RESPONSE STATUS="0x29" MSG = "Failure"/&gt;\n&lt;/RIBCL&gt;' ]</msg>
+<msg timestamp="20180403 02:10:08.603" level="INFO">CONNECTED(00000003)
+---
+Certificate chain
+ 0 s:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com
+   i:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIDFjCCAn+gAwIBAgIJAIIzRKjsgavGMA0GCSqGSIb3DQEBBQUAMGYxCzAJBgNV
+BAYTAlVTMQ4wDAYDVQQIEwVUZXhhczEQMA4GA1UEBxMHSG91c3RvbjEgMB4GA1UE
+ChMXSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkxEzARBgNVBAMTCnd3dy5ocC5jb20w
+HhcNMTIxMDI1MTkyOTM1WhcNMjIxMDI0MTkyOTM1WjBmMQswCQYDVQQGEwJVUzEO
+MAwGA1UECBMFVGV4YXMxEDAOBgNVBAcTB0hvdXN0b24xIDAeBgNVBAoTF0hld2xl
+dHQtUGFja2FyZCBDb21wYW55MRMwEQYDVQQDEwp3d3cuaHAuY29tMIGfMA0GCSqG
+SIb3DQEBAQUAA4GNADCBiQKBgQDb5urKuEfMdz4mHtfzX1xo6f+ZNNuXxkhe9fHz
+GFHFvBKOEoooGBQcfPOPxrKJjnxJP15tr8/mtXwdakV0iTB2obtq0xfhHL113/VE
+BJ0DPcjVN+h1MGu86krB5rVLV0tBAHTvV4OtXA3ZQfQ1OTN9j5/ybQZXsVC0bes4
+MR8uDQIDAQABo4HLMIHIMB0GA1UdDgQWBBRI8TUI2+/9ql/8d3tqpcJ7juG/7TCB
+mAYDVR0jBIGQMIGNgBRI8TUI2+/9ql/8d3tqpcJ7juG/7aFqpGgwZjELMAkGA1UE
+BhMCVVMxDjAMBgNVBAgTBVRleGFzMRAwDgYDVQQHEwdIb3VzdG9uMSAwHgYDVQQK
+ExdIZXdsZXR0LVBhY2thcmQgQ29tcGFueTETMBEGA1UEAxMKd3d3LmhwLmNvbYIJ
+AIIzRKjsgavGMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAt1ZB2MKL
+XnrPdykEXxYpdLyCHIku45qSsiX3cJIapMM9oNpb2wbhf2ueza2+Wp1j3lPxSRV2
+vx5gmDyBOYawckN7a3L1uNwSNK27JTPBu7Fr9AKlrC8CnM61urSMdfdSDifUXYRz
+2d0UrX+evDfrWBZiBB9BB6PFYeFJ/5QGR5s=
+-----END CERTIFICATE-----
+subject=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com
+issuer=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com
+---
+No client certificate CA names sent
+---
+SSL handshake has read 943 bytes and written 389 bytes
+---
+New, TLSv1/SSLv3, Cipher is DES-CBC3-SHA
+Server public key is 1024 bit
+Secure Renegotiation IS NOT supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1
+    Cipher    : DES-CBC3-SHA
+    Session-ID: 77CFEC6CBE1A175951D5CC7A504E8F7975073D5C29C7DB47185E7210DEF13229
+    Session-ID-ctx: 
+    Master-Key: 224571616FDA7B658EF8C1CA351069BC80C9CC968B7B4955EBDB95456B15B65489FBA95076F341051E60DAC4B926A88E
+    Key-Arg   : None
+    Krb5 Principal: None
+    PSK identity: None
+    PSK identity hint: None
+    Start Time: 1522782141
+    Timeout   : 7200 (sec)
+    Verify return code: 18 (self signed certificate)
+---
+&lt;?xml version="1.0"?&gt;
+&lt;RIBCL VERSION="2.21"&gt;
+&lt;RESPONSE STATUS="0x29" MSG = "Failure"/&gt;
+&lt;/RIBCL&gt;</msg>
+<msg timestamp="20180403 02:10:08.603" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:08.603" starttime="20180403 02:10:08.603"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>"CONNECTED"</arg>
+</arguments>
+<assign>
+<var>${value}</var>
+</assign>
+<msg timestamp="20180403 02:10:08.603" level="TRACE">Arguments: [ '"CONNECTED"' ]</msg>
+<msg timestamp="20180403 02:10:08.603" level="TRACE">Return: b'CONNECTED'</msg>
+<msg timestamp="20180403 02:10:08.603" level="INFO">${value} = CONNECTED</msg>
+<status status="PASS" endtime="20180403 02:10:08.603" starttime="20180403 02:10:08.603"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Should Contain</arg>
+<arg>${rc}</arg>
+<arg>${value}</arg>
 </arguments>
 <assign>
 <var>${status}</var>
 </assign>
-<kw name="Set Variable" library="BuiltIn">
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<arguments>
-<arg>OK</arg>
-</arguments>
-<status status="PASS" endtime="20171129 13:05:48.421" starttime="20171129 13:05:48.420"></status>
-</kw>
-<msg timestamp="20171129 13:05:48.421" level="INFO">${status} = OK</msg>
-<status status="PASS" endtime="20171129 13:05:48.421" starttime="20171129 13:05:48.415"></status>
-</kw>
-<kw name="Should Be Empty" library="BuiltIn">
-<doc>Verifies that the given item is empty.</doc>
-<arguments>
-<arg>${stderr}</arg>
-<arg>msg=Error returned: ${rc} ${stderr}</arg>
-</arguments>
-<msg timestamp="20171129 13:05:48.423" level="INFO">Length is 0</msg>
-<status status="PASS" endtime="20171129 13:05:48.423" starttime="20171129 13:05:48.422"></status>
-</kw>
-<kw name="Should Be Equal As Integers" library="BuiltIn">
-<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20180403 02:10:08.603" level="TRACE">Arguments: [ 'Should Contain' | '${rc}' | '${value}' ]</msg>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
 <arguments>
 <arg>${rc}</arg>
-<arg>0</arg>
-<arg>msg=non-zero return code ${rc}</arg>
+<arg>${value}</arg>
 </arguments>
-<msg timestamp="20171129 13:05:48.426" level="INFO">Argument types are:
-&lt;type 'int'&gt;
-&lt;type 'unicode'&gt;</msg>
-<status status="PASS" endtime="20171129 13:05:48.426" starttime="20171129 13:05:48.425"></status>
+<msg timestamp="20180403 02:10:08.618" level="TRACE">Arguments: [ 'CONNECTED(00000003)\n---\nCertificate chain\n 0 s:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n   i:/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n---\nServer certificate\n-----BEGIN CERTIFICATE-----\nMIIDFjCCAn+gAwIBAgIJAIIzRKjsgavGMA0GCSqGSIb3DQEBBQUAMGYxCzAJBgNV\nBAYTAlVTMQ4wDAYDVQQIEwVUZXhhczEQMA4GA1UEBxMHSG91c3RvbjEgMB4GA1UE\nChMXSGV3bGV0dC1QYWNrYXJkIENvbXBhbnkxEzARBgNVBAMTCnd3dy5ocC5jb20w\nHhcNMTIxMDI1MTkyOTM1WhcNMjIxMDI0MTkyOTM1WjBmMQswCQYDVQQGEwJVUzEO\nMAwGA1UECBMFVGV4YXMxEDAOBgNVBAcTB0hvdXN0b24xIDAeBgNVBAoTF0hld2xl\ndHQtUGFja2FyZCBDb21wYW55MRMwEQYDVQQDEwp3d3cuaHAuY29tMIGfMA0GCSqG\nSIb3DQEBAQUAA4GNADCBiQKBgQDb5urKuEfMdz4mHtfzX1xo6f+ZNNuXxkhe9fHz\nGFHFvBKOEoooGBQcfPOPxrKJjnxJP15tr8/mtXwdakV0iTB2obtq0xfhHL113/VE\nBJ0DPcjVN+h1MGu86krB5rVLV0tBAHTvV4OtXA3ZQfQ1OTN9j5/ybQZXsVC0bes4\nMR8uDQIDAQABo4HLMIHIMB0GA1UdDgQWBBRI8TUI2+/9ql/8d3tqpcJ7juG/7TCB\nmAYDVR0jBIGQMIGNgBRI8TUI2+/9ql/8d3tqpcJ7juG/7aFqpGgwZjELMAkGA1UE\nBhMCVVMxDjAMBgNVBAgTBVRleGFzMRAwDgYDVQQHEwdIb3VzdG9uMSAwHgYDVQQK\nExdIZXdsZXR0LVBhY2thcmQgQ29tcGFueTETMBEGA1UEAxMKd3d3LmhwLmNvbYIJ\nAIIzRKjsgavGMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAt1ZB2MKL\nXnrPdykEXxYpdLyCHIku45qSsiX3cJIapMM9oNpb2wbhf2ueza2+Wp1j3lPxSRV2\nvx5gmDyBOYawckN7a3L1uNwSNK27JTPBu7Fr9AKlrC8CnM61urSMdfdSDifUXYRz\n2d0UrX+evDfrWBZiBB9BB6PFYeFJ/5QGR5s=\n-----END CERTIFICATE-----\nsubject=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\nissuer=/C=US/ST=Texas/L=Houston/O=Hewlett-Packard Company/CN=www.hp.com\n---\nNo client certificate CA names sent\n---\nSSL handshake has read 943 bytes and written 389 bytes\n---\nNew, TLSv1/SSLv3, Cipher is DES-CBC3-SHA\nServer public key is 1024 bit\nSecure Renegotiation IS NOT supported\nCompression: NONE\nExpansion: NONE\nNo ALPN negotiated\nSSL-Session:\n    Protocol  : TLSv1\n    Cipher    : DES-CBC3-SHA\n    Session-ID: 77CFEC6CBE1A175951D5CC7A504E8F7975073D5C29C7DB47185E7210DEF13229\n    Session-ID-ctx: \n    Master-Key: 224571616FDA7B658EF8C1CA351069BC80C9CC968B7B4955EBDB95456B15B65489FBA95076F341051E60DAC4B926A88E\n    Key-Arg   : None\n    Krb5 Principal: None\n    PSK identity: None\n    PSK identity hint: None\n    Start Time: 1522782141\n    Timeout   : 7200 (sec)\n    Verify return code: 18 (self signed certificate)\n---\n&lt;?xml version="1.0"?&gt;\n&lt;RIBCL VERSION="2.21"&gt;\n&lt;RESPONSE STATUS="0x29" MSG = "Failure"/&gt;\n&lt;/RIBCL&gt;' | b'CONNECTED' ]</msg>
+<msg timestamp="20180403 02:10:08.618" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:08.618" starttime="20180403 02:10:08.618"></status>
+</kw>
+<msg timestamp="20180403 02:10:08.618" level="TRACE">Return: True</msg>
+<msg timestamp="20180403 02:10:08.618" level="INFO">${status} = True</msg>
+<status status="PASS" endtime="20180403 02:10:08.618" starttime="20180403 02:10:08.603"></status>
 </kw>
 <kw name="Run Keyword If" library="BuiltIn">
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
 <arguments>
-<arg>'${status}'=='True'</arg>
-<arg>PASS</arg>
-<arg>Log</arg>
-<arg>Validation : Passed</arg>
+<arg>'${status}' != 'True'</arg>
+<arg>Set To Dictionary</arg>
+<arg>${IPDU}</arg>
+<arg>Port 443</arg>
+<arg>Cannot Connect</arg>
+<arg>ELSE IF</arg>
+<arg>'${status}' == 'True'</arg>
+<arg>Set To Dictionary</arg>
+<arg>${IPDU}</arg>
+<arg>Port 443</arg>
+<arg>Open</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:05:48.431" starttime="20171129 13:05:48.428"></status>
+<msg timestamp="20180403 02:10:08.618" level="TRACE">Arguments: [ "'True' != 'True'" | 'Set To Dictionary' | '${IPDU}' | 'Port 443' | 'Cannot Connect' | 'ELSE IF' | "'${status}' == 'True'" | 'Set To Dictionary' | '${IPDU}' | 'Port 443' | 'Open' ]</msg>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${IPDU}</arg>
+<arg>Port 443</arg>
+<arg>Open</arg>
+</arguments>
+<msg timestamp="20180403 02:10:08.618" level="TRACE">Arguments: [ {'Port 161': 'Open'} | 'Port 443' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:08.618" level="TRACE">Return: {'Port 161': 'Open', 'Port 443': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:08.618" starttime="20180403 02:10:08.618"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:05:48.431" starttime="20171129 13:05:24.211"></status>
+<msg timestamp="20180403 02:10:08.618" level="TRACE">Return: {'Port 161': 'Open', 'Port 443': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:08.618" starttime="20180403 02:10:08.618"></status>
 </kw>
-<kw type="foritem" name="${Command} = ./device_communication.py -ip 15.154.122.101 -devtype OA">
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${IPDU}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Arguments: [ {'Port 161': 'Open', 'Port 443': 'Open'} | console='true' ]</msg>
+<msg timestamp="20180403 02:10:08.634" level="INFO">{u'Port 161': u'Open', u'Port 443': u'Open'}</msg>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:08.634" starttime="20180403 02:10:08.634"></status>
+</kw>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Return: {'Port 161': 'Open', 'Port 443': 'Open'}</msg>
+<msg timestamp="20180403 02:10:08.634" level="INFO">${IPDU} = {u'Port 161': u'Open', u'Port 443': u'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:08.634" starttime="20180403 02:09:57.343"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>DEV Ports Dictionary:${IPDU}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Arguments: [ "DEV Ports Dictionary:{u'Port 161': u'Open', u'Port 443': u'Open'}" | console='True' ]</msg>
+<msg timestamp="20180403 02:10:08.634" level="INFO">DEV Ports Dictionary:{u'Port 161': u'Open', u'Port 443': u'Open'}</msg>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:08.634" starttime="20180403 02:10:08.634"></status>
+</kw>
+<kw name="Open DevSSH Connection And Log In" library="PortCommResource">
+<doc>Opens an SSH session to a device and logs in</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>${HOST_USERNAME}</arg>
+<arg>${HOST_PASSWORD}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Arguments: [ ${SSH_HOST}='15.212.144.169' | ${SSH_USER}='root' | ${SSH_PASS}='hpvse1' ]</msg>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>timeout=180s</arg>
+</arguments>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Arguments: [ '15.212.144.169' | timeout='180s' ]</msg>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Return: 2</msg>
+<status status="PASS" endtime="20180403 02:10:08.634" starttime="20180403 02:10:08.634"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${SSH_USER}</arg>
+<arg>${SSH_PASS}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:08.634" level="TRACE">Arguments: [ 'root' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:10:08.634" level="INFO">Logging into '15.212.144.169:22' as 'root'.</msg>
+<msg timestamp="20180403 02:10:09.056" level="DEBUG">Adding ssh-rsa host key for 15.212.144.169: 384c307862744f084d50634b1c76adf1</msg>
+<msg timestamp="20180403 02:10:09.493" level="DEBUG">[chan 0] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:10.884" level="INFO">Read output: Last login: Tue Apr  3 19:02:12 2018 from 15.212.144.185
+7[r[999;999H[6n</msg>
+<msg timestamp="20180403 02:10:10.884" level="TRACE">Return: 'Last login: Tue Apr  3 19:02:12 2018 from 15.212.144.185\r\r\n\x1b7\x1b[r\x1b[999;999H\x1b[6n'</msg>
+<status status="PASS" endtime="20180403 02:10:10.884" starttime="20180403 02:10:08.634"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>SSH Connection Eshtablished for ${SSH_HOST}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:10.884" level="TRACE">Arguments: [ 'SSH Connection Eshtablished for 15.212.144.169' | console='True' ]</msg>
+<msg timestamp="20180403 02:10:10.884" level="INFO">SSH Connection Eshtablished for 15.212.144.169</msg>
+<msg timestamp="20180403 02:10:10.884" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:10.884" starttime="20180403 02:10:10.884"></status>
+</kw>
+<msg timestamp="20180403 02:10:10.884" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:10.884" starttime="20180403 02:10:08.634"></status>
+</kw>
 <kw name="Execute Command" library="SSHLibrary">
 <doc>Executes `command` on the remote machine and returns its outputs.</doc>
 <arguments>
-<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ${Command}</arg>
-<arg>return_stderr=True</arg>
-<arg>return_rc=True</arg>
+<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -ip ${ipdu_ip} -devtype iPDU</arg>
 </arguments>
 <assign>
-<var>${stdout}</var>
-<var>${stderr}</var>
-<var>${rc}</var>
+<var>${AIPDU}</var>
 </assign>
-<msg timestamp="20171129 13:05:48.433" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./device_communication.py -ip 15.154.122.101 -devtype OA'.</msg>
-<msg timestamp="20171129 13:06:15.486" level="INFO">Command exited with return code 0.</msg>
-<msg timestamp="20171129 13:06:15.486" level="INFO">${stdout} = Device Type : oa
-Supported protocols :  ping,ssh,soap
+<msg timestamp="20180403 02:10:10.884" level="TRACE">Arguments: [ 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -ip 15.212.144.94 -devtype iPDU' ]</msg>
+<msg timestamp="20180403 02:10:10.884" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -ip 15.212.144.94 -devtype iPDU'.</msg>
+<msg timestamp="20180403 02:10:10.884" level="DEBUG">[chan 1] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:20.713" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Return: 'IP Address : 15.212.144.94\nSupported ports are 161,443\n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000091: \n\nChecking for port...\nPort 443: \t Open\nLatency 0:00:00.001473: \n\n\nPort check completed'</msg>
+<msg timestamp="20180403 02:10:20.713" level="INFO">${AIPDU} = IP Address : 15.212.144.94
+Supported ports are 161,443
 
-ping : passed
-checking ssh communication ...
-SSH : passed
-checking SOAP communication ...
-SOAP Passed</msg>
-<msg timestamp="20171129 13:06:15.487" level="INFO">${stderr} = </msg>
-<msg timestamp="20171129 13:06:15.487" level="INFO">${rc} = 0</msg>
-<status status="PASS" endtime="20171129 13:06:15.487" starttime="20171129 13:05:48.433"></status>
+Checking for port...
+Port 161: 	 Open
+Latency 0:00:00.000091: 
+
+Checking for port...
+Port 443: 	 Open
+Latency 0:00:00.001473: 
+
+
+Port check comp...</msg>
+<status status="PASS" endtime="20180403 02:10:20.713" starttime="20180403 02:10:10.884"></status>
 </kw>
 <kw name="Log" library="BuiltIn">
 <doc>Logs the given message with the given level.</doc>
 <arguments>
-<arg>[Command]#:${Command}</arg>
+<arg>Command output:Port communication for IPDU</arg>
 <arg>console=true</arg>
 </arguments>
-<msg timestamp="20171129 13:06:15.488" level="INFO">[Command]#:./device_communication.py -ip 15.154.122.101 -devtype OA</msg>
-<status status="PASS" endtime="20171129 13:06:15.489" starttime="20171129 13:06:15.488"></status>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Arguments: [ 'Command output:Port communication for IPDU' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:20.713" level="INFO">Command output:Port communication for IPDU</msg>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.713" starttime="20180403 02:10:20.713"></status>
 </kw>
 <kw name="Log" library="BuiltIn">
 <doc>Logs the given message with the given level.</doc>
 <arguments>
-<arg>${stdout}</arg>
+<arg>${AIPDU}</arg>
 <arg>console=true</arg>
 </arguments>
-<msg timestamp="20171129 13:06:15.491" level="INFO">Device Type : oa
-Supported protocols :  ping,ssh,soap
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Arguments: [ 'IP Address : 15.212.144.94\nSupported ports are 161,443\n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000091: \n\nChecking for port...\nPort 443: \t Open\nLatency 0:00:00.001473: \n\n\nPort check completed' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:20.713" level="INFO">IP Address : 15.212.144.94
+Supported ports are 161,443
 
-ping : passed
-checking ssh communication ...
-SSH : passed
-checking SOAP communication ...
-SOAP Passed</msg>
-<status status="PASS" endtime="20171129 13:06:15.491" starttime="20171129 13:06:15.490"></status>
+Checking for port...
+Port 161: 	 Open
+Latency 0:00:00.000091: 
+
+Checking for port...
+Port 443: 	 Open
+Latency 0:00:00.001473: 
+
+
+Port check completed</msg>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.713" starttime="20180403 02:10:20.713"></status>
+</kw>
+<kw name="Parse Key Value Output" library="PortCommResource">
+<arguments>
+<arg>${AIPDU}</arg>
+</arguments>
+<assign>
+<var>${AIPDU}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Arguments: [ ${result}='IP Address : 15.212.144.94\nSupported ports are 161,443\n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000091: \n\nChecking for port...\nPort 443: \t Open\nLatency 0:00:00.001473: \n\n\nPort check completed' ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<assign>
+<var>${Output}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Return: {}</msg>
+<msg timestamp="20180403 02:10:20.713" level="INFO">${Output} = {}</msg>
+<status status="PASS" endtime="20180403 02:10:20.713" starttime="20180403 02:10:20.713"></status>
+</kw>
+<kw name="Get Lines Containing String" library="String">
+<doc>Returns lines of the given ``string`` that contain the ``pattern``.</doc>
+<arguments>
+<arg>${result}</arg>
+<arg>:</arg>
+</arguments>
+<assign>
+<var>${result1}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Arguments: [ 'IP Address : 15.212.144.94\nSupported ports are 161,443\n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000091: \n\nChecking for port...\nPort 443: \t Open\nLatency 0:00:00.001473: \n\n\nPort check completed' | ':' ]</msg>
+<msg timestamp="20180403 02:10:20.713" level="INFO">5 out of 13 lines matched</msg>
+<msg timestamp="20180403 02:10:20.713" level="TRACE">Return: 'IP Address : 15.212.144.94\nPort 161: \t Open\nLatency 0:00:00.000091: \nPort 443: \t Open\nLatency 0:00:00.001473: '</msg>
+<msg timestamp="20180403 02:10:20.713" level="INFO">${result1} = IP Address : 15.212.144.94
+Port 161: 	 Open
+Latency 0:00:00.000091: 
+Port 443: 	 Open
+Latency 0:00:00.001473: </msg>
+<status status="PASS" endtime="20180403 02:10:20.713" starttime="20180403 02:10:20.713"></status>
+</kw>
+<kw name="Get Lines Containing String" library="String">
+<doc>Returns lines of the given ``string`` that contain the ``pattern``.</doc>
+<arguments>
+<arg>${result1}</arg>
+<arg>Port</arg>
+</arguments>
+<assign>
+<var>${result2}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Arguments: [ 'IP Address : 15.212.144.94\nPort 161: \t Open\nLatency 0:00:00.000091: \nPort 443: \t Open\nLatency 0:00:00.001473: ' | 'Port' ]</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">2 out of 5 lines matched</msg>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Return: 'Port 161: \t Open\nPort 443: \t Open'</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">${result2} = Port 161: 	 Open
+Port 443: 	 Open</msg>
+<status status="PASS" endtime="20180403 02:10:20.729" starttime="20180403 02:10:20.729"></status>
+</kw>
+<kw name="Split To Lines" library="String">
+<doc>Splits the given string to lines.</doc>
+<arguments>
+<arg>${result2}</arg>
+</arguments>
+<assign>
+<var>@{lines}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Arguments: [ 'Port 161: \t Open\nPort 443: \t Open' ]</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">2 lines returned</msg>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Return: ['Port 161: \t Open', 'Port 443: \t Open']</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">@{lines} = [ Port 161: 	 Open | Port 443: 	 Open ]</msg>
+<status status="PASS" endtime="20180403 02:10:20.729" starttime="20180403 02:10:20.729"></status>
+</kw>
+<kw type="for" name="${line} IN [ @{lines} ]">
+<kw type="foritem" name="${line} = Port 161: &#09; Open">
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${line}</arg>
+<arg>:</arg>
+<arg>1</arg>
+</arguments>
+<assign>
+<var>${key}</var>
+<var>${value}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Arguments: [ 'Port 161: \t Open' | ':' | '1' ]</msg>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Return: ['Port 161', ' \t Open']</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">${key} = Port 161</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">${value} =  	 Open</msg>
+<status status="PASS" endtime="20180403 02:10:20.729" starttime="20180403 02:10:20.729"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${Output}</arg>
+<arg>${key.strip()}</arg>
+<arg>${value.strip()}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Arguments: [ {} | 'Port 161' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Return: {'Port 161': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:20.729" starttime="20180403 02:10:20.729"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:20.729" starttime="20180403 02:10:20.729"></status>
+</kw>
+<kw type="foritem" name="${line} = Port 443: &#09; Open">
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${line}</arg>
+<arg>:</arg>
+<arg>1</arg>
+</arguments>
+<assign>
+<var>${key}</var>
+<var>${value}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Arguments: [ 'Port 443: \t Open' | ':' | '1' ]</msg>
+<msg timestamp="20180403 02:10:20.729" level="TRACE">Return: ['Port 443', ' \t Open']</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">${key} = Port 443</msg>
+<msg timestamp="20180403 02:10:20.729" level="INFO">${value} =  	 Open</msg>
+<status status="PASS" endtime="20180403 02:10:20.729" starttime="20180403 02:10:20.729"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${Output}</arg>
+<arg>${key.strip()}</arg>
+<arg>${value.strip()}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Arguments: [ {'Port 161': 'Open'} | 'Port 443' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Return: {'Port 161': 'Open', 'Port 443': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.745"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.729"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.729"></status>
+</kw>
+<kw name="Log Dictionary" library="Collections">
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<arguments>
+<arg>${Output}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Arguments: [ {'Port 161': 'Open', 'Port 443': 'Open'} ]</msg>
+<msg timestamp="20180403 02:10:20.745" level="INFO">Dictionary size is 2 and it contains following items:
+Port 161: Open
+Port 443: Open</msg>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.745"></status>
+</kw>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Return: {'Port 161': 'Open', 'Port 443': 'Open'}</msg>
+<msg timestamp="20180403 02:10:20.745" level="INFO">${AIPDU} = {u'Port 161': u'Open', u'Port 443': u'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.713"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Suppot tools Dictionary:${AIPDU}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Arguments: [ "Suppot tools Dictionary:{u'Port 161': u'Open', u'Port 443': u'Open'}" | console='True' ]</msg>
+<msg timestamp="20180403 02:10:20.745" level="INFO">Suppot tools Dictionary:{u'Port 161': u'Open', u'Port 443': u'Open'}</msg>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.745"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionaries Should Be Equal</arg>
+<arg>${AIPDU}</arg>
+<arg>${IPDU}</arg>
+</arguments>
+<assign>
+<var>${Status}</var>
+</assign>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Arguments: [ 'Dictionaries Should Be Equal' | '${AIPDU}' | '${IPDU}' ]</msg>
+<kw name="Dictionaries Should Be Equal" library="Collections">
+<doc>Fails if the given dictionaries are not equal.</doc>
+<arguments>
+<arg>${AIPDU}</arg>
+<arg>${IPDU}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Arguments: [ {'Port 161': 'Open', 'Port 443': 'Open'} | {'Port 161': 'Open', 'Port 443': 'Open'} ]</msg>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.745"></status>
+</kw>
+<msg timestamp="20180403 02:10:20.745" level="TRACE">Return: True</msg>
+<msg timestamp="20180403 02:10:20.745" level="INFO">${Status} = True</msg>
+<status status="PASS" endtime="20180403 02:10:20.745" starttime="20180403 02:10:20.745"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>status:${Status}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.760" level="TRACE">Arguments: [ 'status:True' | console='True' ]</msg>
+<msg timestamp="20180403 02:10:20.760" level="INFO">status:True</msg>
+<msg timestamp="20180403 02:10:20.760" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.760" starttime="20180403 02:10:20.760"></status>
 </kw>
 <kw name="Run Keyword If" library="BuiltIn">
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
 <arguments>
-<arg>'''${devComm_3par}'''=='''${stdout}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
+<arg>'${Status}' != 'True'</arg>
+<arg>Fail</arg>
+<arg>********Port Communication check for IPDU FAILED********</arg>
 <arg>ELSE IF</arg>
-<arg>'''${devComm_OA}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
+<arg>'${Status}' == 'True'</arg>
+<arg>Log To Console</arg>
+<arg>********Port Communication check for IPDU PASSED********</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.760" level="TRACE">Arguments: [ "'True' != 'True'" | 'Fail' | '********Port Communication check for IPDU FAILED********' | 'ELSE IF' | "'${Status}' == 'True'" | 'Log To Console' | '********Port Communication check for IPDU PASSED********' ]</msg>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>********Port Communication check for IPDU PASSED********</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.776" level="TRACE">Arguments: [ '********Port Communication check for IPDU PASSED********' ]</msg>
+<msg timestamp="20180403 02:10:20.776" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.776" starttime="20180403 02:10:20.760"></status>
+</kw>
+<msg timestamp="20180403 02:10:20.776" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.776" starttime="20180403 02:10:20.760"></status>
+</kw>
+<msg timestamp="20180403 02:10:20.776" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.776" starttime="20180403 02:09:57.343"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:20.776" critical="yes" starttime="20180403 02:09:50.398"></status>
+</test>
+<test id="s1-t2" name="Test 20">
+<kw type="setup" name="Open SSH and API" library="support_resource1">
+<msg timestamp="20180403 02:10:20.807" level="TRACE">Arguments: [  ]</msg>
+<kw name="Open OVSSH Connection And Log In" library="support_resource1">
+<doc>Opens an SSH session to an appliance and logs in</doc>
+<msg timestamp="20180403 02:10:20.807" level="TRACE">Arguments: [ ${SSH_USER}='root' | ${SSH_PASS}='hpvse1' ]</msg>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>timeout=180s</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.807" level="TRACE">Arguments: [ '15.212.144.169' | timeout='180s' ]</msg>
+<msg timestamp="20180403 02:10:20.807" level="TRACE">Return: 3</msg>
+<status status="PASS" endtime="20180403 02:10:20.807" starttime="20180403 02:10:20.807"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PASS}' is ${null}</arg>
+<arg>Set Suite variable</arg>
+<arg>${SSH_PASS}</arg>
+<arg>hpvse1</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.807" level="TRACE">Arguments: [ "'hpvse1' is None" | 'Set Suite variable' | '${SSH_PASS}' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:10:20.807" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:20.807" starttime="20180403 02:10:20.807"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${SSH_USER}</arg>
+<arg>${SSH_PASS}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:20.807" level="TRACE">Arguments: [ 'root' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:10:20.807" level="INFO">Logging into '15.212.144.169:22' as 'root'.</msg>
+<msg timestamp="20180403 02:10:21.276" level="DEBUG">Adding ssh-rsa host key for 15.212.144.169: 384c307862744f084d50634b1c76adf1</msg>
+<msg timestamp="20180403 02:10:21.698" level="DEBUG">[chan 0] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:23.088" level="INFO">Read output: Last login: Tue Apr  3 19:02:30 2018 from 15.212.144.185
+7[r[999;999H[6n</msg>
+<msg timestamp="20180403 02:10:23.088" level="TRACE">Return: 'Last login: Tue Apr  3 19:02:30 2018 from 15.212.144.185\r\r\n\x1b7\x1b[r\x1b[999;999H\x1b[6n'</msg>
+<status status="PASS" endtime="20180403 02:10:23.088" starttime="20180403 02:10:20.807"></status>
+</kw>
+<msg timestamp="20180403 02:10:23.088" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:23.088" starttime="20180403 02:10:20.807"></status>
+</kw>
+<kw name="Login to OV Via REST API" library="support_resource1">
+<msg timestamp="20180403 02:10:23.088" level="TRACE">Arguments: [  ]</msg>
+<kw name="Should Not Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are equal.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>'unknown'</arg>
+<arg>msg=Please specify a valid Fusion IP address or hostname</arg>
+</arguments>
+<msg timestamp="20180403 02:10:23.088" level="TRACE">Arguments: [ '15.212.144.169' | "'unknown'" | msg='Please specify a valid Fusion IP address or hostname' ]</msg>
+<msg timestamp="20180403 02:10:23.088" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20180403 02:10:23.088" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:23.088" starttime="20180403 02:10:23.088"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>\n With IP ${SSH_HOST} (${admin1_credentials})...</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20180403 02:10:23.088" level="TRACE">Arguments: [ "\nWith IP 15.212.144.169 ({'userName': 'Administrator', 'password': 'admin123'})..." | console='true' ]</msg>
+<msg timestamp="20180403 02:10:23.088" level="INFO">
+With IP 15.212.144.169 ({'userName': 'Administrator', 'password': 'admin123'})...</msg>
+<msg timestamp="20180403 02:10:23.104" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:23.104" starttime="20180403 02:10:23.088"></status>
+</kw>
+<kw name="Fusion Api Login Appliance" library="FusionLibrary">
+<doc>Login to the appliance as the specified user</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>${admin1_credentials}</arg>
+</arguments>
+<assign>
+<var>${Response}</var>
+<var>${AUTHTOKEN}</var>
+</assign>
+<msg timestamp="20180403 02:10:23.104" level="TRACE">Arguments: [ '15.212.144.169' | {b'password': b'admin123', b'userName': b'Administrator'} ]</msg>
+<msg timestamp="20180403 02:10:23.104" level="DEBUG">
+URL	GET https://15.212.144.169/rest/appliance/nodeinfo/version
+Request Headers {
+    "Accept": "application/json, */*",
+    "Accept-language": "en_US",
+    "Content-Type": "application/json",
+    "X-Api-Version": "600"
+}
+HTTP Headers {
+    "accept": [
+        "Accept",
+        "*/*"
+    ],
+    "accept-encoding": [
+        "Accept-Encoding",
+        "gzip, deflate"
+    ],
+    "auth": [
+        "auth",
+        "LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o"
+    ],
+    "connection": [
+        "Connection",
+        "keep-alive"
+    ],
+    "user-agent": [
+        "User-Agent",
+        "python-requests/2.18.4"
+    ]
+}
+</msg>
+<msg timestamp="20180403 02:10:23.104" level="DEBUG">Resetting dropped connection: 15.212.144.169</msg>
+<msg timestamp="20180403 02:10:23.104" level="DEBUG">Starting new HTTPS connection (2): 15.212.144.169</msg>
+<msg timestamp="20180403 02:10:26.015" level="DEBUG">https://15.212.144.169:443 "GET /rest/appliance/nodeinfo/version HTTP/1.1" 200 None</msg>
+<msg timestamp="20180403 02:10:26.015" level="DEBUG">
+Status 200
+Response Headers {
+    "Connection": "Keep-Alive",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Date": "Tue, 03 Apr 2018 19:02:46 GMT",
+    "Keep-Alive": "timeout=15, max=100",
+    "Server": "Apache",
+    "Transfer-Encoding": "chunked",
+    "cache-control": "no-cache"
+}
+Response Body {
+    "build": "0336720",
+    "category": "appliance",
+    "compatibility": "4.10",
+    "created": null,
+    "date": "2018-03-11T02:01:02+0000",
+    "eTag": null,
+    "family": "HPE OneView VM",
+    "major": "4",
+    "minor": "10",
+    "modelNumber": "HPE OneView VM - VMware vSphere",
+    "modified": null,
+    "platformType": "vm",
+    "revision": "00",
+    "serialNumber": "VMware-422c1b770fa92b1d-58a5f8652952a424",
+    "softwareVersion": "4.10.00-0336720",
+    "type": "NodeVersionDto4",
+    "uri": "/rest/appliance/nodeinfo/version",
+    "uuid": "f150fb1d-fb39-4fc2-81cc-83e86235f113"
+}</msg>
+<msg timestamp="20180403 02:10:26.015" level="INFO">Set suite metadata 'OneView Version' to value '4.10.00-0336720'.</msg>
+<msg timestamp="20180403 02:10:26.015" level="DEBUG">
+URL	POST https://15.212.144.169/rest/login-sessions
+Request Headers {
+    "Accept": "application/json, */*",
+    "Accept-language": "en_US",
+    "Content-Type": "application/json",
+    "X-Api-Version": "600"
+}
+HTTP Headers {
+    "accept": [
+        "Accept",
+        "*/*"
+    ],
+    "accept-encoding": [
+        "Accept-Encoding",
+        "gzip, deflate"
+    ],
+    "auth": [
+        "auth",
+        "LTQ2NTg1MzU2MDE0KFxZKR3SGDIBvUdjLZIoz-MJzaI8lS5o"
+    ],
+    "connection": [
+        "Connection",
+        "keep-alive"
+    ],
+    "user-agent": [
+        "User-Agent",
+        "python-requests/2.18.4"
+    ]
+}n</msg>
+<msg timestamp="20180403 02:10:26.015" level="DEBUG">Request Body {
+    "password": "admin123",
+    "userName": "Administrator"
+}
+</msg>
+<msg timestamp="20180403 02:10:26.577" level="DEBUG">https://15.212.144.169:443 "POST /rest/login-sessions HTTP/1.1" 200 None</msg>
+<msg timestamp="20180403 02:10:26.577" level="DEBUG">
+Status 200
+Response Headers {
+    "Connection": "Keep-Alive",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Date": "Tue, 03 Apr 2018 19:02:47 GMT",
+    "Keep-Alive": "timeout=15, max=99",
+    "Server": "Apache",
+    "Transfer-Encoding": "chunked",
+    "cache-control": "no-cache"
+}
+Response Body {
+    "partnerData": {},
+    "sessionID": "LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-"
+}</msg>
+<msg timestamp="20180403 02:10:26.577" level="TRACE">Return: ({b'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=99', 'Server': 'Apache', 'Connection': 'Keep-Alive', 'cache-control': 'no-cache', 'Date': 'Tue, 03 Apr 2018 19:02:47 GMT', 'Content-Type': 'application/json;charset=UTF-8'}, 'partnerData': {}, 'sessionID': 'LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-', b'status_code': 200},
+ 'LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-')</msg>
+<msg timestamp="20180403 02:10:26.577" level="INFO">${Response} = {'status_code': 200, u'sessionID': u'LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-', u'partnerData': {}, 'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=99', 'Server': 'A...</msg>
+<msg timestamp="20180403 02:10:26.577" level="INFO">${AUTHTOKEN} = LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-</msg>
+<status status="PASS" endtime="20180403 02:10:26.577" starttime="20180403 02:10:23.104"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${AUTHTOKEN}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:26.577" level="TRACE">Arguments: [ '${AUTHTOKEN}' ]</msg>
+<msg timestamp="20180403 02:10:26.577" level="INFO">${AUTHTOKEN} = LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-</msg>
+<msg timestamp="20180403 02:10:26.577" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:26.577" starttime="20180403 02:10:26.577"></status>
+</kw>
+<kw name="Console" library="robot.api.logger">
+<doc>Writes the message to the console.</doc>
+<arguments>
+<arg>Auth token: ${AUTHTOKEN}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Arguments: [ 'Auth token: LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-' ]</msg>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:26.593" starttime="20180403 02:10:26.593"></status>
+</kw>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:26.593" starttime="20180403 02:10:23.088"></status>
+</kw>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:26.593" starttime="20180403 02:10:20.807"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>PORT COMMUNICATION FOR 3PAR ******** STARTED ******</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Arguments: [ 'PORT COMMUNICATION FOR 3PAR ******** STARTED ******' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:26.593" level="INFO">PORT COMMUNICATION FOR 3PAR ******** STARTED ******</msg>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:26.593" starttime="20180403 02:10:26.593"></status>
+</kw>
+<kw name="Port Communication Check for 3PAR" library="PortCommResource">
+<doc>Port communication check for 3PAR</doc>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Arguments: [  ]</msg>
+<kw name="3PAR Port Validation" library="PortCommResource">
+<doc>Check SNMP protocol and HTTPS port</doc>
+<assign>
+<var>${3PAR}</var>
+</assign>
+<msg timestamp="20180403 02:10:26.593" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<assign>
+<var>${3PAR}</var>
+</assign>
+<msg timestamp="20180403 02:10:26.608" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20180403 02:10:26.608" level="TRACE">Return: {}</msg>
+<msg timestamp="20180403 02:10:26.608" level="INFO">${3PAR} = {}</msg>
+<status status="PASS" endtime="20180403 02:10:26.608" starttime="20180403 02:10:26.608"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>nc -vzu ${stor_ip} 161</arg>
+</arguments>
+<assign>
+<var>${snmp}</var>
+</assign>
+<msg timestamp="20180403 02:10:26.608" level="TRACE">Arguments: [ 'nc -vzu 15.212.144.135 161' ]</msg>
+<msg timestamp="20180403 02:10:26.608" level="INFO">Executing command 'nc -vzu 15.212.144.135 161'.</msg>
+<msg timestamp="20180403 02:10:26.608" level="DEBUG">[chan 1] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:29.813" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20180403 02:10:29.813" level="TRACE">Return: 'Connection to 15.212.144.135 161 port [udp/snmp] succeeded!'</msg>
+<msg timestamp="20180403 02:10:29.813" level="INFO">${snmp} = Connection to 15.212.144.135 161 port [udp/snmp] succeeded!</msg>
+<status status="PASS" endtime="20180403 02:10:29.813" starttime="20180403 02:10:26.608"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${snmp}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20180403 02:10:29.813" level="TRACE">Arguments: [ 'Connection to 15.212.144.135 161 port [udp/snmp] succeeded!' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:29.813" level="INFO">Connection to 15.212.144.135 161 port [udp/snmp] succeeded!</msg>
+<msg timestamp="20180403 02:10:29.813" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:29.813" starttime="20180403 02:10:29.813"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>nc -vzu ${stor_ip} 8080</arg>
+</arguments>
+<assign>
+<var>${https}</var>
+</assign>
+<msg timestamp="20180403 02:10:29.813" level="TRACE">Arguments: [ 'nc -vzu 15.212.144.135 8080' ]</msg>
+<msg timestamp="20180403 02:10:29.813" level="INFO">Executing command 'nc -vzu 15.212.144.135 8080'.</msg>
+<msg timestamp="20180403 02:10:29.813" level="DEBUG">[chan 2] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:32.954" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Return: 'Connection to 15.212.144.135 8080 port [udp/webcache] succeeded!'</msg>
+<msg timestamp="20180403 02:10:32.954" level="INFO">${https} = Connection to 15.212.144.135 8080 port [udp/webcache] succeeded!</msg>
+<status status="PASS" endtime="20180403 02:10:32.954" starttime="20180403 02:10:29.813"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${https}</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Arguments: [ 'Connection to 15.212.144.135 8080 port [udp/webcache] succeeded!' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:32.954" level="INFO">Connection to 15.212.144.135 8080 port [udp/webcache] succeeded!</msg>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:32.954" starttime="20180403 02:10:32.954"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Should Contain</arg>
+<arg>${snmp}</arg>
+<arg>161 port [udp/snmp] succeeded</arg>
+</arguments>
+<assign>
+<var>${status1}</var>
+</assign>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Arguments: [ 'Should Contain' | '${snmp}' | '161 port [udp/snmp] succeeded' ]</msg>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${snmp}</arg>
+<arg>161 port [udp/snmp] succeeded</arg>
+</arguments>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Arguments: [ 'Connection to 15.212.144.135 161 port [udp/snmp] succeeded!' | '161 port [udp/snmp] succeeded' ]</msg>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:32.954" starttime="20180403 02:10:32.954"></status>
+</kw>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Return: True</msg>
+<msg timestamp="20180403 02:10:32.954" level="INFO">${status1} = True</msg>
+<status status="PASS" endtime="20180403 02:10:32.954" starttime="20180403 02:10:32.954"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${status1}' != 'True'</arg>
+<arg>Log To Console</arg>
+<arg>SNMP port is not enabled for 3PAR</arg>
+<arg>WARN</arg>
 <arg>ELSE IF</arg>
-<arg>'''${ilo_devComm}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
-<arg>ELSE</arg>
-<arg>FAIL</arg>
+<arg>'${status1}' == 'True'</arg>
+<arg>Set To Dictionary</arg>
+<arg>${3PAR}</arg>
+<arg>Port 161</arg>
+<arg>Open</arg>
+</arguments>
+<msg timestamp="20180403 02:10:32.954" level="TRACE">Arguments: [ "'True' != 'True'" | 'Log To Console' | 'SNMP port is not enabled for 3PAR' | 'WARN' | 'ELSE IF' | "'${status1}' == 'True'" | 'Set To Dictionary' | '${3PAR}' | 'Port 161' | 'Open' ]</msg>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${3PAR}</arg>
+<arg>Port 161</arg>
+<arg>Open</arg>
+</arguments>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Arguments: [ {} | 'Port 161' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Return: {'Port 161': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:32.969" starttime="20180403 02:10:32.969"></status>
+</kw>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Return: {'Port 161': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:32.969" starttime="20180403 02:10:32.954"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Should Contain</arg>
+<arg>${https}</arg>
+<arg>8080 port [udp/webcache] succeeded</arg>
 </arguments>
 <assign>
 <var>${status}</var>
 </assign>
-<kw name="Set Variable" library="BuiltIn">
-<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Arguments: [ 'Should Contain' | '${https}' | '8080 port [udp/webcache] succeeded' ]</msg>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
 <arguments>
-<arg>OK</arg>
+<arg>${https}</arg>
+<arg>8080 port [udp/webcache] succeeded</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:06:15.502" starttime="20171129 13:06:15.502"></status>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Arguments: [ 'Connection to 15.212.144.135 8080 port [udp/webcache] succeeded!' | '8080 port [udp/webcache] succeeded' ]</msg>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:32.969" starttime="20180403 02:10:32.969"></status>
 </kw>
-<msg timestamp="20171129 13:06:15.502" level="INFO">${status} = OK</msg>
-<status status="PASS" endtime="20171129 13:06:15.502" starttime="20171129 13:06:15.493"></status>
-</kw>
-<kw name="Should Be Empty" library="BuiltIn">
-<doc>Verifies that the given item is empty.</doc>
-<arguments>
-<arg>${stderr}</arg>
-<arg>msg=Error returned: ${rc} ${stderr}</arg>
-</arguments>
-<msg timestamp="20171129 13:06:15.506" level="INFO">Length is 0</msg>
-<status status="PASS" endtime="20171129 13:06:15.506" starttime="20171129 13:06:15.505"></status>
-</kw>
-<kw name="Should Be Equal As Integers" library="BuiltIn">
-<doc>Fails if objects are unequal after converting them to integers.</doc>
-<arguments>
-<arg>${rc}</arg>
-<arg>0</arg>
-<arg>msg=non-zero return code ${rc}</arg>
-</arguments>
-<msg timestamp="20171129 13:06:15.508" level="INFO">Argument types are:
-&lt;type 'int'&gt;
-&lt;type 'unicode'&gt;</msg>
-<status status="PASS" endtime="20171129 13:06:15.508" starttime="20171129 13:06:15.507"></status>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Return: True</msg>
+<msg timestamp="20180403 02:10:32.969" level="INFO">${status} = True</msg>
+<status status="PASS" endtime="20180403 02:10:32.969" starttime="20180403 02:10:32.969"></status>
 </kw>
 <kw name="Run Keyword If" library="BuiltIn">
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
 <arguments>
-<arg>'${status}'=='True'</arg>
-<arg>PASS</arg>
-<arg>Log</arg>
-<arg>Validation : Passed</arg>
+<arg>'${status}' != 'True'</arg>
+<arg>Log To Console</arg>
+<arg>HTTPS port is not enabled for 3PAR</arg>
+<arg>WARN</arg>
+<arg>ELSE IF</arg>
+<arg>'${status}' == 'True'</arg>
+<arg>Set To Dictionary</arg>
+<arg>${3PAR}</arg>
+<arg>Port 8080</arg>
+<arg>Open</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:06:15.512" starttime="20171129 13:06:15.509"></status>
+<msg timestamp="20180403 02:10:32.969" level="TRACE">Arguments: [ "'True' != 'True'" | 'Log To Console' | 'HTTPS port is not enabled for 3PAR' | 'WARN' | 'ELSE IF' | "'${status}' == 'True'" | 'Set To Dictionary' | '${3PAR}' | 'Port 8080' | 'Open' ]</msg>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${3PAR}</arg>
+<arg>Port 8080</arg>
+<arg>Open</arg>
+</arguments>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Arguments: [ {'Port 161': 'Open'} | 'Port 8080' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Return: {'Port 161': 'Open', 'Port 8080': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:32.985" starttime="20180403 02:10:32.985"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:06:15.512" starttime="20171129 13:05:48.431"></status>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Return: {'Port 161': 'Open', 'Port 8080': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:32.985" starttime="20180403 02:10:32.969"></status>
 </kw>
-<kw type="foritem" name="${Command} = ./device_communication.py -ip 15.154.126.8 -devtype ILO">
+<kw name="Log Dictionary" library="Collections">
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<arguments>
+<arg>${3PAR}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Arguments: [ {'Port 161': 'Open', 'Port 8080': 'Open'} ]</msg>
+<msg timestamp="20180403 02:10:32.985" level="INFO">Dictionary size is 2 and it contains following items:
+Port 161: Open
+Port 8080: Open</msg>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:32.985" starttime="20180403 02:10:32.985"></status>
+</kw>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Return: {'Port 161': 'Open', 'Port 8080': 'Open'}</msg>
+<msg timestamp="20180403 02:10:32.985" level="INFO">${3PAR} = {u'Port 161': u'Open', u'Port 8080': u'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:32.985" starttime="20180403 02:10:26.593"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>DEV Ports Dictionary:${3PAR}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Arguments: [ "DEV Ports Dictionary:{u'Port 161': u'Open', u'Port 8080': u'Open'}" | console='True' ]</msg>
+<msg timestamp="20180403 02:10:32.985" level="INFO">DEV Ports Dictionary:{u'Port 161': u'Open', u'Port 8080': u'Open'}</msg>
+<msg timestamp="20180403 02:10:32.985" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:32.985" starttime="20180403 02:10:32.985"></status>
+</kw>
+<kw name="Open DevSSH Connection And Log In" library="PortCommResource">
+<doc>Opens an SSH session to a device and logs in</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>${HOST_USERNAME}</arg>
+<arg>${HOST_PASSWORD}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:33.000" level="TRACE">Arguments: [ ${SSH_HOST}='15.212.144.169' | ${SSH_USER}='root' | ${SSH_PASS}='hpvse1' ]</msg>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>timeout=180s</arg>
+</arguments>
+<msg timestamp="20180403 02:10:33.000" level="TRACE">Arguments: [ '15.212.144.169' | timeout='180s' ]</msg>
+<msg timestamp="20180403 02:10:33.000" level="TRACE">Return: 4</msg>
+<status status="PASS" endtime="20180403 02:10:33.000" starttime="20180403 02:10:33.000"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${SSH_USER}</arg>
+<arg>${SSH_PASS}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:33.000" level="TRACE">Arguments: [ 'root' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:10:33.000" level="INFO">Logging into '15.212.144.169:22' as 'root'.</msg>
+<msg timestamp="20180403 02:10:33.438" level="DEBUG">Adding ssh-rsa host key for 15.212.144.169: 384c307862744f084d50634b1c76adf1</msg>
+<msg timestamp="20180403 02:10:33.876" level="DEBUG">[chan 0] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:35.251" level="INFO">Read output: Last login: Tue Apr  3 19:02:42 2018 from 15.212.144.185
+7[r[999;999H[6n</msg>
+<msg timestamp="20180403 02:10:35.251" level="TRACE">Return: 'Last login: Tue Apr  3 19:02:42 2018 from 15.212.144.185\r\r\n\x1b7\x1b[r\x1b[999;999H\x1b[6n'</msg>
+<status status="PASS" endtime="20180403 02:10:35.251" starttime="20180403 02:10:33.000"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>SSH Connection Eshtablished for ${SSH_HOST}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:35.251" level="TRACE">Arguments: [ 'SSH Connection Eshtablished for 15.212.144.169' | console='True' ]</msg>
+<msg timestamp="20180403 02:10:35.251" level="INFO">SSH Connection Eshtablished for 15.212.144.169</msg>
+<msg timestamp="20180403 02:10:35.251" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:35.251" starttime="20180403 02:10:35.251"></status>
+</kw>
+<msg timestamp="20180403 02:10:35.251" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:35.251" starttime="20180403 02:10:33.000"></status>
+</kw>
 <kw name="Execute Command" library="SSHLibrary">
 <doc>Executes `command` on the remote machine and returns its outputs.</doc>
 <arguments>
-<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ${Command}</arg>
-<arg>return_stderr=True</arg>
-<arg>return_rc=True</arg>
+<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -ip ${stor_ip} -devtype 3par</arg>
 </arguments>
 <assign>
-<var>${stdout}</var>
-<var>${stderr}</var>
-<var>${rc}</var>
+<var>${Storage}</var>
 </assign>
-<msg timestamp="20171129 13:06:15.516" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./device_communication.py -ip 15.154.126.8 -devtype ILO'.</msg>
-<msg timestamp="20171129 13:06:33.481" level="INFO">Command exited with return code 0.</msg>
-<msg timestamp="20171129 13:06:33.483" level="INFO">${stdout} = Device Type : ilo
-Note: REST and SNMP access are supported only on iLO 4.
-Supported protocols :  ping,rest,ribcl,snmp
+<msg timestamp="20180403 02:10:35.251" level="TRACE">Arguments: [ 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -ip 15.212.144.135 -devtype 3par' ]</msg>
+<msg timestamp="20180403 02:10:35.251" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -ip 15.212.144.135 -devtype 3par'.</msg>
+<msg timestamp="20180403 02:10:35.251" level="DEBUG">[chan 1] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:44.805" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Return: 'IP Address : 15.212.144.135\nSupported ports are 8080,161\n\nChecking for port...\nPort 8080: \t Open\nLatency 0:00:00.000990: \n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000039: \n\n\nPort check completed'</msg>
+<msg timestamp="20180403 02:10:44.805" level="INFO">${Storage} = IP Address : 15.212.144.135
+Supported ports are 8080,161
 
-ping : passed
-checking REST communication for iLO...
-REST : passed
-checking RIBCL...</msg>
-<msg timestamp="20171129 13:06:33.483" level="INFO">${stderr} = </msg>
-<msg timestamp="20171129 13:06:33.483" level="INFO">${rc} = 0</msg>
-<status status="PASS" endtime="20171129 13:06:33.483" starttime="20171129 13:06:15.514"></status>
+Checking for port...
+Port 8080: 	 Open
+Latency 0:00:00.000990: 
+
+Checking for port...
+Port 161: 	 Open
+Latency 0:00:00.000039: 
+
+
+Port check c...</msg>
+<status status="PASS" endtime="20180403 02:10:44.805" starttime="20180403 02:10:35.251"></status>
 </kw>
 <kw name="Log" library="BuiltIn">
 <doc>Logs the given message with the given level.</doc>
 <arguments>
-<arg>[Command]#:${Command}</arg>
+<arg>Command output:Port communication for 3PAR</arg>
 <arg>console=true</arg>
 </arguments>
-<msg timestamp="20171129 13:06:33.486" level="INFO">[Command]#:./device_communication.py -ip 15.154.126.8 -devtype ILO</msg>
-<status status="PASS" endtime="20171129 13:06:33.486" starttime="20171129 13:06:33.485"></status>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Arguments: [ 'Command output:Port communication for 3PAR' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:44.805" level="INFO">Command output:Port communication for 3PAR</msg>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.805" starttime="20180403 02:10:44.805"></status>
 </kw>
 <kw name="Log" library="BuiltIn">
 <doc>Logs the given message with the given level.</doc>
 <arguments>
-<arg>${stdout}</arg>
+<arg>${Storage}</arg>
 <arg>console=true</arg>
 </arguments>
-<msg timestamp="20171129 13:06:33.487" level="INFO">Device Type : ilo
-Note: REST and SNMP access are supported only on iLO 4.
-Supported protocols :  ping,rest,ribcl,snmp
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Arguments: [ 'IP Address : 15.212.144.135\nSupported ports are 8080,161\n\nChecking for port...\nPort 8080: \t Open\nLatency 0:00:00.000990: \n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000039: \n\n\nPort check completed' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:44.805" level="INFO">IP Address : 15.212.144.135
+Supported ports are 8080,161
 
-ping : passed
-checking REST communication for iLO...
-REST : passed
-checking RIBCL communication for iLO...
-RIBCL : Passed
-checking snmp communication ...
-snmp : failed</msg>
-<status status="PASS" endtime="20171129 13:06:33.488" starttime="20171129 13:06:33.487"></status>
+Checking for port...
+Port 8080: 	 Open
+Latency 0:00:00.000990: 
+
+Checking for port...
+Port 161: 	 Open
+Latency 0:00:00.000039: 
+
+
+Port check completed</msg>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.805" starttime="20180403 02:10:44.805"></status>
+</kw>
+<kw name="Parse Key Value Output" library="PortCommResource">
+<arguments>
+<arg>${Storage}</arg>
+</arguments>
+<assign>
+<var>${Storage}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Arguments: [ ${result}='IP Address : 15.212.144.135\nSupported ports are 8080,161\n\nChecking for port...\nPort 8080: \t Open\nLatency 0:00:00.000990: \n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000039: \n\n\nPort check completed' ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<assign>
+<var>${Output}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Return: {}</msg>
+<msg timestamp="20180403 02:10:44.805" level="INFO">${Output} = {}</msg>
+<status status="PASS" endtime="20180403 02:10:44.805" starttime="20180403 02:10:44.805"></status>
+</kw>
+<kw name="Get Lines Containing String" library="String">
+<doc>Returns lines of the given ``string`` that contain the ``pattern``.</doc>
+<arguments>
+<arg>${result}</arg>
+<arg>:</arg>
+</arguments>
+<assign>
+<var>${result1}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Arguments: [ 'IP Address : 15.212.144.135\nSupported ports are 8080,161\n\nChecking for port...\nPort 8080: \t Open\nLatency 0:00:00.000990: \n\nChecking for port...\nPort 161: \t Open\nLatency 0:00:00.000039: \n\n\nPort check completed' | ':' ]</msg>
+<msg timestamp="20180403 02:10:44.805" level="INFO">5 out of 13 lines matched</msg>
+<msg timestamp="20180403 02:10:44.805" level="TRACE">Return: 'IP Address : 15.212.144.135\nPort 8080: \t Open\nLatency 0:00:00.000990: \nPort 161: \t Open\nLatency 0:00:00.000039: '</msg>
+<msg timestamp="20180403 02:10:44.805" level="INFO">${result1} = IP Address : 15.212.144.135
+Port 8080: 	 Open
+Latency 0:00:00.000990: 
+Port 161: 	 Open
+Latency 0:00:00.000039: </msg>
+<status status="PASS" endtime="20180403 02:10:44.805" starttime="20180403 02:10:44.805"></status>
+</kw>
+<kw name="Get Lines Containing String" library="String">
+<doc>Returns lines of the given ``string`` that contain the ``pattern``.</doc>
+<arguments>
+<arg>${result1}</arg>
+<arg>Port</arg>
+</arguments>
+<assign>
+<var>${result2}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Arguments: [ 'IP Address : 15.212.144.135\nPort 8080: \t Open\nLatency 0:00:00.000990: \nPort 161: \t Open\nLatency 0:00:00.000039: ' | 'Port' ]</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">2 out of 5 lines matched</msg>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Return: 'Port 8080: \t Open\nPort 161: \t Open'</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">${result2} = Port 8080: 	 Open
+Port 161: 	 Open</msg>
+<status status="PASS" endtime="20180403 02:10:44.821" starttime="20180403 02:10:44.821"></status>
+</kw>
+<kw name="Split To Lines" library="String">
+<doc>Splits the given string to lines.</doc>
+<arguments>
+<arg>${result2}</arg>
+</arguments>
+<assign>
+<var>@{lines}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Arguments: [ 'Port 8080: \t Open\nPort 161: \t Open' ]</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">2 lines returned</msg>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Return: ['Port 8080: \t Open', 'Port 161: \t Open']</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">@{lines} = [ Port 8080: 	 Open | Port 161: 	 Open ]</msg>
+<status status="PASS" endtime="20180403 02:10:44.821" starttime="20180403 02:10:44.821"></status>
+</kw>
+<kw type="for" name="${line} IN [ @{lines} ]">
+<kw type="foritem" name="${line} = Port 8080: &#09; Open">
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${line}</arg>
+<arg>:</arg>
+<arg>1</arg>
+</arguments>
+<assign>
+<var>${key}</var>
+<var>${value}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Arguments: [ 'Port 8080: \t Open' | ':' | '1' ]</msg>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Return: ['Port 8080', ' \t Open']</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">${key} = Port 8080</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">${value} =  	 Open</msg>
+<status status="PASS" endtime="20180403 02:10:44.821" starttime="20180403 02:10:44.821"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${Output}</arg>
+<arg>${key.strip()}</arg>
+<arg>${value.strip()}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Arguments: [ {} | 'Port 8080' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Return: {'Port 8080': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:44.821" starttime="20180403 02:10:44.821"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:44.821" starttime="20180403 02:10:44.821"></status>
+</kw>
+<kw type="foritem" name="${line} = Port 161: &#09; Open">
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${line}</arg>
+<arg>:</arg>
+<arg>1</arg>
+</arguments>
+<assign>
+<var>${key}</var>
+<var>${value}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Arguments: [ 'Port 161: \t Open' | ':' | '1' ]</msg>
+<msg timestamp="20180403 02:10:44.821" level="TRACE">Return: ['Port 161', ' \t Open']</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">${key} = Port 161</msg>
+<msg timestamp="20180403 02:10:44.821" level="INFO">${value} =  	 Open</msg>
+<status status="PASS" endtime="20180403 02:10:44.821" starttime="20180403 02:10:44.821"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${Output}</arg>
+<arg>${key.strip()}</arg>
+<arg>${value.strip()}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Arguments: [ {'Port 8080': 'Open'} | 'Port 161' | 'Open' ]</msg>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Return: {'Port 161': 'Open', 'Port 8080': 'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:44.836" starttime="20180403 02:10:44.836"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:44.836" starttime="20180403 02:10:44.821"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:44.836" starttime="20180403 02:10:44.821"></status>
+</kw>
+<kw name="Log Dictionary" library="Collections">
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<arguments>
+<arg>${Output}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Arguments: [ {'Port 161': 'Open', 'Port 8080': 'Open'} ]</msg>
+<msg timestamp="20180403 02:10:44.836" level="INFO">Dictionary size is 2 and it contains following items:
+Port 161: Open
+Port 8080: Open</msg>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.836" starttime="20180403 02:10:44.836"></status>
+</kw>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Return: {'Port 161': 'Open', 'Port 8080': 'Open'}</msg>
+<msg timestamp="20180403 02:10:44.836" level="INFO">${Storage} = {u'Port 8080': u'Open', u'Port 161': u'Open'}</msg>
+<status status="PASS" endtime="20180403 02:10:44.836" starttime="20180403 02:10:44.805"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Suppot tools Dictionary:${Storage}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Arguments: [ "Suppot tools Dictionary:{u'Port 8080': u'Open', u'Port 161': u'Open'}" | console='True' ]</msg>
+<msg timestamp="20180403 02:10:44.836" level="INFO">Suppot tools Dictionary:{u'Port 8080': u'Open', u'Port 161': u'Open'}</msg>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.836" starttime="20180403 02:10:44.836"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionaries Should Be Equal</arg>
+<arg>${Storage}</arg>
+<arg>${3PAR}</arg>
+</arguments>
+<assign>
+<var>${Status}</var>
+</assign>
+<msg timestamp="20180403 02:10:44.836" level="TRACE">Arguments: [ 'Dictionaries Should Be Equal' | '${Storage}' | '${3PAR}' ]</msg>
+<kw name="Dictionaries Should Be Equal" library="Collections">
+<doc>Fails if the given dictionaries are not equal.</doc>
+<arguments>
+<arg>${Storage}</arg>
+<arg>${3PAR}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:44.852" level="TRACE">Arguments: [ {'Port 161': 'Open', 'Port 8080': 'Open'} | {'Port 161': 'Open', 'Port 8080': 'Open'} ]</msg>
+<msg timestamp="20180403 02:10:44.852" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.852" starttime="20180403 02:10:44.836"></status>
+</kw>
+<msg timestamp="20180403 02:10:44.852" level="TRACE">Return: True</msg>
+<msg timestamp="20180403 02:10:44.852" level="INFO">${Status} = True</msg>
+<status status="PASS" endtime="20180403 02:10:44.852" starttime="20180403 02:10:44.836"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>status:${Status}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:44.852" level="TRACE">Arguments: [ 'status:True' | console='True' ]</msg>
+<msg timestamp="20180403 02:10:44.852" level="INFO">status:True</msg>
+<msg timestamp="20180403 02:10:44.852" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.852" starttime="20180403 02:10:44.852"></status>
 </kw>
 <kw name="Run Keyword If" library="BuiltIn">
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
 <arguments>
-<arg>'''${devComm_3par}'''=='''${stdout}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
+<arg>'${Status}' != 'True'</arg>
+<arg>Fail</arg>
+<arg>********Port Communication check for 3PAR FAILED********</arg>
 <arg>ELSE IF</arg>
-<arg>'''${devComm_OA}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
-<arg>ELSE IF</arg>
-<arg>'''${ilo_devComm}'''</arg>
-<arg>Set Variable</arg>
-<arg>OK</arg>
-<arg>ELSE</arg>
-<arg>FAIL</arg>
+<arg>'${Status}' == 'True'</arg>
+<arg>Log To Console</arg>
+<arg>********Port Communication check for 3PAR PASSED********</arg>
 </arguments>
-<assign>
-<var>${status}</var>
-</assign>
-<kw name="Set Variable" library="BuiltIn">
-<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20180403 02:10:44.852" level="TRACE">Arguments: [ "'True' != 'True'" | 'Fail' | '********Port Communication check for 3PAR FAILED********' | 'ELSE IF' | "'${Status}' == 'True'" | 'Log To Console' | '********Port Communication check for 3PAR PASSED********' ]</msg>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
 <arguments>
-<arg>OK</arg>
+<arg>********Port Communication check for 3PAR PASSED********</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:06:33.499" starttime="20171129 13:06:33.498"></status>
+<msg timestamp="20180403 02:10:44.852" level="TRACE">Arguments: [ '********Port Communication check for 3PAR PASSED********' ]</msg>
+<msg timestamp="20180403 02:10:44.868" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.868" starttime="20180403 02:10:44.852"></status>
 </kw>
-<msg timestamp="20171129 13:06:33.499" level="INFO">${status} = OK</msg>
-<status status="PASS" endtime="20171129 13:06:33.499" starttime="20171129 13:06:33.489"></status>
+<msg timestamp="20180403 02:10:44.868" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.868" starttime="20180403 02:10:44.852"></status>
 </kw>
-<kw name="Should Be Empty" library="BuiltIn">
-<doc>Verifies that the given item is empty.</doc>
+<msg timestamp="20180403 02:10:44.868" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.868" starttime="20180403 02:10:26.593"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:44.868" critical="yes" starttime="20180403 02:10:20.776"></status>
+</test>
+<test id="s1-t3" name="Test 21">
+<kw type="setup" name="Open SSH and API" library="support_resource1">
+<msg timestamp="20180403 02:10:44.883" level="TRACE">Arguments: [  ]</msg>
+<kw name="Open OVSSH Connection And Log In" library="support_resource1">
+<doc>Opens an SSH session to an appliance and logs in</doc>
+<msg timestamp="20180403 02:10:44.883" level="TRACE">Arguments: [ ${SSH_USER}='root' | ${SSH_PASS}='hpvse1' ]</msg>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
 <arguments>
-<arg>${stderr}</arg>
-<arg>msg=Error returned: ${rc} ${stderr}</arg>
+<arg>${SSH_HOST}</arg>
+<arg>timeout=180s</arg>
 </arguments>
-<msg timestamp="20171129 13:06:33.503" level="INFO">Length is 0</msg>
-<status status="PASS" endtime="20171129 13:06:33.503" starttime="20171129 13:06:33.502"></status>
+<msg timestamp="20180403 02:10:44.883" level="TRACE">Arguments: [ '15.212.144.169' | timeout='180s' ]</msg>
+<msg timestamp="20180403 02:10:44.883" level="TRACE">Return: 5</msg>
+<status status="PASS" endtime="20180403 02:10:44.883" starttime="20180403 02:10:44.883"></status>
 </kw>
-<kw name="Should Be Equal As Integers" library="BuiltIn">
-<doc>Fails if objects are unequal after converting them to integers.</doc>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
 <arguments>
-<arg>${rc}</arg>
-<arg>0</arg>
-<arg>msg=non-zero return code ${rc}</arg>
+<arg>'${SSH_PASS}' is ${null}</arg>
+<arg>Set Suite variable</arg>
+<arg>${SSH_PASS}</arg>
+<arg>hpvse1</arg>
 </arguments>
-<msg timestamp="20171129 13:06:33.505" level="INFO">Argument types are:
-&lt;type 'int'&gt;
+<msg timestamp="20180403 02:10:44.883" level="TRACE">Arguments: [ "'hpvse1' is None" | 'Set Suite variable' | '${SSH_PASS}' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:10:44.899" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:44.899" starttime="20180403 02:10:44.883"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${SSH_USER}</arg>
+<arg>${SSH_PASS}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:44.899" level="TRACE">Arguments: [ 'root' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:10:44.899" level="INFO">Logging into '15.212.144.169:22' as 'root'.</msg>
+<msg timestamp="20180403 02:10:45.368" level="DEBUG">Adding ssh-rsa host key for 15.212.144.169: 384c307862744f084d50634b1c76adf1</msg>
+<msg timestamp="20180403 02:10:45.805" level="DEBUG">[chan 0] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:47.165" level="INFO">Read output: Last login: Tue Apr  3 19:02:55 2018 from 15.212.144.185
+7[r[999;999H[6n</msg>
+<msg timestamp="20180403 02:10:47.165" level="TRACE">Return: 'Last login: Tue Apr  3 19:02:55 2018 from 15.212.144.185\r\r\n\x1b7\x1b[r\x1b[999;999H\x1b[6n'</msg>
+<status status="PASS" endtime="20180403 02:10:47.165" starttime="20180403 02:10:44.899"></status>
+</kw>
+<msg timestamp="20180403 02:10:47.165" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:47.165" starttime="20180403 02:10:44.883"></status>
+</kw>
+<kw name="Login to OV Via REST API" library="support_resource1">
+<msg timestamp="20180403 02:10:47.165" level="TRACE">Arguments: [  ]</msg>
+<kw name="Should Not Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are equal.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>'unknown'</arg>
+<arg>msg=Please specify a valid Fusion IP address or hostname</arg>
+</arguments>
+<msg timestamp="20180403 02:10:47.165" level="TRACE">Arguments: [ '15.212.144.169' | "'unknown'" | msg='Please specify a valid Fusion IP address or hostname' ]</msg>
+<msg timestamp="20180403 02:10:47.165" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
 &lt;type 'unicode'&gt;</msg>
-<status status="PASS" endtime="20171129 13:06:33.505" starttime="20171129 13:06:33.504"></status>
+<msg timestamp="20180403 02:10:47.165" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:47.165" starttime="20180403 02:10:47.165"></status>
 </kw>
-<kw name="Run Keyword If" library="BuiltIn">
-<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
 <arguments>
-<arg>'${status}'=='True'</arg>
-<arg>PASS</arg>
-<arg>Log</arg>
-<arg>Validation : Passed</arg>
+<arg>\n With IP ${SSH_HOST} (${admin1_credentials})...</arg>
+<arg>console=true</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:06:33.510" starttime="20171129 13:06:33.506"></status>
+<msg timestamp="20180403 02:10:47.165" level="TRACE">Arguments: [ "\nWith IP 15.212.144.169 ({'userName': 'Administrator', 'password': 'admin123'})..." | console='true' ]</msg>
+<msg timestamp="20180403 02:10:47.165" level="INFO">
+With IP 15.212.144.169 ({'userName': 'Administrator', 'password': 'admin123'})...</msg>
+<msg timestamp="20180403 02:10:47.180" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:47.180" starttime="20180403 02:10:47.165"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:06:33.510" starttime="20171129 13:06:15.512"></status>
-</kw>
-<status status="PASS" endtime="20171129 13:06:33.510" starttime="20171129 13:05:24.211"></status>
-</kw>
-<kw name="Run Keyword If" library="BuiltIn">
-<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Fusion Api Login Appliance" library="FusionLibrary">
+<doc>Login to the appliance as the specified user</doc>
 <arguments>
-<arg>'${status}'!='OK'</arg>
-<arg>FAIL</arg>
-<arg>Validation : Failed</arg>
+<arg>${SSH_HOST}</arg>
+<arg>${admin1_credentials}</arg>
 </arguments>
-<status status="PASS" endtime="20171129 13:06:33.515" starttime="20171129 13:06:33.512"></status>
+<assign>
+<var>${Response}</var>
+<var>${AUTHTOKEN}</var>
+</assign>
+<msg timestamp="20180403 02:10:47.180" level="TRACE">Arguments: [ '15.212.144.169' | {b'password': b'admin123', b'userName': b'Administrator'} ]</msg>
+<msg timestamp="20180403 02:10:47.180" level="DEBUG">
+URL	GET https://15.212.144.169/rest/appliance/nodeinfo/version
+Request Headers {
+    "Accept": "application/json, */*",
+    "Accept-language": "en_US",
+    "Content-Type": "application/json",
+    "X-Api-Version": "600"
+}
+HTTP Headers {
+    "accept": [
+        "Accept",
+        "*/*"
+    ],
+    "accept-encoding": [
+        "Accept-Encoding",
+        "gzip, deflate"
+    ],
+    "auth": [
+        "auth",
+        "LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-"
+    ],
+    "connection": [
+        "Connection",
+        "keep-alive"
+    ],
+    "user-agent": [
+        "User-Agent",
+        "python-requests/2.18.4"
+    ]
+}
+</msg>
+<msg timestamp="20180403 02:10:47.180" level="DEBUG">Resetting dropped connection: 15.212.144.169</msg>
+<msg timestamp="20180403 02:10:47.180" level="DEBUG">Starting new HTTPS connection (3): 15.212.144.169</msg>
+<msg timestamp="20180403 02:10:50.149" level="DEBUG">https://15.212.144.169:443 "GET /rest/appliance/nodeinfo/version HTTP/1.1" 200 None</msg>
+<msg timestamp="20180403 02:10:50.149" level="DEBUG">
+Status 200
+Response Headers {
+    "Connection": "Keep-Alive",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Date": "Tue, 03 Apr 2018 19:03:10 GMT",
+    "Keep-Alive": "timeout=15, max=100",
+    "Server": "Apache",
+    "Transfer-Encoding": "chunked",
+    "cache-control": "no-cache"
+}
+Response Body {
+    "build": "0336720",
+    "category": "appliance",
+    "compatibility": "4.10",
+    "created": null,
+    "date": "2018-03-11T02:01:02+0000",
+    "eTag": null,
+    "family": "HPE OneView VM",
+    "major": "4",
+    "minor": "10",
+    "modelNumber": "HPE OneView VM - VMware vSphere",
+    "modified": null,
+    "platformType": "vm",
+    "revision": "00",
+    "serialNumber": "VMware-422c1b770fa92b1d-58a5f8652952a424",
+    "softwareVersion": "4.10.00-0336720",
+    "type": "NodeVersionDto4",
+    "uri": "/rest/appliance/nodeinfo/version",
+    "uuid": "f150fb1d-fb39-4fc2-81cc-83e86235f113"
+}</msg>
+<msg timestamp="20180403 02:10:50.149" level="INFO">Set suite metadata 'OneView Version' to value '4.10.00-0336720'.</msg>
+<msg timestamp="20180403 02:10:50.149" level="DEBUG">
+URL	POST https://15.212.144.169/rest/login-sessions
+Request Headers {
+    "Accept": "application/json, */*",
+    "Accept-language": "en_US",
+    "Content-Type": "application/json",
+    "X-Api-Version": "600"
+}
+HTTP Headers {
+    "accept": [
+        "Accept",
+        "*/*"
+    ],
+    "accept-encoding": [
+        "Accept-Encoding",
+        "gzip, deflate"
+    ],
+    "auth": [
+        "auth",
+        "LTYzNDEwOTU4NjE0xfKwdu2dheU9jRD_VUj2_lLJ1toYSfN-"
+    ],
+    "connection": [
+        "Connection",
+        "keep-alive"
+    ],
+    "user-agent": [
+        "User-Agent",
+        "python-requests/2.18.4"
+    ]
+}n</msg>
+<msg timestamp="20180403 02:10:50.149" level="DEBUG">Request Body {
+    "password": "admin123",
+    "userName": "Administrator"
+}
+</msg>
+<msg timestamp="20180403 02:10:50.758" level="DEBUG">https://15.212.144.169:443 "POST /rest/login-sessions HTTP/1.1" 200 None</msg>
+<msg timestamp="20180403 02:10:50.758" level="DEBUG">
+Status 200
+Response Headers {
+    "Connection": "Keep-Alive",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Date": "Tue, 03 Apr 2018 19:03:11 GMT",
+    "Keep-Alive": "timeout=15, max=99",
+    "Server": "Apache",
+    "Transfer-Encoding": "chunked",
+    "cache-control": "no-cache"
+}
+Response Body {
+    "partnerData": {},
+    "sessionID": "MzAzMDc0MDYwMjUzj_iXJLN4KbbMIblkpWva4mVX-vG5hpV8"
+}</msg>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Return: ({b'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=99', 'Server': 'Apache', 'Connection': 'Keep-Alive', 'cache-control': 'no-cache', 'Date': 'Tue, 03 Apr 2018 19:03:11 GMT', 'Content-Type': 'application/json;charset=UTF-8'}, 'partnerData': {}, 'sessionID': 'MzAzMDc0MDYwMjUzj_iXJLN4KbbMIblkpWva4mVX-vG5hpV8', b'status_code': 200},
+ 'MzAzMDc0MDYwMjUzj_iXJLN4KbbMIblkpWva4mVX-vG5hpV8')</msg>
+<msg timestamp="20180403 02:10:50.758" level="INFO">${Response} = {'status_code': 200, u'sessionID': u'MzAzMDc0MDYwMjUzj_iXJLN4KbbMIblkpWva4mVX-vG5hpV8', u'partnerData': {}, 'headers': {'Transfer-Encoding': 'chunked', 'Keep-Alive': 'timeout=15, max=99', 'Server': 'A...</msg>
+<msg timestamp="20180403 02:10:50.758" level="INFO">${AUTHTOKEN} = MzAzMDc0MDYwMjUzj_iXJLN4KbbMIblkpWva4mVX-vG5hpV8</msg>
+<status status="PASS" endtime="20180403 02:10:50.758" starttime="20180403 02:10:47.180"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:06:33.515" starttime="20171129 13:05:24.208"></status>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${AUTHTOKEN}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Arguments: [ '${AUTHTOKEN}' ]</msg>
+<msg timestamp="20180403 02:10:50.758" level="INFO">${AUTHTOKEN} = MzAzMDc0MDYwMjUzj_iXJLN4KbbMIblkpWva4mVX-vG5hpV8</msg>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:50.758" starttime="20180403 02:10:50.758"></status>
 </kw>
-<status status="PASS" endtime="20171129 13:06:33.516" critical="yes" starttime="20171129 13:05:15.696"></status>
+<kw name="Console" library="robot.api.logger">
+<doc>Writes the message to the console.</doc>
+<arguments>
+<arg>Auth token: ${AUTHTOKEN}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Arguments: [ 'Auth token: MzAzMDc0MDYwMjUzj_iXJLN4KbbMIblkpWva4mVX-vG5hpV8' ]</msg>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:50.758" starttime="20180403 02:10:50.758"></status>
+</kw>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:50.758" starttime="20180403 02:10:47.165"></status>
+</kw>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:50.758" starttime="20180403 02:10:44.883"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>PORT COMMUNICATION FOR HELP command ******** STARTED ******</arg>
+<arg>console=true</arg>
+</arguments>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Arguments: [ 'PORT COMMUNICATION FOR HELP command ******** STARTED ******' | console='true' ]</msg>
+<msg timestamp="20180403 02:10:50.758" level="INFO">PORT COMMUNICATION FOR HELP command ******** STARTED ******</msg>
+<msg timestamp="20180403 02:10:50.758" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:50.758" starttime="20180403 02:10:50.758"></status>
+</kw>
+<kw name="Port Communication Help Command" library="PortCommResource">
+<msg timestamp="20180403 02:10:50.774" level="TRACE">Arguments: [  ]</msg>
+<kw name="Open DevSSH Connection And Log In" library="PortCommResource">
+<doc>Opens an SSH session to a device and logs in</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>${HOST_USERNAME}</arg>
+<arg>${HOST_PASSWORD}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:50.774" level="TRACE">Arguments: [ ${SSH_HOST}='15.212.144.169' | ${SSH_USER}='root' | ${SSH_PASS}='hpvse1' ]</msg>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>${SSH_HOST}</arg>
+<arg>timeout=180s</arg>
+</arguments>
+<msg timestamp="20180403 02:10:50.774" level="TRACE">Arguments: [ '15.212.144.169' | timeout='180s' ]</msg>
+<msg timestamp="20180403 02:10:50.774" level="TRACE">Return: 6</msg>
+<status status="PASS" endtime="20180403 02:10:50.774" starttime="20180403 02:10:50.774"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${SSH_USER}</arg>
+<arg>${SSH_PASS}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:50.774" level="TRACE">Arguments: [ 'root' | 'hpvse1' ]</msg>
+<msg timestamp="20180403 02:10:50.774" level="INFO">Logging into '15.212.144.169:22' as 'root'.</msg>
+<msg timestamp="20180403 02:10:51.227" level="DEBUG">Adding ssh-rsa host key for 15.212.144.169: 384c307862744f084d50634b1c76adf1</msg>
+<msg timestamp="20180403 02:10:51.649" level="DEBUG">[chan 0] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:53.024" level="INFO">Read output: Last login: Tue Apr  3 19:03:07 2018 from 15.212.144.185
+7[r[999;999H[6n</msg>
+<msg timestamp="20180403 02:10:53.024" level="TRACE">Return: 'Last login: Tue Apr  3 19:03:07 2018 from 15.212.144.185\r\r\n\x1b7\x1b[r\x1b[999;999H\x1b[6n'</msg>
+<status status="PASS" endtime="20180403 02:10:53.024" starttime="20180403 02:10:50.774"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>SSH Connection Eshtablished for ${SSH_HOST}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20180403 02:10:53.024" level="TRACE">Arguments: [ 'SSH Connection Eshtablished for 15.212.144.169' | console='True' ]</msg>
+<msg timestamp="20180403 02:10:53.024" level="INFO">SSH Connection Eshtablished for 15.212.144.169</msg>
+<msg timestamp="20180403 02:10:53.024" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:53.024" starttime="20180403 02:10:53.024"></status>
+</kw>
+<msg timestamp="20180403 02:10:53.024" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:53.024" starttime="20180403 02:10:50.774"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -h</arg>
+</arguments>
+<assign>
+<var>${Output}</var>
+</assign>
+<msg timestamp="20180403 02:10:53.024" level="TRACE">Arguments: [ 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -h' ]</msg>
+<msg timestamp="20180403 02:10:53.024" level="INFO">Executing command 'cd /ci/support/ovsupportability/scripts/ &amp;&amp; ./check_port_communication.py -h'.</msg>
+<msg timestamp="20180403 02:10:53.024" level="DEBUG">[chan 1] Max packet in: 32768 bytes</msg>
+<msg timestamp="20180403 02:10:53.243" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20180403 02:10:53.243" level="TRACE">Return: 'usage: check_port_communication.py [-h] -ip IPADDRESS [-devtype DEVICETYPE]\n                                   [-p PORT]\n\noptional arguments:\n  -h, --help            show this help message and exit\n  -ip IPADDRESS, --ipaddress IPADDRESS\n                        remote host ip address\n  -devtype DEVICETYPE, --deviceType DEVICETYPE\n                        deviceType of the host i.e ILO or OA or IPDU or 3PAR\n                        or I3S or EM\n  -p PORT, --port PORT  port number to check whether port is open or not'</msg>
+<msg timestamp="20180403 02:10:53.243" level="INFO">${Output} = usage: check_port_communication.py [-h] -ip IPADDRESS [-devtype DEVICETYPE]
+                                   [-p PORT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  ...</msg>
+<status status="PASS" endtime="20180403 02:10:53.243" starttime="20180403 02:10:53.024"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${Output}</arg>
+<arg>${port_help}</arg>
+</arguments>
+<msg timestamp="20180403 02:10:53.243" level="TRACE">Arguments: [ 'usage: check_port_communication.py [-h] -ip IPADDRESS [-devtype DEVICETYPE]\n                                   [-p PORT]\n\noptional arguments:\n  -h, --help            show this help message and exit\n  -ip IPADDRESS, --ipaddress IPADDRESS\n                        remote host ip address\n  -devtype DEVICETYPE, --deviceType DEVICETYPE\n                        deviceType of the host i.e ILO or OA or IPDU or 3PAR\n                        or I3S or EM\n  -p PORT, --port PORT  port number to check whether port is open or not' | b'usage: check_port_communication.py [-h] -ip IPADDRESS [-devtype DEVICETYPE]\n                                   [-p PORT]\n\noptional arguments:\n  -h, --help            show this help message and exit\n  -ip IPADDRESS, --ipaddress IPADDRESS\n                        remote host ip address\n  -devtype DEVICETYPE, --deviceType DEVICETYPE\n                        deviceType of the host i.e ILO or OA or IPDU or 3PAR\n                        or I3S or EM\n  -p PORT, --port PORT  port number to check whether port is open or not' ]</msg>
+<msg timestamp="20180403 02:10:53.243" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:53.243" starttime="20180403 02:10:53.243"></status>
+</kw>
+<msg timestamp="20180403 02:10:53.243" level="TRACE">Return: None</msg>
+<status status="PASS" endtime="20180403 02:10:53.243" starttime="20180403 02:10:50.774"></status>
+</kw>
+<status status="PASS" endtime="20180403 02:10:53.243" critical="yes" starttime="20180403 02:10:44.868"></status>
 </test>
 <doc>Verify and Deploy latest Support-Tool OVA</doc>
 <metadata>
-<item name="OneView Version">4.00.00-0322016</item>
+<item name="OneView Version">4.10.00-0336720</item>
 </metadata>
-<status status="PASS" endtime="20171129 13:06:33.521" starttime="20171129 13:05:08.699"></status>
+<status status="PASS" endtime="20180403 02:10:53.243" starttime="20180403 02:09:41.009"></status>
 </suite>
 <statistics>
 <total>
-<stat fail="0" pass="1">Critical Tests</stat>
-<stat fail="0" pass="1">All Tests</stat>
+<stat fail="0" pass="3">Critical Tests</stat>
+<stat fail="0" pass="3">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat fail="0" id="s1" name="Support" pass="1">Support</stat>
+<stat fail="0" id="s1" name="Support" pass="3">Support</stat>
 </suite>
 </statistics>
 <errors>

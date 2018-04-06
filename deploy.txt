@@ -7,7 +7,7 @@ Documentation    Deploy latest OVA
 ...     | | (default http://ci-nexus.vse.rdlabs.hpecorp.net/Fusion/rel/4.00/OVA/DCS/ ).|
 ...     | VSPHERE_DATASTORE | vShpere device to hold deployed VM (default fusionvm-1)|
 Resource        deploy_resource.txt
-
+Suite Setup    Set Log Level    Trace
 *** Test Cases ***
 
 Test 1
@@ -16,11 +16,11 @@ Test 1
 Test2
     Extract Build Id Number
 
-# Test3
-    # Check OVFtool
+Test3
+    Check OVFtool
 
-# Test4
-    # Deploy One View
+Test4
+    Deploy One View
     
 Test 5
     Get OV IP Address    
@@ -33,7 +33,3 @@ Test 7
 
 Test 8
     FTS OV
-
-
-    
-    

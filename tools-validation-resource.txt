@@ -12,76 +12,249 @@ Library                         SSHLibrary
 Library                         json
 Library                         XML            
 Resource						deploy_resource.txt
+Resource						support_resource1.txt
 Variables                       Supportool_data.py
                         
 
 
 *** Variables ***
-${SSH_HOST}                     15.154.123.154
+${SSH_HOST}
 
 *** Keywords ***
 #######################################
 # LOGGING
 #######################################
 
-Open OVSSH Connection And Log In
-    [Documentation]     Opens an SSH session to an appliance and logs in
-    [Arguments]         ${SSH_USER}=root   ${SSH_PASS}=hpvse1
-    Open Connection     ${SSH_HOST}     timeout=180s
-    Run Keyword If	    '${SSH_PASS}' is ${null}      Set Suite variable  ${SSH_PASS}     hpvse1
-    Login               ${SSH_USER}     ${SSH_PASS}
+# Open OVSSH Connection And Log In
+    # [Documentation]     Opens an SSH session to an appliance and logs in
+    # [Arguments]         ${SSH_USER}=root   ${SSH_PASS}=hpvse1
+    # Open Connection     ${SSH_HOST}     timeout=180s
+    # Run Keyword If	    '${SSH_PASS}' is ${null}      Set Suite variable  ${SSH_PASS}     hpvse1
+    # Login               ${SSH_USER}     ${SSH_PASS}
     
-Login to OV Via REST API
-    # [Documentation]    Connects to the Appliance and creates a session using the Username and Password.
-    # [Documentation]    Example:\n| Login to Fusion Via REST
-    Should Not Be Equal    ${SSH_HOST}    'unknown'    msg=Please specify a valid Fusion IP address or hostname
-    Log    \n With IP ${SSH_HOST} (${admin1_credentials})...    console=true
-    ${Response}    ${AUTHTOKEN}    Fusion Api Login Appliance    ${SSH_HOST}    ${admin1_credentials}
-    Set Suite Variable   ${AUTHTOKEN}
-    Console      Auth token: ${AUTHTOKEN}
-    #Should Match StatusCode in Response      ${Response}   ${200}
-    #Set Suite Variable    ${LOGGED}  ${True}
-Open SSH and API
-    Open OVSSH Connection And Log In
-    Login to OV Via REST API    
+# Login to OV Via REST API
+    # # [Documentation]    Connects to the Appliance and creates a session using the Username and Password.
+    # # [Documentation]    Example:\n| Login to Fusion Via REST
+    # Should Not Be Equal    ${SSH_HOST}    'unknown'    msg=Please specify a valid Fusion IP address or hostname
+    # Log    \n With IP ${SSH_HOST} (${admin1_credentials})...    console=true
+    # ${Response}    ${AUTHTOKEN}    Fusion Api Login Appliance    ${SSH_HOST}    ${admin1_credentials}
+    # Set Suite Variable   ${AUTHTOKEN}
+    # Console      Auth token: ${AUTHTOKEN}
+    # #Should Match StatusCode in Response      ${Response}   ${200}
+    # #Set Suite Variable    ${LOGGED}  ${True}
+# Open SSH and API
+    # Open OVSSH Connection And Log In
+    # Login to OV Via REST API    
 Soap Comm
-    ${rc}=    Execute Command    java -cp /ci/support/ovsupportability/lib/supportclient.jar:/ci/webapps/psrm/WEB-INF/lib/*:/ci/webapps/vcmmigrationmgr/WEB-INF/lib/*: SoapClient 15.154.122.101 admin admin1234
-    Log    ${rc}    console=true
+    ${rc}=    Execute Command    java -cp /ci/support/ovsupportability/lib/supportclient.jar:/ci/webapps/psrm/WEB-INF/lib/*:/ci/webapps/vcmmigrationmgr/WEB-INF/lib/*: SoapClient ${OA_ip} ${dev_cred['OA_user']} ${dev_cred['OA_pass']}
+    Log    ${rc}
     ${value}=    Evaluate    "SessionKey:"
-    ${status}    ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rc}    ${value}
-    Run keyword if   '${status}'=='PASS'    Log    SOAP COMMUNICATION PASSED    console=true
-    Run keyword if   '${status}'!='PASS'    FAIL    SOAP FAILED
-    [Return]     ${status}  
+    ${status}=  Run Keyword and Return Status    Should Contain    ${rc}    ${value}
+    ${outcode}=  Run Keyword If     '${status}'=='True'      Set Variable    SOAP Passed
+    ...                    ELSE                              Set Variable    SOAP Failed
+    Run keyword if   '${status}'=='True'    Log    SOAP COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL    SOAP COMMUNICATION FAILED
+    [Return]     ${status}    ${outcode}
+    
     
 REST Comm
-    ${rc}=    Execute Command     /usr/bin/curl -i --user admin:admin123 -X GET https://15.154.126.8/rest/v1/Systems
+    [Arguments]    ${dev_ip}
+    ${rc}=    Execute Command     /usr/bin/curl -i --user admin:admin123 -X GET https://${dev_ip}/rest/v1/Systems
+    Log    ${rc}
+    ${value}=    Evaluate    "HTTP/1.1 200 OK"
+    ${status}=  Run Keyword and Return Status    Should Contain    ${rc}    ${value}
+    ${outcode}=  Run Keyword If     '${status}'=='True'      Set Variable    REST : passed
+    ...                    ELSE                              Set Variable    REST : Failed
+    Run keyword if   '${status}'=='True'    Log    REST COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL   REST COMMUNICATION FAILED
+    [Return]     ${status}    ${outcode}
+    
+REST 3Par Comm
+    #[Arguments]    ${dev_ip}
+    ${Session_key}=    Create Dictionary 
+    ${rc}=    Execute Command     /usr/bin/curl -ik -H "Content-type: application/json" -X POST https://${stor_ip}:8080/api/v1/credentials -d '{"user":"${storage1_systems['username']}","password":"${storage1_systems['password']}"}'
+    Log    ${rc}
+    ${value}=    Evaluate    "HTTP/1.1 201 Created"
+    ${status}=  Run Keyword and Return Status    Should Contain    ${rc}    ${value}
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL   Session-key : FAILED
+    #${lines}=    Split To Lines    ${rc}
+    #${match}=    Get Matches    ${lines}    regexp=key:\\w+
+    ${key}=    Get Lines Containing String    ${rc}    key
+    ${str} =	Remove String    ${key}    {    }
+    Log    Auth Token: ${str}
+    ${Output}=    Create Dictionary
+    ${key1}    ${value}=    Split String    ${str}    :     1
+    Set To Dictionary     ${Output}    ${key1.strip()}    ${value.strip()}
+    Log Dictionary    ${Output}   
+    ${val}=    Pop From Dictionary    ${Output}    ${key1}
+    Log    ${val}
+    ${rc1}=    Execute Command    /usr/bin/curl -ik -H "Content-type: application/json" -H "Accept: application/json" -H "X-HP3PAR-WSAPI-SessionKey: ${val}" -X GET https://${stor_ip}:8080/api/v1/volumes
+    Log    ${rc1}
+    ${value1}=    Evaluate    "HTTP/1.1 200 OK"
+    ${status}=  Run Keyword and Return Status    Should Contain    ${rc}    ${value}
+    ${outcode}=  Run Keyword If     '${status}'=='True'      Set Variable    REST : passed
+    ...                    ELSE                              Set Variable    REST : Failed
+    Run keyword if   '${status}'=='True'    Log    REST COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL   REST COMMUNICATION FAILED
+    [Return]     ${status}    ${outcode}
+    
+RIBCL Comm
+    [Arguments]    ${dev_ip}    ${dev_user}    ${dev_pass}
+    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts && ./locfg1.pl -s ${dev_ip} -f get_server_name.xml -u ${dev_user} -p ${dev_pass}
+    Log    ${rc}
+    ${value}=    Evaluate    "SERVER"
+    ${status}=  Run Keyword and Return Status    Should Contain    ${rc}    ${value}
+    ${outcode}=  Run Keyword If     '${status}'=='True'      Set Variable    RIBCL : Passed
+    ...                    ELSE                              Set Variable    RIBCL : Failed
+    Run keyword if   '${status}'=='True'    Log    RIBCL COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL   RIBCL COMMUNICATION FAILED
+    [Return]     ${status}    ${outcode}
+    
+RIBCL Ipdu Comm
+    [Arguments]    ${dev_ip}
+    ${rc}=    Execute Command    timeout 120s openssl s_client -tls1 -crlf -ign_eof -connect ${dev_ip}:50443
+    Log    ${rc}
+    ${value}=    Evaluate    "CONNECTED"
+    ${status}=  Run Keyword and Return Status    Should Contain    ${rc}    ${value}
+    ${outcode}=  Run Keyword If     '${status}'=='True'      Set Variable    RIBCL : passed
+    ...                    ELSE                              Set Variable    RIBCL : Failed
+    Run keyword if   '${status}'=='True'    Log    RIBCL COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL   RIBCL COMMUNICATION FAILED
+    [Return]     ${status}    ${outcode}
+
+SSH Comm
+    ${connected}=  Check Ssh To Console    ${OA_ip}
+    ...                                    ${dev_cred['OA_user']}
+    ...                                    ${dev_cred['OA_pass']}
+    ${status}=  Run Keyword and Return Status        Should Be True                ${connected}
+    ${outcode}=  Run Keyword If     '${status}'=='True'      Set variable    SSH : passed
+    ...                    ELSE                              Set Variable    SSH : failed
+    Run keyword if   '${status}'=='True'    Log    SSH COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL   SSH COMMUNICATION FAILED
+    [Return]    ${status}    ${outcode}
+    
+    
+OV ping
+    [Arguments]    ${dev_ip}
+	${rc}=    Run    ping -n 4 ${dev_ip}
+	#${status}=    Convert To List    ${status}
+    Log    ${rc}
+    ${status}=  Run Keyword and Return Status   Should Contain    ${rc}    TTL=
+    ${outcode}=  Run Keyword If     '${status}'=='True'      Set Variable    ping : passed
+    ...                    ELSE                              Set Variable    ping : Failed
+    Run keyword if   '${status}'=='True'    Log    PING COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL  PING COMMUNICATION FAILED
+	[Return]     ${status}    ${outcode}
+	
+	
+    
+ILO4 Validation
+    [Arguments]    ${length}=0    ${count}=0
+    ${ILO4_ValList}=    Create List
+    @{test_list}=    Create List    OV ping
+    ...                             REST Comm
+    ...                             RIBCL Comm
+    :FOR    ${test}    IN    @{test_list}
+    \    ${status}=  Run Keyword If    '${test}'!='RIBCL Comm'    ${test}    ${ilo4_ip}
+    \    ...                   ELSE        ${test}    ${ilo4_ip}    ${dev_cred['ilo4_user']}    ${dev_cred['ilo4_pass']}
+    \    Append To List    ${ILO4_ValList}    ${status[1]}
+    \    ${status}=        Run Keyword If     '${status[0]}'=='True'        Set Variable  PASS
+    # ${status}    ${taskState} =  Run Keywords    OV ping    AND    REST Comm    AND    RIBCL Comm
+    # ${status}    ${taskState} =  Run Keyword and Return Status        REST Comm
+    # ${status}    ${taskState} =  Run Keyword and Return Status        RIBCL Comm
+    \    ${count}=    Run keyword if   '${status}'=='PASS'    evaluate    ${count}+1
+    \    ...                 ELSE IF    '${status}'=='None'    evaluate    ${count}+0
+    \    ${length}=    Evaluate    ${length}+1
+    Log    ${ILO4_ValList}    console=true
+    Run keyword if    ${count} == ${length}        Log    ******** ILO4 Validation : PASSED *********    console=true
+    Run keyword Unless    ${count} == ${length}    Run Keyword And Continue On Failure    FAIL   ILO Validation : FAILED
+    [Return]    ${ILO4_ValList}
+    
+ILO3 Validation
+    [Arguments]    ${length}=0    ${count}=0
+    ${ILO3_ValList}=    Create List
+    @{test_list}=    Create List    OV ping
+    ...                             RIBCL Comm
+    :FOR    ${test}    IN    @{test_list}
+    \    ${status}=  Run Keyword If    '${test}'!='RIBCL Comm'    Run Keyword And Continue On Failure    ${test}    ${ilo3_ip}
+    \    ...                   ELSE    Run Keyword And Continue On Failure    ${test}    ${ilo3_ip}    ${dev_cred['ilo3_user']}    ${dev_cred['ilo3_pass']}
+    \    Append To List    ${ILO3_ValList}    ${status[1]}
+    \    ${status}=        Run Keyword If     '${status[0]}'=='True'        Set Variable  PASS
+    # ${status}    ${taskState} =  Run Keywords    OV ping    AND    REST Comm    AND    RIBCL Comm
+    # ${status}    ${taskState} =  Run Keyword and Return Status        REST Comm
+    # ${status}    ${taskState} =  Run Keyword and Return Status        RIBCL Comm
+    \    ${count}=    Run keyword if   '${status}'=='PASS'    evaluate    ${count}+1
+    \    ...                 ELSE IF    '${status}'=='None'    evaluate    ${count}+0
+    \    ${length}=    Evaluate    ${length}+1
+    Log    ${ILO3_ValList}    console=true
+    Run keyword if    ${count} == ${length}        Log    ****** ILO3 Validation : PASSED *******    console=true
+    Run keyword Unless    ${count} == ${length}    Run Keyword And Continue On Failure    FAIL   ILO Validation : FAILED
+    [Return]    ${ILO3_ValList}
+    
+OA Validation
+    [Arguments]    ${length}=0    ${count}=0
+    ${OA_ValList}=    Create List
+    @{test_list}=    Create List    OV ping
+    ...                             SSH Comm
+    ...                             Soap Comm
+    :FOR    ${test}    IN    @{test_list}
+    \    ${status}=  Run Keyword If    '${test}'=='OV ping'    Run Keyword And Continue On Failure    ${test}    ${OA_ip}
+    \    ...                   ELSE        Run Keyword And Continue On Failure    ${test}
+    \    Append To List    ${OA_ValList}    ${status[1]}
+    \    ${status}=        Run Keyword If     '${status[0]}'=='True'        Set Variable  PASS
+    # ${status}    ${taskState} =  Run Keywords    OV ping    AND    REST Comm    AND    RIBCL Comm
+    # ${status}    ${taskState} =  Run Keyword and Return Status        REST Comm
+    # ${status}    ${taskState} =  Run Keyword and Return Status        RIBCL Comm
+    \    ${count}=    Run keyword if   '${status}'=='PASS'    evaluate    ${count}+1
+    \    ...                 ELSE IF    '${status}'=='None'    evaluate    ${count}+0
+    \    ${length}=    Evaluate    ${length}+1
+    Log    ${OA_ValList}
+    Run keyword if    ${count} == ${length}        Log    ********** OA Validation : PASSED *********8    console=true
+    Run keyword Unless    ${count} == ${length}        Run Keyword And Continue On Failure    FAIL    OA Validation : FAILED
+    [Return]    ${OA_ValList}
+    
+Validation 3PAR
+    [Arguments]    ${length}=0    ${count}=0
+    ${3PAR_ValList}=    Create List
+    @{test_list}=    Create List    OV ping
+    ...                             REST 3Par Comm
+    :FOR    ${test}    IN    @{test_list}
+    \    ${status}=  Run Keyword If    '${test}'=='OV ping'    Run Keyword And Continue On Failure    ${test}    ${stor_ip}
+    \    ...                   ELSE        Run Keyword And Continue On Failure    ${test}
+    \    Append To List    ${3PAR_ValList}    ${status[1]}
+    \    ${status}=        Run Keyword If     '${status[0]}'=='True'        Set Variable  PASS
+    \    ${count}=    Run keyword if   '${status}'=='PASS'    evaluate    ${count}+1
+    \    ...                 ELSE IF    '${status}'=='None'    evaluate    ${count}+0
+    \    ${length}=    Evaluate    ${length}+1
+    Log    ${3PAR_ValList}
+    Run keyword if    ${count} == ${length}        Log    ********** 3PAR Validation : PASSED *********8    console=true
+    Run keyword Unless    ${count} == ${length}        Run Keyword And Continue On Failure    FAIL    3PAR Validation : FAILED
+    [Return]    ${3PAR_ValList}
+    
+Validation Ipdu
+    [Arguments]    ${length}=0    ${count}=0
+    ${Ipdu_ValList}=    Create List
+    @{test_list}=    Create List    OV ping
+    ...                             RIBCL Ipdu Comm
+    :FOR    ${test}    IN    @{test_list}
+    \    ${status}=  Run Keyword If    '${test}'=='OV ping'    Run Keyword And Continue On Failure    ${test}    ${ipdu_ip}
+    \    ...                   ELSE        Run Keyword And Continue On Failure    ${test}    ${ipdu_ip}
+    \    Append To List    ${Ipdu_ValList}    ${status[1]}
+    \    ${status}=        Run Keyword If     '${status[0]}'=='True'        Set Variable  PASS
+    \    ${count}=    Run keyword if   '${status}'=='PASS'    evaluate    ${count}+1
+    \    ...                 ELSE IF    '${status}'=='None'    evaluate    ${count}+0
+    \    ${length}=    Evaluate    ${length}+1
+    Log    ${Ipdu_ValList}
+    Run keyword if    ${count} == ${length}        Log    ********** IPDU Validation : PASSED *********8    console=true
+    Run keyword Unless    ${count} == ${length}        Run Keyword And Continue On Failure    FAIL    IPDU Validation : FAILED
+    [Return]    ${Ipdu_ValList}
+    
+Dtask
+    ${rc}=    Execute Command    curl -ik -X GET -H "Auth: ${AUTHTOKEN}" -H "X-Api-Version: 600" https://15.154.123.154/rest/tasks?filter=taskState=Warning
     Log    ${rc}    console=true
     ${value}=    Evaluate    "HTTP/1.1 200 OK"
     ${status}    ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rc}    ${value}
-    Run keyword if   '${status}'=='PASS'    Log    REST : PASSED    console=true
-    Run keyword if   '${status}'!='PASS'    FAIL   REST : FAILED    console=true
-    [Return]     ${status}  
-    
-RIBCL Comm
-    [Arguments]    ${ilo_ip}=15.154.126.8    ${user_ilo}=admin    ${pass_ilo}=admin123  
-    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts && ./locfg1.pl -s ${ilo_ip} -f get_server_name.xml -u ${user_ilo} -p ${pass_ilo}
-    Log    ${rc}    console=true
-    ${value}=    Evaluate    "SERVER_OSNAME"
-    ${status}    ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${rc}    ${value}
-    Run keyword if   '${status}'=='PASS'    Log    RIBCL : PASSED    console=true
-    Run keyword if   '${status}'!='PASS'    FAIL   RIBCL : FAILED    console=true
-    [Return]     ${status}  
-
-ILO Validation
-    REST Comm
-    RIBCL Comm
-    [Return]
-        
-    
-    
-    
-    
-    
-    
-    
-    
+    Run keyword if   '${status}'=='PASS'    Log    DTASK COMMUNICATION PASSED    console=true
+    Run keyword if   '${status}'!='PASS'    FAIL    DTASK FAILED
+    [Return]     ${status}
+   

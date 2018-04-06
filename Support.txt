@@ -2,35 +2,68 @@
 Documentation    Verify and Deploy latest Support-Tool OVA
 
 Resource         support_resource1.txt
+Resource         PortCommResource.robot
 Test Setup       Open SSH and API
-
+Suite Setup      Set Log Level    Trace
 	  
 
 *** Test Cases ***
-# Connect to ssh OV
-    # ${a}=    Open OVSSH Connection And Log In
-    # Log    ${a}    console=True
-# Test 1
-    # Check Support Tool
-# Test 2
-    # Check Support Tool rpm
-# Test 3
-    # rpm file availability
-# Test 4
-    # Untar
-# Test 5
-    # Install Supportool
-# Test 6
-    # Post Installation Validation
-# Test 7
-    # Add OV Enclosure
-# Test 8
-    # ADD STORAGE DEVICES
-# Test 9
-    # ADD New Server Hardware
-    # Sleep  10 seconds
+
+Test 1
+    Check Support Tool
+Test 2
+    Check Support Tool rpm
+Test 3
+    rpm file availability
+Test 4
+    Untar
+Test 5
+    Install Supportool
+Test 6
+    Post Installation Validation
+Test 7
+    Add OV Enclosure
+Test 8
+    ADD STORAGE DEVICES
+Test 9
+    ADD New Server Hardware
+    Sleep  60 seconds
 Test 10
-    DevComm Verification
-# Test 11
-    # Test Support
+    ADD IPDU Device
+Test 11
+    Log    DEVICE COMMUNICATION FOR ILO 3 ******** STARTED ******    console=true
+    DevcomILO3
+Test 12
+    Log    DEVICE COMMUNICATION FOR ILO 4 ******** STARTED ******    console=true
+    DevcomILO4
+Test 13
+    Log    DEVICE COMMUNICATION FOR OA ******** STARTED ******    console=true
+    DevcomOA
+Test 14
+    Log    DEVICE COMMUNICATION FOR 3PAR ******** STARTED ******    console=true
+    Devcom3PAR
+Test 15
+    Log    DEVICE COMMUNICATION FOR IPDU ******** STARTED ******    console=true
+    DevcomIPDU
+Test 16
+    Log    PORT COMMUNICATION FOR OA ******** STARTED ******    console=true
+    Port Communication Check for OA
+Test 17
+    Log    PORT COMMUNICATION FOR ILO 3 ******** STARTED ******    console=true
+    Port Communication Check for ILO3
+Test 18
+    Log    PORT COMMUNICATION FOR ILO 4 ******** STARTED ******    console=true
+    Port Communication Check for ILO4
+Test 19
+    Log    PORT COMMUNICATION FOR IPDU ******** STARTED ******    console=true
+    Port Communication Check for IPDU
+Test 20
+    Log    PORT COMMUNICATION FOR 3PAR ******** STARTED ******    console=true
+    Port Communication Check for 3PAR
+Test 21
+    Log    PORT COMMUNICATION FOR HELP command ******** STARTED ******    console=true
+    Port Communication Help Command
+Test 22
+    Log    DbSync Tool Validation ******** STARTED ******    console=true
+    DBsync Verification
     

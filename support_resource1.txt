@@ -1,6 +1,5 @@
 *** Settings ***
 Documentation    Support Tools Installation and verification
-
 Library                         robot.api.logger
 Library                         OperatingSystem
 Library                         FusionLibrary
@@ -8,16 +7,14 @@ Library                         RoboGalaxyLibrary
 Library                         BuiltIn
 Library                         Collections
 Library                         String
-Library                         SSHLibrary
+#Library                         SSHLibrary
 Library                         XML             
+Resource                        ../../RIST/API/OVF358/keywords.txt
 Resource						deploy_resource.txt
-#Resource                        tools-validation-resource.txt
+Resource                        tools-validation-resource.txt
 Variables                       Supportool_data.py                        
-
 *** Variables ***
-${SSH_HOST}              15.154.123.154
-
-
+${SSH_HOST}
 *** Keywords ***
 #######################################
 # LOGGING
@@ -25,10 +22,9 @@ ${SSH_HOST}              15.154.123.154
 Open OVSSH Connection And Log In
     [Documentation]     Opens an SSH session to an appliance and logs in
     [Arguments]         ${SSH_USER}=root   ${SSH_PASS}=hpvse1
-    Open Connection     ${SSH_HOST}     timeout=180s
+    SSHLibrary.Open Connection     ${SSH_HOST}     timeout=180s
     Run Keyword If	    '${SSH_PASS}' is ${null}      Set Suite variable  ${SSH_PASS}     hpvse1
-    Login               ${SSH_USER}     ${SSH_PASS}
-    
+    SSHLibrary.Login               ${SSH_USER}     ${SSH_PASS}
 Login to OV Via REST API
     # [Documentation]    Connects to the Appliance and creates a session using the Username and Password.
     # [Documentation]    Example:\n| Login to Fusion Via REST
@@ -41,8 +37,7 @@ Login to OV Via REST API
     #Set Suite Variable    ${LOGGED}  ${True}
 Open SSH and API
     Open OVSSH Connection And Log In
-    Login to OV Via REST API    
-        
+    Login to OV Via REST API
 Check Support Tool
     ${out}=  Execute Command    rpm -qa | grep "support"
     ${result}=  Split String    ${out}    \n
@@ -54,7 +49,6 @@ Check Support Tool
     \    ${status}     ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${line}    ${value}    ${value1}    ${value2}
     \    Run keyword if   '${status}'=='PASS'     Exit for loop
     Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the files
-    
 Check Support Tool rpm
     ${out}=  Execute Command    rpm -qa | grep "support-tools"
     ${result}=  Split String    ${out}    \n
@@ -65,7 +59,6 @@ Check Support Tool rpm
     \    ${status}     ${taskState} =  Run Keyword and Ignore Error    Should Contain    ${line}    ${value}
     \    Run keyword if   '${status}'=='PASS'     Exit for loop
     Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the files
-    
 rpm file availability
     ${rpm_out}=  Execute Command    ls -p /ci/support/ovs/ | grep -v /
     #${result}=  Split String    ${out}    \n
@@ -77,24 +70,12 @@ rpm file availability
     Run keyword if   '${status}'=='PASS'    Log    RPM Exists
     Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the files
     Set Global Variable    ${rpm_out}
-    
 Untar
     ${out}=  Execute Command    tar -xvf /ci/support/ovs/${rpm_out} -C /ci/support/ovs/
     ${result}=  Split String    ${out}
     log    [untar support-tools]#:${result}    console=true
     ${payload}=    Create List  tmp/ecdsa-0.13-py2.py3-none-any.whl
-    ...                         tmp/install.sh
-    ...                         tmp/libnl-1.1.4-2.el6.x86_64.rpm
-    ...                         tmp/libpcap-1.4.0-4.20130826git2dbcaa1.el6.x86_64.rpm
-    ...                         tmp/ply-3.8.tar.gz
-    ...                         tmp/pyasn1-0.1.9-py2.py3-none-any.whl
-    ...                         tmp/pycrypto-2.6.1-py2.py3-none-any.whl
-    ...                         tmp/pysmi-0.0.7-py2.py3-none-any.whl
-    ...                         tmp/pysnmp-4.3.2.tar.gz
-    ...                         tmp/requests-2.9.1.tar.gz
-    ...                         tmp/supportUtil-4.10.00-SNAPSHOT.rpm
-    ...                         tmp/tcpdump-4.0.0-5.20090921gitdf3cb4.2.el6.x86_64.rpm
-    ...                         tmp/uninstall.sh
+                         ...                         tmp/install.sh                         tmp/libnl-1.1.4-2.el6.x86_64.rpm                         tmp/libpcap-1.4.0-4.20130826git2dbcaa1.el6.x86_64.rpm                         tmp/ply-3.8.tar.gz                         tmp/pyasn1-0.1.9-py2.py3-none-any.whl                         tmp/pycrypto-2.6.1-py2.py3-none-any.whl                         tmp/pysmi-0.0.7-py2.py3-none-any.whl                         tmp/pysnmp-4.3.2.tar.gz                         tmp/requests-2.9.1.tar.gz                         tmp/supportUtil-4.10.00-SNAPSHOT.rpm                         tmp/tcpdump-4.0.0-5.20090921gitdf3cb4.2.el6.x86_64.rpm                         tmp/uninstall.sh
     ${result1} =   Create List
     log    Reference List output:${payload}    console=true
     :FOR    ${value1}    IN    @{result}
@@ -102,7 +83,6 @@ Untar
     \    Run keyword if   '${status}'=='True'    Append to List    ${result1}  ${value1}
     Run keyword if   '${status}'!='True'    FAIL    Failed to Find the files
     log    Verified Pacakages:${result1}    console=true
-
 Install Supportool
     [Arguments]       ${text}=fail
     ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovs/tmp && ./install.sh    return_stderr=True    return_rc=True
@@ -111,9 +91,7 @@ Install Supportool
     Log    ${stdout}    console=true
     Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
     Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
-
 Post Installation Validation
-
     Set Default Configuration    timeout=900    # Some commands (below) take a long time
     @{Commands}    Create List    find / -name "pyasn1"
     ...                           find / -name "pysmi"
@@ -130,10 +108,8 @@ Post Installation Validation
     \    Log    ${stdout}    console=true
     \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
     \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
-
-    
 Add OV Enclosure
-    [Arguments]       ${timeout}=600 s   ${interval}=10 s
+    [Arguments]       ${timeout}=1500 s   ${interval}=10 s
     Log  Request to add enclosure   console=true
     ${response} =   Fusion Api Add Enclosure    body=${add1_enclosure_body}
     ${actual_resp_code} =   get from dictionary     ${response}     status_code
@@ -144,10 +120,8 @@ Add OV Enclosure
     Set Suite Variable  ${uri_location}
     Set Suite Variable  ${response}
     ${task} =   Wait Until Keyword Succeeds     ${timeout}  ${interval}    Task1 Reached Endstate
-    
     #Should Match Regexp     ${task['percentComplete']}   ((?i)Warning|Unknown|Terminated|Killed|Error|Completed)
     Run Keyword If    '${task['percentComplete']}' is None    FAIL
-    
 Task1 Reached Endstate
     #[Documentation]  Validate that task response has reach the end state
     #[Arguments]    ${response}
@@ -157,7 +131,6 @@ Task1 Reached Endstate
     Console      \t Task: [${task['category']}:${task['name']}] is: ${task['percentComplete']} for resource: ${task['associatedResource']['resourceName']} ${task['associatedResource']['resourceUri']}
     Should Be Equal as integers    ${task['percentComplete']}  100
     [Return]    ${task}
-
 ADD STORAGE DEVICES
     ${resp} =    Fusion Api Create Storage System     body=${storage1_systems}
     Log    ${resp}
@@ -165,7 +138,6 @@ ADD STORAGE DEVICES
     Log    [Status Code for Storage Hardware Add]#: ${actual_resp_code}    console=true
     Run Keyword If  "${actual_resp_code}" is not '${202}'   Output Response Error Messages   ${resp}
     Run Keyword If  "${actual_resp_code}" is not '${202}'  Fail    msg=Failed add enclosure since the response code is not 202 
-    
 ADD New Server Hardware
     ${resp} =  Fusion Api Add Server Hardware   body=${rackservers1}
     Log  ${resp}
@@ -173,110 +145,194 @@ ADD New Server Hardware
     Log    [Status Code for Server Hardware Add]#: ${actual_resp_code}    console=true
     Run Keyword If  "${actual_resp_code}" is not '${202}'   Output Response Error Messages   ${resp}
     Run Keyword If  "${actual_resp_code}" is not '${202}'  Fail    msg=Failed add enclosure since the response code is not 202
+    
+ADD IPDU Device
+    [Arguments]       ${timeout}=1500 s   ${interval}=10 s
+    ${body}=  Generate Certificate Payload     ${ipdu_ip}    ${CERTIFICATE}    ${ipdu}
+    Log      \n-import body=${body}
+    ${resp}=  Fusion Api Import Client Certificate   ${body}
 
-DevComm Verification
-    [Documentation]    Verifies Device communication scripts against ILO , 3PAR , OA
-    Set Default Configuration    timeout=900    # Some commands (below) take a long time
-    :FOR    ${Command}    IN    @{devComm_commands1}
-    # \    ${stdout}=     Create Variable
-    \    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
-    \    Log    [Command]#:${Command}    console=true
-    \    Log    ${stdout}    console=true
-    \    ${status}=    Run Keyword If    '''${stdout}'''=='''${devComm_3par}'''             Set Variable  OK
-    \    ...                  ELSE IF    '''${stdout}'''=='''${devComm_OA}'''               Set Variable  OK
-    \    ...                  ELSE IF    '''${stdout}'''=='''${ilo_devComm}'''              Set Variable  OK
-    # \    ...                  ELSE    FAIL
-    \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
-    \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
-    \    Run keyword if   '${status}'=='True'    PASS     Log    Validation : Passed
-    Run keyword if   '${status}'!='OK'    FAIL    Validation : Failed
-       
-PortComm Verification
-    [Documentation]    Verifies port communication scripts against ILO , 3PAR , OA
-    #[Arguments]    ${Command}=./check_port_communication.py -ip 15.154.126.8 -devtype ilo 
-    Set Default Configuration    timeout=900    # Some commands (below) take a long time
-    :FOR    ${Command}    IN    @{portComm_commands}
-    \    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
-    \    Log    [Command]#:${Command}    console=true
-    \    Log    ${stdout}    console=true
-    \    ${lines}=    Split To Lines    ${stdout}
+    Log      \n -resp is ${resp}
+    Should Be Equal As Integers   ${resp['status_code']}  200   msg="\n-Import cert fail!"
+    Log To Console And Logfile   \n-Verify certificate info...
+    #Verify Client Certificate Exist In Baseappliancejks    ${ipdu_ip}
+    #Verify Client Certificate Exist By Aliasname    ${ipdu_ip}
+    #Verify Client Certificate Trust Status    ${ipdu_ip}
+
+    Log To Console And Logfile  \n-Import iPDU...
+    
+    Log  Request to add iPDU   console=trues
+    ${response} =   Fusion Api Discover Power Device    body=${ipdu_systems}
+    ${actual_resp_code} =   get from dictionary     ${response}     status_code
+    ${uri_location} =     Get From Dictionary    ${response}    headers
+    Run Keyword If  "${actual_resp_code}" is not '${202}'   Output Response Error Messages   ${response}
+    Run Keyword If  "${actual_resp_code}" is not '${202}'  Fail    msg=Failed add enclosure since the response code is not 202
+    Should Contain    ${uri_location}    Location
+    Set Suite Variable  ${uri_location}
+    Set Suite Variable  ${response}
+    ${task} =   Wait Until Keyword Succeeds     ${timeout}  ${interval}    Task1 Reached Endstate
+    #Should Match Regexp     ${task['percentComplete']}   ((?i)Warning|Unknown|Terminated|Killed|Error|Completed)
+    Run Keyword If    '${task['percentComplete']}' is None    FAIL
+    
+DevcomILO4
+    [Documentation]    Verifies Device communication scripts against ILO 4
+    [Arguments]    ${Command}=./device_communication.py -ip ${ilo4_ip} -devtype ILO
+    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
+    Log    [Command]#:${Command}    console=true
+    Log    ${stdout}    console=true
+    ${lines}=    Split To Lines    ${stdout}
     #Log    ${lines}    console=true
-    \    ${match}=    Should Contain Match    ${lines}    regexp=Port\\s\\d+:\\s+Open
-    \    ${match}=    Set Variable If     '${match}'=='None'    OK
-    \    Log    [Match]:${match}    console=true
-    \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
-    \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
-    Run keyword if   '${match}'=='OK'        Log    Port Validation : Passed
-    Run keyword if   '${match}'!='OK'    FAIL    Port Validation : Failed
-    # ${status}=      Get From List       ${lines}               4
-    # Log    ${status}    console=true
+    ${match}=    Get Matches    ${lines}    regexp=\\w+...[pP]assed
+    ${count}=    Get Match Count    ${match}    regexp=\\w+...[pP]assed
+    Run keyword if   '${count}'=='3'    Log    [ILO4DevComm_Cmd_Stdout_List] : ${match}    console=true
+    ...        ELSE    Run Keyword And Continue On Failure    FAIL    [Incomplete_ILO4DevComm_Cmd_Stdout_List] : ${match}
+     
+    ${fail_count}=    Get Matches    ${lines}    regexp=\\w+...[fF]ailed
+    ${status_match}=    Get Match Count    ${fail_count}    regexp=\\w+...[fF]ailed
+    Run Keyword If     '${status_match}'=='0'    Log    [All Protocols working in ILO4]    console=true
+    ...       ELSE      Run Keyword And Continue On Failure    FAIL    [Failed Protocols Found in ILO4]: ${fail_count}
     
-    # \    ${status}=    Run Keyword If    '''${stdout}'''=='''${portComm_OA}'''                Set Variable  OK
-    # \    ...                  ELSE IF    '''${stdout}'''=='''${portComm_ILO}'''               Set Variable  OK
-    # \    ...                  ELSE IF    '''${stdout}'''=='''${portComm_3par}'''              Set Variable  OK
-    # # \    ...                  ELSE    FAIL
-    # \    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
-    # \    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
-    # \    Run keyword if   '${status}'=='True'    PASS     Log    Validation : Passed
-    # Run keyword if   '${status}'!='OK'    FAIL    Validation : Failed
-
-Dtask Verification
-    ${dtask_out}=  Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dtask.py --list warning    return_stderr=True    return_rc=True
-    #${dtask_out}=  Split String    ${out}
-    ${str}=    Catenate    @{dtask_out}
-    log    [Dtask availability]#:${str}    console=true
-    #:FOR     ${task}   in    @${dtask_out}
-    ${value}=    Evaluate   'Warning'
-    ${status}     ${taskState} =  Run Keyword and Ignore Error    should contain    ${str}    ${value}
-    Run keyword if   '${status}'=='PASS'    Log    Dtasks Exists    console=true
-    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the tasks
-    
-RabbitMQ Verification
-    ${mq_out}=  Execute Command    cd /ci/support/ovsupportability/scripts/ && ./rabbitmq.py -l CRM    return_stderr=True    return_rc=True
-    #${dtask_out}=  Split String    ${out}
-    ${str}=    Catenate    @{mq_out}
-    log    [RabbitMQ availability]#:${str}    console=true
-    #:FOR     ${task}   in    @${dtask_out}
-    ${value}=    Evaluate   'Running'
-    ${status}     ${taskState} =  Run Keyword and Ignore Error    should contain    ${str}    ${value}
-    Run keyword if   '${status}'=='PASS'    Log    Queue Exists    console=true
-    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the Oueues
-    
-DBsync Verification
-    ${db_out}=  Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm fulldb -diff    return_stderr=True    return_rc=True
-    #${dtask_out}=  Split String    ${out}
-    ${str}=    Catenate    @{db_out}
-    log    [DBsync Output]#:${str}    console=true
-    #:FOR     ${task}   in    @${dtask_out}
-    ${value}=    Evaluate   'rm_id'
-    ${status}     ${taskState} =  Run Keyword and Ignore Error    should contain    ${str}    ${value}
-    Run keyword if   '${status}'=='PASS'    Log    DB Exists    console=true
-    Run keyword if   '${status}'!='PASS'    FAIL    Failed to Find the DB
-    
-LuceneIndex Verfication
-    [Arguments]    ${out1}=Lucene and Index db needs to be synced. Appliance restart will resolve the issue    ${out2}=Lucene and index db are in sync
-    ${Command}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./luceneindex.py    return_stderr=True    return_rc=True
-    Log    [OUTPUT]#:${Command}    console=true
-    ${status}=    Run Keyword If    '''${out1}'''=='''${Command}'''    Set Variable  OK
-    ...                  ELSE IF    '''${out2}'''               Set Variable  OK
-    ...                  ELSE    FAIL
-    Run keyword if   '${status}'=='OK'    Log    LuceneIndex Validation : Passed    console=true
-    Run keyword if   '${status}'!='OK'    FAIL    Validation : Failed
-
-        
-Test Support
-    Set Default Configuration    timeout=900    # Some commands (below) take a long time
-    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./device_communication.py -ip 15.154.126.8 -devtype ILO    return_stderr=True    return_rc=True
-    #Log    [Command]#:${Command}    console=true
-        
-    ${comm_stdout_list}=    Create List    ${stdout.replace("\n", " ")}
-    
-    Log    ${comm_stdout_list}    console=true
-    Log    ${ilo_devComm}    console=true
-    ${status}     ${taskState} =  Run Keyword and Ignore Error    List Should Contain Value    ${comm_stdout_list}    ${ilo_devComm}   
-    Log    ${status}    console=true
-    #Log    ${stdout}    console=true
+    ${status}=    Run keyword if    '${count}'=='3'    Set Variable    PASS
+    ...                     ELSE                       Set Variable    FAIL
     Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
     Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    Run keyword if   '${status}'=='PASS'        Log    ILO 4 Output String Validation : Passed    console=true
+    Run keyword if   '${status}'!='PASS'    Run Keyword And Continue On Failure    FAIL    ILO 4 Output String Validation : Failed
+    Log To Console    ********* PROTOCOLS VALIDATION STARTED *********
+    ${ILO4_List}=    Run Keyword And Continue On Failure    ILO4 Validation
+    Log To Console    ********** [ILO4DevComm_Validation_List] : ${ILO4_List}
+    Lists Should Be Equal      ${ILO4_List}    ${match}    msg=******* ILO3 Protocols Validation : Failed ********
+DevcomILO3
+    [Documentation]    Verifies Device communication scripts against ILO 3
+    [Arguments]    ${Command}=./device_communication.py -ip ${ilo3_ip} -devtype ILO
+    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
+    Log    [Command]#:${Command}    console=true
+    Log    ${stdout}    console=true
+    ${lines}=    Split To Lines    ${stdout}
+    #Log    ${lines}    console=true
+    ${match}=    Get Matches    ${lines}    regexp=\\w+...[pP]assed
+    ${count}=    Get Match Count    ${match}    regexp=\\w+...[pP]assed
+    Run keyword if   '${count}'=='2'    Log    [ILO3DevComm_Cmd_Stdout_List] : ${match}    console=true
+    ...        ELSE    Run Keyword And Continue On Failure    FAIL    [Incomplete_ILO3DevComm_Cmd_Stdout_List] : ${match}
+     
+    ${fail_count}=    Get Matches    ${lines}    regexp=\\w+...[fF]ailed
+    ${status_match}=    Get Match Count    ${fail_count}    regexp=\\w+...[fF]ailed
+    Run Keyword If     '${status_match}'=='1'    Log    [REST Failed Protocol Found in ILO3:Ignore]    console=true
+    ...       ELSE      Run Keyword And Continue On Failure    FAIL    [Mutiple Failed Protocols Found in ILO3]: ${fail_count}
+    
+    ${status}=    Run keyword if    '${count}'=='2'    Set Variable    PASS
+    ...                     ELSE                       Set Variable    FAIL
+    
+    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    Run keyword if   '${status}'=='PASS'        Log    ILO 3 Output String Validation : Passed    console=true
+    Run keyword if   '${status}'!='PASS'    Run Keyword And Continue On Failure    FAIL    ILO 3 Output String Validation : Failed
+    Log To Console    ********* PROTOCOLS VALIDATION STARTED *********
+    ${ILO3_List}=    Run Keyword And Continue On Failure    ILO3 Validation
+    Log    ********[ILO3DevComm_Validation_List]: ${ILO3_List}    console=true
+    Lists Should Be Equal      ${ILO3_List}    ${match}    msg=****** ILO3 Protocols Validation : Failed ********
+DevcomOA
+    [Documentation]    Verifies Device communication scripts against OA
+    [Arguments]    ${Command}=./device_communication.py -ip ${OA_ip} -devtype oa
+    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
+    Log    [Command]#:${Command}    console=true
+    Log    ${stdout}    console=true
+    ${lines}=    Split To Lines    ${stdout}
+    #Log    ${lines}    console=true
+    ${match}=    Get Matches    ${lines}    regexp=\\w+...[pP]assed
+    ${count}=    Get Match Count    ${match}    regexp=\\w+...[pP]assed
+    Run keyword if   '${count}'=='3'    Log    [OADevComm_Cmd_Stdout_List] : ${match}    console=true
+    ...        ELSE    Run Keyword And Continue On Failure    FAIL    [Incomplete_OADevComm_Cmd_Stdout_List] : ${match}
+    ${fail_count}=    Get Matches    ${lines}    regexp=\\w+...[fF]ailed
+    ${status_match}=    Get Match Count    ${fail_count}    regexp=\\w+...[fF]ailed
+    Run Keyword If     '${status_match}'=='0'    Log    [No Failed Protocol Found]    console=true
+    ...       ELSE      Run Keyword And Continue On Failure    FAIL    [Failed Protocols Found]: ${fail_count}
+    ${status}=    Run keyword if    '${count}'=='3'    Set Variable    PASS
+    ...                     ELSE                       Set Variable    FAIL
+    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    Run keyword if   '${status}'=='PASS'        Log    OA Output String Validation : Passed    console=true
+    Run keyword if   '${status}'!='PASS'    Run Keyword And Continue On Failure    FAIL    OA Output String Validation : Failed
+    Log To Console    ********* PROTOCOLS VALIDATION STARTED *********
+    ${OA_List}=    Run Keyword And Continue On Failure    OA Validation
+    Log To Console    ************ [OADevComm_Validation_List] : ${OA_List}
+    Lists Should Be Equal      ${OA_List}    ${match}    msg=****** OA Protocols Validation : Failed ******
+    # Run keyword if   '${status}'!='PASS'    FAIL    OA Protocol Validation : Failed
+Devcom3PAR
+    [Documentation]    Verifies Device communication scripts against 3PAR
+    [Arguments]    ${Command}=./device_communication.py -ip ${stor_ip} -devtype 3par
+    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
+    Log    [Command]#:${Command}    console=true
+    Log    ${stdout}    console=true
+    ${lines}=    Split To Lines    ${stdout}
+    #Log    ${lines}    console=true
+    ${match}=    Get Matches    ${lines}    regexp=\\w+...[pP]assed
+    ${count}=    Get Match Count    ${match}    regexp=\\w+...[pP]assed
+    Run keyword if   '${count}'=='2'    Log    [3PAR_DevComm_Cmd_Stdout_List] : ${match}    console=true
+    ...        ELSE    Run Keyword And Continue On Failure    FAIL    [Incomplete_3PAR_DevComm_Cmd_Stdout_List] : ${match}
+    ${fail_count}=    Get Matches    ${lines}    regexp=\\w+...[fF]ailed
+    ${status_match}=    Get Match Count    ${fail_count}    regexp=\\w+...[fF]ailed
+    Run Keyword If     '${status_match}'=='0'    Log    [No Failed Protocol Found]    console=true
+    ...       ELSE      Run Keyword And Continue On Failure    FAIL    [Failed Protocols Found]: ${fail_count}
+    ${status}=    Run keyword if    '${count}'=='2'    Set Variable    PASS
+    ...                     ELSE                       Set Variable    FAIL
+    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    Run keyword if   '${status}'=='PASS'        Log    3PAR Output String Validation : Passed    console=true
+    Run keyword if   '${status}'!='PASS'    Run Keyword And Continue On Failure    FAIL    3PAR Output String Validation : Failed
+    Log To Console    ********* PROTOCOLS VALIDATION STARTED *********
+    ${3PAR_List}=    Run Keyword And Continue On Failure    Validation 3PAR
+    Log To Console    ************ [3PAR_DevComm_Validation_List] : ${3PAR_List}
+    Lists Should Be Equal      ${3PAR_List}    ${match}    msg=****** 3PAR Protocols Validation : Failed ******
+    # Run keyword if   '${status}'!='PASS'    FAIL    OA Protocol Validation : Failed
+    
+DevcomIPDU
+    [Documentation]    Verifies Device communication scripts against IPDU
+    [Arguments]    ${Command}=./device_communication.py -ip ${ipdu_ip} -devtype ipdu
+    ${stdout}    ${stderr}    ${rc}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ${Command}    return_stderr=True    return_rc=True
+    Log    [Command]#:${Command}    console=true
+    Log    ${stdout}    console=true
+    ${lines}=    Split To Lines    ${stdout}
+    #Log    ${lines}    console=true
+    ${match}=    Get Matches    ${lines}    regexp=\\w+...[pP]assed
+    ${count}=    Get Match Count    ${match}    regexp=\\w+...[pP]assed
+    Run keyword if   '${count}'=='2'    Log    [IPDU_DevComm_Cmd_Stdout_List] : ${match}    console=true
+    ...        ELSE    Run Keyword And Continue On Failure    FAIL    [Incomplete_IPDU_DevComm_Cmd_Stdout_List] : ${match}
+    ${fail_count}=    Get Matches    ${lines}    regexp=\\w+...[fF]ailed
+    ${status_match}=    Get Match Count    ${fail_count}    regexp=\\w+...[fF]ailed
+    Run Keyword If     '${status_match}'=='0'    Log    [No Failed Protocol Found]    console=true
+    ...       ELSE      Run Keyword And Continue On Failure    FAIL    [Failed Protocols Found]: ${fail_count}
+    ${status}=    Run keyword if    '${count}'=='2'    Set Variable    PASS
+    ...                     ELSE                       Set Variable    FAIL
+    Should Be Empty    ${stderr}                 msg=Error returned: ${rc} ${stderr}
+    Should Be Equal As Integers    ${rc}    0    msg=non-zero return code ${rc}
+    Run keyword if   '${status}'=='PASS'        Log    IPDU Output String Validation : Passed    console=true
+    Run keyword if   '${status}'!='PASS'    Run Keyword And Continue On Failure    FAIL    IPDU Output String Validation : Failed
+    Log To Console    ********* PROTOCOLS VALIDATION STARTED *********
+    ${IPDU_List}=    Run Keyword And Continue On Failure    Validation Ipdu
+    Log To Console    ************ [IPDU_DevComm_Validation_List] : ${IPDU_List}
+    Lists Should Be Equal      ${IPDU_List}    ${match}    msg=****** IPDU Protocols Validation : Failed ******
+    
+ 
+DBsync Verification
+    [Documentation]    Validate DbSync Tool Script in Support Tool
+    [Arguments]    	${api}=800    ${text}=(0 rows)    ${text2}=Syncing the index service    ${text3}=/rest/server-hardware/test-1
+    ${trusted_token}=  Execute Command    /ci/bin/./get-trustedtoken.sh 'DigitalSig'
+    
+    ${resp} =    Fusion Api Create Index Resource    ${dbsync_Index_body}    ${api}    auth=${trusted_token}
+    ${dbsync}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm psrm -diff
+    ${status} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${dbsync}    ${text}
+    Run keyword if   '${status}'=='True'    Log    Successfully Added Entry in Index.node db ***************    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    Failed to Add Entry in Index.node db ***************
+    
+    ${dbsync_Sync_Index}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && yes | ./dbSync.py -rm psrm -syncindex
+    ${status} =  Run Keyword and Return Status    BuiltIn.Should Contain    ${dbsync_Sync_Index}    ${text2}
+    Run keyword if   '${status}'=='True'    Log    Successfully Synced Index.node db and RM db ***************    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    Failed to Remove Entry from Index.node db ***************
+    
+    ${dbsync_diff_val}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm psrm -diff
+    ${status} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${dbsync_diff_val}    ${text3}
+    Run keyword if   '${status}'=='True'    Log    ************ DbSync Tool Validation Passed ***************    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    ************** DbSync Tool Validation Failed ***************
     
     
