@@ -23,7 +23,7 @@ ${VSPHERE_IP}                   15.212.144.137
 ${VSPHERE_USERNAME}             Administrator@vsphere.local
 ${VSPHERE_PASSWORD}             12Iso*help
 ${VSPHERE_DATASTORE}            ""OVS_3PAR_TEST_Vol2""
-${FUSION_NAME}                  OVS-MAT_4.10OVS-HPOneView                #  Change the name accordingly
+${FUSION_NAME}                  OVS-MAT_4.10-HPOneView                #  Change the name accordingly
 ${VSPHERE_NETWORK}              "VM Network"
 ${OVFTOOL}                      C:\\ovftool\\ovftool.exe    #for 64-bit ovftool
 ${TARGET_LOCATOR}               "vi://vsphere.local%5cAdministrator:12Iso*help@15.212.144.137:443/OVSupportDev/host/OVS_Test"
@@ -161,7 +161,7 @@ API For Appliance Setup
     Remove from dictionary      ${body}         status_code   
     ${hostname} = 	get from dictionary	${body['applianceNetworks'][0]} 	hostname
     Set to dictionary	${body['applianceNetworks'][0]}		hostname=${hostname}.hpe.com
-    Set to dictionary   ${body['applianceNetworks'][0]}		app1Ipv4Addr=15.212.144.151
+    Set to dictionary   ${body['applianceNetworks'][0]}		app1Ipv4Addr=15.212.144.183
     Set to dictionary	${body['applianceNetworks'][0]}		ipv4Subnet=255.255.255.0
     Set to dictionary	${body['applianceNetworks'][0]}		ipv4Gateway=15.212.144.1
     Set to dictionary   ${body['applianceNetworks'][0]}		ipv4Type=STATIC

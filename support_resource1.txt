@@ -14,7 +14,7 @@ Resource						deploy_resource.txt
 Resource                        tools-validation-resource.txt
 Variables                       Supportool_data.py                        
 *** Variables ***
-${SSH_HOST}
+${SSH_HOST}    
 *** Keywords ***
 #######################################
 # LOGGING
@@ -315,24 +315,25 @@ DevcomIPDU
     
  
 DBsync Verification
-    [Documentation]    Validate DbSync Tool Script in Support Tool
     [Arguments]    	${api}=800    ${text}=(0 rows)    ${text2}=Syncing the index service    ${text3}=/rest/server-hardware/test-1
-    ${trusted_token}=  Execute Command    /ci/bin/./get-trustedtoken.sh 'DigitalSig'
+        
+    # Below Keyword Creates Entry in Index.node DB
+    ${resp_code}=    DBSync POST Entry    ${api}
+    Log    [Status Code for Posting Entry in Index.node DB]#: ${resp_code[0]}    console=true
+    Run Keyword If  "${resp_code[0]}" is not '${200}'   Output Response Error Messages   ${resp_code[1]}
+    Run Keyword If  "${resp_code[0]}" is not '${200}'  Fail    msg=Failed TO Post Entry in Index.node
     
-    ${resp} =    Fusion Api Create Index Resource    ${dbsync_Index_body}    ${api}    auth=${trusted_token}
-    ${dbsync}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm psrm -diff
-    ${status} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${dbsync}    ${text}
-    Run keyword if   '${status}'=='True'    Log    Successfully Added Entry in Index.node db ***************    console=true
-    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    Failed to Add Entry in Index.node db ***************
+    # Below Keyword Validates the Entry Added By API POST call using Dbsync Tool and Psql Query to Index.node DB of PSRM
     
-    ${dbsync_Sync_Index}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && yes | ./dbSync.py -rm psrm -syncindex
-    ${status} =  Run Keyword and Return Status    BuiltIn.Should Contain    ${dbsync_Sync_Index}    ${text2}
-    Run keyword if   '${status}'=='True'    Log    Successfully Synced Index.node db and RM db ***************    console=true
-    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    Failed to Remove Entry from Index.node db ***************
+    ${dbsync_cmd_dict}    ${dbsync_db_dict}=    DBSync Compare DB Diff      ${text}    ${text3}
+    Dictionaries Should Be Equal    ${dbsync_cmd_dict}    ${dbsync_db_dict}    msg=****** DbSync Script Differance Validation : Failed : Failed ******
     
-    ${dbsync_diff_val}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm psrm -diff
-    ${status} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${dbsync_diff_val}    ${text3}
-    Run keyword if   '${status}'=='True'    Log    ************ DbSync Tool Validation Passed ***************    console=true
-    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    ************** DbSync Tool Validation Failed ***************
+    # Below Keyword deletes those Entries from Index.node db which are not present in RM DB but present in Index.node DB
     
+    ${status_Sync_Index}    ${status_diff_val}=    DBSync Sync Diff and Validate    ${text2}    ${text3}
+    Run keyword if   '${status_Sync_Index}'=='True'    Log    ************ Successfully Synced Index.node db and RM db ***************    console=true
+    Run keyword if   '${status_Sync_Index}'!='True'    Run Keyword And Continue On Failure    ************** Failed to Remove Entry from Index.node db ***************
+    
+    Run keyword if   '${status_diff_val}'=='True'    Log    ************ DbSync Tool Validation Passed ***************    console=true
+    Run keyword if   '${status_diff_val}'!='True'    Run Keyword And Continue On Failure    ************** DbSync Tool Validation Failed ***************
     

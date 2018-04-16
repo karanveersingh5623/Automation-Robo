@@ -5,65 +5,68 @@ Resource         support_resource1.txt
 Resource         PortCommResource.robot
 Test Setup       Open SSH and API
 Suite Setup      Set Log Level    Trace
-	  
+Resource         dtaskResource.robot	  
 
 *** Test Cases ***
 
-Test 1
+Check Support Tool
     Check Support Tool
-Test 2
+Check Support Tool rpm
     Check Support Tool rpm
-Test 3
+Rpm file availability
     rpm file availability
-Test 4
+Untar Support tools rpm
     Untar
-Test 5
+Install Supportool
     Install Supportool
-Test 6
+Post Installation Validation
     Post Installation Validation
-Test 7
+Add OV Enclosure
     Add OV Enclosure
-Test 8
+ADD STORAGE DEVICE
     ADD STORAGE DEVICES
-Test 9
+ADD New Server Hardware
     ADD New Server Hardware
     Sleep  60 seconds
-Test 10
+ADD IPDU Device
     ADD IPDU Device
-Test 11
+DevcomILO
     Log    DEVICE COMMUNICATION FOR ILO 3 ******** STARTED ******    console=true
     DevcomILO3
-Test 12
+DevcomILO4
     Log    DEVICE COMMUNICATION FOR ILO 4 ******** STARTED ******    console=true
     DevcomILO4
-Test 13
+DevcomOA
     Log    DEVICE COMMUNICATION FOR OA ******** STARTED ******    console=true
     DevcomOA
-Test 14
+Devcom3PAR
     Log    DEVICE COMMUNICATION FOR 3PAR ******** STARTED ******    console=true
     Devcom3PAR
-Test 15
+DevcomIPDU
     Log    DEVICE COMMUNICATION FOR IPDU ******** STARTED ******    console=true
     DevcomIPDU
-Test 16
+Port Communication Check for OA
     Log    PORT COMMUNICATION FOR OA ******** STARTED ******    console=true
     Port Communication Check for OA
-Test 17
+PORT COMMUNICATION FOR ILO 3
     Log    PORT COMMUNICATION FOR ILO 3 ******** STARTED ******    console=true
     Port Communication Check for ILO3
-Test 18
+Port Communication Check for ILO4
     Log    PORT COMMUNICATION FOR ILO 4 ******** STARTED ******    console=true
     Port Communication Check for ILO4
-Test 19
+Port Communication Check for IPDU
     Log    PORT COMMUNICATION FOR IPDU ******** STARTED ******    console=true
     Port Communication Check for IPDU
-Test 20
+Port Communication Check for 3PAR
     Log    PORT COMMUNICATION FOR 3PAR ******** STARTED ******    console=true
     Port Communication Check for 3PAR
-Test 21
+Port Communication Help Command
     Log    PORT COMMUNICATION FOR HELP command ******** STARTED ******    console=true
     Port Communication Help Command
-Test 22
-    Log    DbSync Tool Validation ******** STARTED ******    console=true
+Dtask Help Command
+    Dtask Help Command
+Dtask Verification
+    Dtask Verification   # Log    DbSync Tool Validation ******** STARTED ******    console=true
+DBsync Verification
     DBsync Verification
-    
+ 

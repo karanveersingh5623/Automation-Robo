@@ -249,6 +249,61 @@ Validation Ipdu
     Run keyword Unless    ${count} == ${length}        Run Keyword And Continue On Failure    FAIL    IPDU Validation : FAILED
     [Return]    ${Ipdu_ValList}
     
+DBSync POST Entry
+    [Documentation]    Creates an Entry in PSRM index.node Database Using Post Api Call
+    [Arguments]    	${api}
+    
+    ${trusted_token}=  Execute Command    /ci/bin/./get-trustedtoken.sh 'DigitalSig'
+    #Set To Dictionary    ${dbsync_Index_header}    Auth    ${dbsync_Index_header['Auth']}
+    #${header}=    fusion_api_get_headers
+    #Set to Dictionary    ${header}    auth=${AUTHTOKEN}
+    ${resp} =    Fusion Api Create Index Resource    ${dbsync_Index_body}    ${api}    auth=${trusted_token}
+    ${actual_resp_code} =   get from dictionary     ${resp}     status_code
+    [Return]    ${actual_resp_code}    ${resp}
+    
+DBSync Compare DB Diff
+    [Documentation]    Below Keyword Validates the Entry Added By API POST call using Dbsync Tool and Psql Query to Index.node DB of PSRM
+    [Arguments]    	${text}    ${text3}
+    ${dbsync_cmd_dict}=    Create Dictionary
+    ${dbsync_db_dict}=    Create Dictionary
+    
+    ${dbsync}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm psrm -diff
+    ${status} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${dbsync}    ${text}
+    Run keyword if   '${status}'=='True'    Log    ************ Successfully Added Entry in Index.node db ***************    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL    ************** Failed to Add Entry in Index.node db ***************
+    ${key} =    Get Regexp Matches    ${dbsync}    index_db_uri
+    ${value} =    Get Regexp Matches    ${dbsync}    ${text3}
+    Log    ${key}
+    Run Keyword If    '${value[0]}' == '${text3}'    Run Keyword And Continue On Failure    Set To Dictionary    ${dbsync_cmd_dict}    ${key[0]}    ${value[0]}
+    ...       ELSE        Run Keyword And Continue On Failure    Fail    ***********Failed to Add Key-Value to DbSync_CMD DB Dictionary*************
+    #Run keyword Unless    '${key[0]}' == '${text3}'    Run Keyword And Continue On Failure    Fail    ***********Failed to Add Key-Value to DbSync_CMD DB Dictionary*************
+    Log    ${dbsync_cmd_dict}
+       
+    ${dbsync}=    Execute Command    ${dbsync_db_query}
+    ${status} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${dbsync}    ${text}
+    Run keyword if   '${status}'=='True'    Log    ************ Successfully Found Entry in Index.node db ***************    console=true
+    Run keyword if   '${status}'!='True'    Run Keyword And Continue On Failure    FAIL    ************** Failed to Find Entry in Index.node db ***************
+    ${key} =    Get Regexp Matches    ${dbsync}    uri
+    ${value} =    Get Regexp Matches    ${dbsync}    ${text3}
+    Log    ${key}
+    Run Keyword If    '${value[0]}' == '${text3}'    Run Keyword And Continue On Failure    Set To Dictionary    ${dbsync_db_dict}    index_db_uri    ${value[0]}
+    Run keyword Unless    '${value[0]}' == '${text3}'    Run Keyword And Continue On Failure    Fail    ***********Failed to Add Key-Value to Index DB Dictionary*************
+    Log    ${dbsync_db_dict} 
+    [Return]      ${dbsync_cmd_dict}    ${dbsync_db_dict}
+    
+DBSync Sync Diff and Validate
+    [Documentation]    Below Keyword deletes those Entries from Index.node db which are not present in RM DB but present in Index.node DB
+    [Arguments]    ${text2}    ${text3}
+    
+    ${dbsync_Sync_Index}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && yes | ./dbSync.py -rm psrm -syncindex
+    ${status_Sync_Index} =  Run Keyword and Return Status    BuiltIn.Should Contain    ${dbsync_Sync_Index}    ${text2}
+        
+    ${dbsync_diff_val}=    Execute Command    cd /ci/support/ovsupportability/scripts/ && ./dbSync.py -rm psrm -diff
+    ${status_diff_val} =  Run Keyword and Return Status    BuiltIn.Should Not Contain    ${dbsync_diff_val}    ${text3}
+    [Return]    ${status_Sync_Index}    ${status_diff_val}
+    
+    
+    
 Dtask
     ${rc}=    Execute Command    curl -ik -X GET -H "Auth: ${AUTHTOKEN}" -H "X-Api-Version: 600" https://15.154.123.154/rest/tasks?filter=taskState=Warning
     Log    ${rc}    console=true
